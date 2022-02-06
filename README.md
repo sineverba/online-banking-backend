@@ -58,7 +58,7 @@ There is a dummy database, pre-populated. At first spin, MySQL will re-populate 
 
 | Step | What | Commit # |
 | ---- | ---- | -------- |
-| 1 | Setup tests + Lombok | |
+| 1 | Setup tests + Lombok | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/ca5e5863ecd7434422b41708fb55db6a5f5b77ac) |
 | 2 | Add Entity | |
 | 3 | Add Repository | |
 | 4 | Add Service | |
