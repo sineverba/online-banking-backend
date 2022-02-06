@@ -58,7 +58,8 @@ There is a dummy database, pre-populated. At first spin, MySQL will re-populate 
 
 | Step | What | Commit # |
 | ---- | ---- | -------- |
-| 1 | Add Entity | |
-| 2 | Add Repository | |
-| 3 | Add Service | |
-| 4 | Add Controller index + DTO + Model Mapper (into main Class) | |
+| 1 | Setup tests + Lombok | |
+| 2 | Add Entity | |
+| 3 | Add Repository | |
+| 4 | Add Service | |
+| 5 | Add Controller index + DTO + Model Mapper (into main Class) | |
