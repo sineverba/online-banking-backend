@@ -1,0 +1,34 @@
+version: v1.0
+name: Test and coverage
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu2004
+    
+global_job_config:
+  secrets:
+    - name: ONLINE_BANKING_BACKEND
+
+blocks:
+  - name: "Test"
+    skip:
+      when: "tag =~ '.*'"
+    task:
+      jobs:
+      - name: Test
+        commands:
+          - sem-version java 17
+          - checkout
+          - mvn -DrepoToken=$COVERALLS_REPO_TOKEN test jacoco:report coveralls:report
+      - name: Sonar
+        commands:
+          - sem-version java 17
+          - checkout
+          - mvn -Dsonar.host.url=https://sonarcloud.io -Dsonar.projectKey=sineverba_online-banking-backend -Dsonar.organization=sineverba clean package sonar:sonar
+          
+promotions:
+  - name: Deploy to Heroku
+    pipeline_file: deploy-production.yml
+    auto_promote:
+      when: "result = 'passed' and tag =~ '.*'"
+          
