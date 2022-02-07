@@ -17,6 +17,7 @@ CREATE TABLE `bank_account_transactions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `bank_account_transactions` (`id`, `amount`, `purpose`, `transaction_date`) VALUES
-(1,	2500.00,	'January 2022 salary',	'2022-02-06 16:49:03.000000');
+(1,	2500.00,	'January 2022 salary',	'2022-02-06 16:49:03.000000'),
+(2,	-450.00,	'Arthur High School February 2022',	'2022-02-07 07:15:29.000000');
 
--- 2022-02-06 16:51:47
+-- 2022-02-07 07:15:57
