@@ -15,6 +15,10 @@ public class BankAccountTransactionsService {
 	@Autowired
 	private BankAccountTransactionsRepository bankAccountTransactionsRepository;
 	
+	/**
+	 * Index
+	 * @return
+	 */
 	public List<BankAccountTransactionsEntity> index() {
 		Iterable<BankAccountTransactionsEntity> items = bankAccountTransactionsRepository.findAll();
 		ArrayList<BankAccountTransactionsEntity> bankAccountTransactions = new ArrayList<>();
@@ -24,5 +28,12 @@ public class BankAccountTransactionsService {
 		}
 		
 		return bankAccountTransactions;
+	}
+	
+	/**
+	 * Post
+	 */
+	public BankAccountTransactionsEntity post(BankAccountTransactionsEntity bankAccountTransactionsEntity) {
+		return bankAccountTransactionsRepository.save(bankAccountTransactionsEntity);
 	}
 }

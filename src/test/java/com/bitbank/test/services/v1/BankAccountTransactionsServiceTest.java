@@ -24,22 +24,15 @@ class BankAccountTransactionsServiceTest {
 	@InjectMocks
 	private BankAccountTransactionsService bankAccountTransactionsService;
 	
+	/**
+	 * Index
+	 */
+	
 	@Test
 	void get_testCanIndex() {
 		
-		var transaction01 = BankAccountTransactionsEntity
-				.builder()
-				.id(1L)
-				.amount(new BigDecimal(99.99))
-				.purpose("First transaction")
-				.build();
-		
-		var transaction02 = BankAccountTransactionsEntity
-				.builder()
-				.id(2L)
-				.amount(new BigDecimal(150))
-				.purpose("Second transaction")
-				.build();
+		var transaction01 = BankAccountTransactionsServiceTest.validBankAccountTransactionsEntity(1L, new BigDecimal(99.99), "First Transaction");
+		var transaction02 = BankAccountTransactionsServiceTest.validBankAccountTransactionsEntity(2L, new BigDecimal(150), "Second Transaction");
 		
 		bankAccountTransactionsRepository.save(transaction01);
 		bankAccountTransactionsRepository.save(transaction02);
@@ -52,5 +45,45 @@ class BankAccountTransactionsServiceTest {
 		
 		assertEquals(result, bankAccountTransactionsService.index());
 		
+	}
+	
+	/**
+	 * Post section
+	 */
+	
+	@Test
+	void post_testCanSaveItem() {
+		var transactionToSave = BankAccountTransactionsServiceTest.validBankAccountTransactionsEntity(new BigDecimal(99.99), "First Transaction");
+		var savedTransaction = BankAccountTransactionsServiceTest.validBankAccountTransactionsEntity(1L, new BigDecimal(99.99), "First Transaction");
+		
+		when(bankAccountTransactionsRepository.save(transactionToSave)).thenReturn(savedTransaction);
+		
+		assertEquals(savedTransaction, bankAccountTransactionsService.post(transactionToSave));
+	}
+	
+	/**
+	 * Useful methods
+	 * 
+	 * @param id
+	 * @param amount
+	 * @param purpose
+	 * @return
+	 */
+	
+	private static BankAccountTransactionsEntity validBankAccountTransactionsEntity(Long id, BigDecimal amount, String purpose) {
+		return BankAccountTransactionsEntity.
+				builder()
+				.id(id)
+				.amount(amount)
+				.purpose(purpose)
+				.build();
+	}
+	 
+	private static BankAccountTransactionsEntity validBankAccountTransactionsEntity(BigDecimal amount, String purpose) {
+			return BankAccountTransactionsEntity.
+					builder()
+					.amount(amount)
+					.purpose(purpose)
+					.build();
 	}
 }
