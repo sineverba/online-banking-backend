@@ -58,10 +58,11 @@ There is a dummy database, pre-populated. At first spin, MySQL will re-populate 
 
 ## TDD
 
-| Step | What | Commit # |
-| ---- | ---- | -------- |
-| 1 | Setup tests + Lombok | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/ca5e5863ecd7434422b41708fb55db6a5f5b77ac) |
-| 2 | Add Entity | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/9ebeddc0020e7e1246ad65c3068fbe59b54688b2) |
-| 3 | Add Repository | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/af84fa1dfda955b0fe779dc249cd447d573b5f6f) |
-| 4 | Add Service | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/0fba806b852d2ca84b1d67a4f4f859261fba9907) |
-| 5 | Add Controller index + DTO + Model Mapper (into main Class) | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/4aabe04ad4f21f3e342d33edff7832ab92e1e551) |
+| Step | What | HTTP verb | Commit # |
+| ---- | ---- | --------- | -------- |
+| 1 | Setup tests + Lombok | N.A. | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/ca5e5863ecd7434422b41708fb55db6a5f5b77ac) |
+| 2 | Add Entity | N.A. | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/9ebeddc0020e7e1246ad65c3068fbe59b54688b2) |
+| 3 | Add Repository | GET / findAll() | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/af84fa1dfda955b0fe779dc249cd447d573b5f6f) |
+| 4 | Add Service | GET / findAll() | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/0fba806b852d2ca84b1d67a4f4f859261fba9907) |
+| 5 | Add Controller index + DTO + Model Mapper (into main Class) | GET / findAll | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/4aabe04ad4f21f3e342d33edff7832ab92e1e551) |
+| 6 | Add Service | POST | [Link to commit]() |
