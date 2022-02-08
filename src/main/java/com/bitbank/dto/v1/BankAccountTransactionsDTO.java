@@ -14,9 +14,5 @@ public class BankAccountTransactionsDTO {
 	
 	private String purpose;
 	
-	public Double getAmount() {
-		return this.amount.doubleValue();
-	}
-	
 	private LocalDateTime transactionDate;
 }

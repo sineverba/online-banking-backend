@@ -4,8 +4,12 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bitbank.dto.v1.BankAccountTransactionsDTO;
@@ -32,6 +36,14 @@ public class BankAccountTransactionsController {
 		return transactions.stream().map(this::convertToDto).toList();
 	}
 	
+	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	public BankAccountTransactionsDTO post(@RequestBody BankAccountTransactionsDTO bankAccountTransactionsDTO) {
+		BankAccountTransactionsEntity bankAccountTransactionsEntity = convertToEntity(bankAccountTransactionsDTO);
+		BankAccountTransactionsEntity savedBankAccountTransactionsEntity = bankAccountTransactionsService.post(bankAccountTransactionsEntity);
+		return convertToDto(savedBankAccountTransactionsEntity);
+	}
+	
 	/**
 	 * Convert the Entity to the DTO
 	 * 
@@ -40,5 +52,15 @@ public class BankAccountTransactionsController {
 	 */
 	private BankAccountTransactionsDTO convertToDto(BankAccountTransactionsEntity bankAccountTransactionsEntity) {
 		return modelMapper.map(bankAccountTransactionsEntity, BankAccountTransactionsDTO.class);
+	}
+	
+	/**
+	 * Convert the DTO to the entity
+	 * 
+	 * @param bankAccountTransactionsEntity
+	 * @return
+	 */
+	private BankAccountTransactionsEntity convertToEntity(BankAccountTransactionsDTO bankAccountTransactionsDTO) {
+		return modelMapper.map(bankAccountTransactionsDTO, BankAccountTransactionsEntity.class);
 	}
 }
