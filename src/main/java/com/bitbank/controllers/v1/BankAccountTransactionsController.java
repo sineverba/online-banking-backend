@@ -39,8 +39,8 @@ public class BankAccountTransactionsController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public BankAccountTransactionsDTO post(@RequestBody BankAccountTransactionsDTO bankAccountTransactionsDTO) {
-		var bankAccountTransactionsEntity = convertToEntity(bankAccountTransactionsDTO);
-		var savedBankAccountTransactionsEntity = bankAccountTransactionsService.post(bankAccountTransactionsEntity);
+		BankAccountTransactionsEntity bankAccountTransactionsEntity = convertToEntity(bankAccountTransactionsDTO);
+		BankAccountTransactionsEntity savedBankAccountTransactionsEntity = bankAccountTransactionsService.post(bankAccountTransactionsEntity);
 		return convertToDto(savedBankAccountTransactionsEntity);
 	}
 	

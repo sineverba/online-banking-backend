@@ -44,7 +44,7 @@ class BankAccountTransactionsControllerTest {
     @Test
     void testCanIndex() throws Exception {
     	var transaction01 = BankAccountTransactionsControllerTest.validBankAccountTransactionsEntity(1L, new BigDecimal(99.99), "First Transaction");
-    	var transaction02 = BankAccountTransactionsControllerTest.validBankAccountTransactionsEntity(2L, new BigDecimal(150), "Second Transaction");
+    	var transaction02 = BankAccountTransactionsControllerTest.validBankAccountTransactionsEntity(2L, new BigDecimal(150.00), "Second Transaction");
 		
     	var result = new ArrayList<BankAccountTransactionsEntity>();
 		result.add(transaction01);
@@ -57,8 +57,8 @@ class BankAccountTransactionsControllerTest {
 		.andExpect(jsonPath("$.length()", is(2)))
 		.andExpect(jsonPath("$[0].id", is(1)))
 		.andExpect(jsonPath("$[1].id", is(2)))
-		.andExpect(jsonPath("$[0].amount", is(99.99)))
-		.andExpect(jsonPath("$[1].amount", is(150.0)))
+		.andExpect(jsonPath("$[0].amount", is(new BigDecimal(99.99))))
+		.andExpect(jsonPath("$[1].amount", is(150)))
 		.andExpect(jsonPath("$[0].purpose", is("First Transaction")))
 		.andExpect(jsonPath("$[1].purpose", is("Second Transaction")))
 		.andExpect(jsonPath("$[0]", Matchers.hasKey("transactionDate")))
