@@ -1,4 +1,7 @@
-# 0.2.0
+# Next version
++ Upgrade dependencies
+
+## 0.2.0
 + Setup tests
 + Add CI/CD
 + Add Bank Account Transactions entity
