@@ -1,5 +1,6 @@
 # Next version
 + Upgrade dependencies
++ Add JWT - Part 1
 
 ## 0.2.0
 + Setup tests
