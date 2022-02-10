@@ -8,6 +8,7 @@
 + Add Docker for deploy
 + Add Bank Account Transactions service POST
 + Add Bank Account Transactions controller POST
++ Add Ping service GET
 
 ## 0.1.0
 + First commit

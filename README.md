@@ -66,4 +66,5 @@ There is a dummy database, pre-populated. At first spin, MySQL will re-populate 
 | 4 | Add Service | GET / findAll() | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/0fba806b852d2ca84b1d67a4f4f859261fba9907) |
 | 5 | Add Controller index + DTO + Model Mapper (into main Class) | GET / findAll | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/4aabe04ad4f21f3e342d33edff7832ab92e1e551) |
 | 6 | Add Service | POST | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/3915553d740e95f711245cb38b621b6ea981d641) |
-| 6 | Add Controller | POST | [Link to commit]() |
+| 7 | Add Controller | POST | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/0f9eebb849d3785065d7f37ac252c34ff30a0a56) |
+| 8 | Add Ping Service | GET | [Link to commit]() |
