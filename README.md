@@ -69,4 +69,5 @@ There is a dummy database, pre-populated. At first spin, MySQL will re-populate 
 | 7 | Add Controller | POST | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/0f9eebb849d3785065d7f37ac252c34ff30a0a56) |
 | 8 | Add Ping Service | GET | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/82745431e03beb29638afbdeff1619da031eff7b) |
 | 9 | Add Ping Controller | GET | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/6281f4e0827475dd22763fce23f798f37218f919) |
-| 10 | Add JWT - Part 1 | N.A. | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/0dd94cb14306994421c4409651756c7b40bccf80) |
+| 10 | Add JWT - Part 1 - Utils | N.A. | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/0dd94cb14306994421c4409651756c7b40bccf80) |
+| 11 | Add JWT - Part 2 - Service (Fake data) | N.A. | [Link to commit]() |

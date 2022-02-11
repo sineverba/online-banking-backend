@@ -1,6 +1,9 @@
-# 0.3.0
+# Next version
++ Add JWT - Part 2 - Service
+
+## 0.3.0
 + Upgrade dependencies
-+ Add JWT - Part 1
++ Add JWT - Part 1 - Utils
 + Fix CORS issue
 
 ## 0.2.0
