@@ -15,33 +15,31 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-	
+
 	private List<String> getAllowedOrigins() {
-		return Arrays.asList("http://localhost:[*]", "https://online-banking-frontend.netlify.app","https://online-banking-frontend.vercel.app");
+		return Arrays.asList("http://localhost:[*]", "https://online-banking-frontend.netlify.app",
+				"https://online-banking-frontend.vercel.app");
 	}
-	
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		
+
 		// Enable CORS and disable CSRF
-        http = http.cors().and().csrf().disable();
-		http.authorizeRequests()
-		.mvcMatchers("/api/v1/ping").permitAll()
-		.mvcMatchers("/api/v1/bank-account-transactions").permitAll()
-		.anyRequest().authenticated();
+		http = http.cors().and().csrf().disable();
+		http.authorizeRequests().mvcMatchers("/api/v1/ping").permitAll()
+				.mvcMatchers("/api/v1/bank-account-transactions").permitAll().anyRequest().authenticated();
 	}
-	
+
 	@Bean
-    public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source =
-            new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.setAllowedOriginPatterns(getAllowedOrigins());
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
-        source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
-    }
-	
+	public CorsFilter corsFilter() {
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		CorsConfiguration config = new CorsConfiguration();
+		config.setAllowCredentials(true);
+		config.setAllowedOriginPatterns(getAllowedOrigins());
+		config.addAllowedHeader("*");
+		config.addAllowedMethod("*");
+		source.registerCorsConfiguration("/**", config);
+		return new CorsFilter(source);
+	}
+
 }
