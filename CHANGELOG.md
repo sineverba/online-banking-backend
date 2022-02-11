@@ -1,6 +1,7 @@
 # Next version
 + Upgrade dependencies
 + Add JWT - Part 1
++ Fix CORS issue
 
 ## 0.2.0
 + Setup tests
