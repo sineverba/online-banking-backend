@@ -1,4 +1,9 @@
-# 0.2.0
+# 0.3.0
++ Upgrade dependencies
++ Add JWT - Part 1
++ Fix CORS issue
+
+## 0.2.0
 + Setup tests
 + Add CI/CD
 + Add Bank Account Transactions entity

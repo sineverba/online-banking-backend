@@ -3,6 +3,15 @@ include .env
 IMAGE_NAME=registry.heroku.com/online-banking-demo-api/web
 CONTAINER_NAME=online-banking-demo-api
 
+check-update:
+	mvn versions:display-dependency-updates
+	
+update-minor:
+	mvn versions:use-next-releases
+	
+update-major:
+	mvn versions:use-latest-releases
+
 test:
 	mvn test
 	
