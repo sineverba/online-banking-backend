@@ -1,4 +1,7 @@
-# 0.3.0
+# Next version
++ Remove JWT configuration part 1
+
+## 0.3.0
 + Upgrade dependencies
 + Add JWT - Part 1
 + Fix CORS issue
