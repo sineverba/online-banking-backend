@@ -1,5 +1,6 @@
 # Next version
 + Remove JWT configuration part 1
++ Add JWT - Part 1 - Application Property + Entity
 
 ## 0.3.0
 + Upgrade dependencies
