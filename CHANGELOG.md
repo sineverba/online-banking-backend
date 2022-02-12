@@ -1,6 +1,7 @@
 # Next version
 + Add JWT - Part 2 - Service
 + Add JWT - Part 3 - Entity (no related to database) + Response
++ Add JWT - Part 4 - Override websecurityconfig for authenticationManager + external support for configuration
 
 ## 0.3.0
 + Upgrade dependencies
