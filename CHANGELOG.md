@@ -1,5 +1,6 @@
 # Next version
 + Add JWT - Part 2 - Service
++ Add JWT - Part 3 - Entity (no related to database) + Response
 
 ## 0.3.0
 + Upgrade dependencies
