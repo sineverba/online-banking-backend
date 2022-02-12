@@ -22,6 +22,7 @@ INSERT INTO `bank_account_transactions` (`id`, `amount`, `purpose`, `transaction
 (3,	100.00,	'Postman test',	'2022-02-08 11:49:59.245823'),
 (4,	74.50,	'Postman test 2',	'2022-02-08 14:02:49.854420'),
 (5,	7.40,	'Daily Interest - CED 002',	'2022-02-10 07:49:32.120245'),
-(6,	4.40,	'Daily Interest - CED 002',	'2022-02-10 07:53:57.450064');
+(6,	4.40,	'Daily Interest - CED 003',	'2022-02-10 07:53:57.450064'),
+(7,	2.20,	'Daily Interest - CED 004',	'2022-02-11 11:22:33.430064');
 
 -- 2022-02-10 10:39:25
