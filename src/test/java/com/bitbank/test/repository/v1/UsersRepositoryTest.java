@@ -29,10 +29,6 @@ class UsersRepositoryTest {
 		return UsersEntity.builder().id(id).username(username).password(password).build();
 	}
 
-	private static UsersEntity usersEntity(String username, String password) {
-		return UsersEntity.builder().username(username).password(password).build();
-	}
-
 	/**
 	 * Index
 	 */
@@ -60,7 +56,7 @@ class UsersRepositoryTest {
 	void testCanFindByUsername() {
 
 		List<UsersEntity> list = new ArrayList<UsersEntity>();
-		
+
 		UsersEntity usersEntity01 = usersEntity(1L, "username", "password");
 		list.add(usersEntity01);
 		list.add(usersEntity(2L, "anotherUsername", "anotherPassword"));
@@ -68,7 +64,7 @@ class UsersRepositoryTest {
 		for (UsersEntity entity : list) {
 			usersRepository.save(entity);
 		}
-		
+
 		Optional<UsersEntity> result = Optional.of(usersEntity01);
 
 		assertEquals(result, usersRepository.findByUsername("username"));
