@@ -1,6 +1,7 @@
 # Next version
 + Remove JWT configuration part 1
 + Add JWT - Part 1 - Application Property + Entity
++ Add JWT - Part 2 - Add UserRepository
 
 ## 0.3.0
 + Upgrade dependencies
