@@ -11,7 +11,7 @@ import com.bitbank.entities.v1.UsersEntity;
 import com.bitbank.repository.v1.UsersRepository;
 
 @Service
-public class UserDetailServiceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
 	UsersRepository usersRepository;

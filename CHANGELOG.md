@@ -4,6 +4,7 @@
 + Add JWT - Part 2 - Add UserRepository
 + Add JWT - Part 3 - Add UserDetailsImpl
 + Add JWT - Part 4 - Add UserDetailsServiceImpl
++ Add JWT - Part 5 - Add AuthEntryPointJwt + Rename UserDetailsServiceImpl
 
 ## 0.3.0
 + Upgrade dependencies
