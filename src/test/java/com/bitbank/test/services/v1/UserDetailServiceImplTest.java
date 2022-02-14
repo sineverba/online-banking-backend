@@ -17,7 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.bitbank.entities.v1.UsersEntity;
 import com.bitbank.repository.v1.UsersRepository;
-import com.bitbank.services.v1.UserDetailServiceImpl;
+import com.bitbank.services.v1.UserDetailsServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 class UserDetailServiceImplTest {
@@ -26,7 +26,7 @@ class UserDetailServiceImplTest {
 	private UsersRepository usersRepository;
 
 	@InjectMocks
-	private UserDetailServiceImpl userDetailServiceImpl;
+	private UserDetailsServiceImpl userDetailServiceImpl;
 
 	private static UsersEntity usersEntity(Long id, String username, String password) {
 		return UsersEntity.builder().id(id).username(username).password(password).build();
