@@ -73,5 +73,6 @@ There is a dummy database, pre-populated. At first spin, MySQL will re-populate 
 | 11 | Add JWT - Part 2 - Add UserRepository | N.A. | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/2de66cc0541b4dc6a5ef7e1e7eac36320c85de3e) |
 | 12 | Add JWT - Part 3 - Add UserDetailsImpl | N.A. | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/1ab5673f358bcf5607aa417009c3b5039efa8e45) |
 | 13 | Add JWT - Part 4 - Add UserDetailsServiceImpl | N.A. | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/14377c80d0f8dd1cd182f3cb26e3ca481a22efe6) |
-| 14 | Add JWT - Part 5 - Add AuthEntryPointJwt  | N.A. | [Link to commit]() |
+| 14 | Add JWT - Part 5 - Add AuthEntryPointJwt | N.A. | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/b803015087d0817de3549ae558e59a9bd39c0380) |
+| 15 | Add JWT - Part 6 - Add JwtUtils | N.A. | [Link to commit]() |
 
