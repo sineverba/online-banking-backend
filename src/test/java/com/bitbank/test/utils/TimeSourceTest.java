@@ -10,12 +10,13 @@ import com.bitbank.utils.TimeSource;
 
 @ExtendWith(SpringExtension.class)
 class TimeSourceTest {
-	
+
 	@Test
 	void testCanGetCurrentDate() {
 		TimeSource timeSource = new TimeSource();
 		var currentMillis = timeSource.getCurrentTimeMillis();
-		assertTrue(currentMillis >= System.currentTimeMillis());
+		// 1262344822000 == 01 Jan 2010 11:20:22 UTC
+		assertTrue(currentMillis > 1262344822000L);
 	}
 
 }
