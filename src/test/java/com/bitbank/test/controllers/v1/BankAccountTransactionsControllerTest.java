@@ -20,9 +20,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.bitbank.config.AuthTokenFilter;
 import com.bitbank.controllers.v1.BankAccountTransactionsController;
 import com.bitbank.entities.v1.BankAccountTransactionsEntity;
 import com.bitbank.services.v1.BankAccountTransactionsService;
+import com.bitbank.services.v1.UserDetailsServiceImpl;
+import com.bitbank.utils.JwtUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ExtendWith(SpringExtension.class)
@@ -37,6 +40,15 @@ class BankAccountTransactionsControllerTest {
 	
 	@Autowired
     private ObjectMapper objectMapper;
+	
+	@Autowired
+	AuthTokenFilter authTokenFilter;
+	
+	@MockBean
+	JwtUtils jwtUtils;
+	
+	@MockBean
+	UserDetailsServiceImpl userDetailsServiceImpl;
     
     /**
      * index
