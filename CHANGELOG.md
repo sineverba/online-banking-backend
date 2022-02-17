@@ -7,6 +7,7 @@
 + Add JWT - Part 5 - Add AuthEntryPointJwt + Rename UserDetailsServiceImpl
 + Add JWT - Part 6 - Add JwtUtils
 + Add JWT - Part 7 - Add AuthTokenFilter
++ Add JWT - Part 8 - Configure Spring Security
 
 ## 0.3.0
 + Upgrade dependencies
