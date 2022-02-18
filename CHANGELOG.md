@@ -1,4 +1,20 @@
-# 0.3.0
+# 0.4.0
++ Remove JWT configuration part 1
++ Add JWT - Part 1 - Application Property + Entity
++ Add JWT - Part 2 - Add UserRepository
++ Add JWT - Part 3 - Add UserDetailsImpl
++ Add JWT - Part 4 - Add UserDetailsServiceImpl
++ Add JWT - Part 5 - Add AuthEntryPointJwt + Rename UserDetailsServiceImpl
++ Add JWT - Part 6 - Add JwtUtils
++ Add JWT - Part 7 - Add AuthTokenFilter
++ Add JWT - Part 8 - Configure Spring Security
++ Add JWT - Part 9 - Add UsersService POST (create)
++ Add JWT - Part 10 - Add AuthController Register
++ Add JWT - Part 11 - Add AuthController Login
++ Add JWT - Part 12 - Set route under authenticated token
+
+
+## 0.3.0
 + Upgrade dependencies
 + Add JWT - Part 1
 + Fix CORS issue

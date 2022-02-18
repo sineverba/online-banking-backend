@@ -14,6 +14,7 @@ import com.bitbank.services.v1.PingService;
 @RequestMapping("/api/v1/ping")
 public class PingController {
 
+	@Autowired
 	private PingService pingService;
 	
 	@Autowired

@@ -69,4 +69,15 @@ There is a dummy database, pre-populated. At first spin, MySQL will re-populate 
 | 7 | Add Controller | POST | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/0f9eebb849d3785065d7f37ac252c34ff30a0a56) |
 | 8 | Add Ping Service | GET | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/82745431e03beb29638afbdeff1619da031eff7b) |
 | 9 | Add Ping Controller | GET | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/6281f4e0827475dd22763fce23f798f37218f919) |
-| 10 | Add JWT - Part 1 | N.A. | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/0dd94cb14306994421c4409651756c7b40bccf80) |
+| 10 | Add JWT - Part 1 - Add JWT - Part 1 - Application Property + Entity | N.A. | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/ca9306602b5581414262e0024cfae3c720eee506) |
+| 11 | Add JWT - Part 2 - Add UserRepository | N.A. | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/2de66cc0541b4dc6a5ef7e1e7eac36320c85de3e) |
+| 12 | Add JWT - Part 3 - Add UserDetailsImpl | N.A. | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/1ab5673f358bcf5607aa417009c3b5039efa8e45) |
+| 13 | Add JWT - Part 4 - Add UserDetailsServiceImpl | N.A. | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/14377c80d0f8dd1cd182f3cb26e3ca481a22efe6) |
+| 14 | Add JWT - Part 5 - Add AuthEntryPointJwt | N.A. | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/b803015087d0817de3549ae558e59a9bd39c0380) |
+| 15 | Add JWT - Part 6 - Add JwtUtils | N.A. | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/95f33c994582566c09776fb451bf59238e07dc75) |
+| 16 | Add JWT - Part 7 - Add AuthTokenFilter | N.A. | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/b9bd76f532a1f4ac75b209320115febf5288d5c4) |
+| 17 | Add JWT - Part 8 - Configure Spring Security | N.A. | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/5c5a2231f1dc127c2030c91bcbf230c006744308) |
+| 18 | Add JWT - Part 9 - Add UsersService POST (create) | N.A. | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/59e66d093863d88f771b87350bb076d86759dcba) |
+| 19 | Add JWT - Part 10 - Add AuthController Register | POST | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/4b424a76e3c4b2f90768f07843bfda84585db260) |
+| 20 | Add JWT - Part 11 - Add AuthController Login | POST | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/c16a2e40a1b76959771b269c9fc94250ec42acc5) |
+| 21 | Add JWT - Part 12 - Set route under authenticated token | N.A. | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/73037762c84f04f419d405b8fee7f2c229625f35) |

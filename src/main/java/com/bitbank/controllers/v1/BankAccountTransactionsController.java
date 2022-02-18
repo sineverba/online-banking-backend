@@ -20,6 +20,7 @@ import com.bitbank.services.v1.BankAccountTransactionsService;
 @RequestMapping("/api/v1/bank-account-transactions")
 public class BankAccountTransactionsController {
 	
+	@Autowired
 	private BankAccountTransactionsService bankAccountTransactionsService;
 	
 	@Autowired
