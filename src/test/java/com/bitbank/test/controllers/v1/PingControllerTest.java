@@ -27,36 +27,34 @@ import com.bitbank.utils.JwtUtils;
 @WebMvcTest(PingController.class)
 @TestPropertySource("classpath:application.properties")
 class PingControllerTest {
-	
+
 	@Autowired
-    private MockMvc mvc;
-	
+	private MockMvc mvc;
+
 	@Autowired
 	AuthTokenFilter authTokenFilter;
-	
+
 	@MockBean
 	AuthEntryPointJwt authEntryPointJwt;
-	
+
 	@MockBean
 	JwtUtils jwtUtils;
-	
+
 	@MockBean
 	UserDetailsServiceImpl userDetailsServiceImpl;
-	
+
 	@MockBean
-    private PingService pingService;
-	
+	private PingService pingService;
+
 	@Value("${app.version}")
 	private String appVersion;
-	
+
 	@Test
 	void indexShouldReturnApiVersion() throws Exception {
-		
+
 		when(pingService.show()).thenReturn(appVersion);
-		
-		mvc.perform(get("/api/v1/ping"))
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.version", is(appVersion)));
+
+		mvc.perform(get("/api/v1/ping")).andExpect(status().isOk()).andExpect(jsonPath("$.version", is(appVersion)));
 	}
 
 }
