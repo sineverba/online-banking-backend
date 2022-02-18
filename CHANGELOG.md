@@ -1,4 +1,4 @@
-# Next version
+# 0.4.0
 + Remove JWT configuration part 1
 + Add JWT - Part 1 - Application Property + Entity
 + Add JWT - Part 2 - Add UserRepository
