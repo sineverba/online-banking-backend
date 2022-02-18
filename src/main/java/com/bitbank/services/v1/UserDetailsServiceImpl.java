@@ -24,4 +24,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		return UserDetailsImpl.build(userEntity);
 	}
 
+	public UsersEntity post(UsersEntity usersEntity) {
+		return usersRepository.save(usersEntity);
+	}
+
 }

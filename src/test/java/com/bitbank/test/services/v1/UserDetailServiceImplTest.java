@@ -59,4 +59,26 @@ class UserDetailServiceImplTest {
 		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
+	/**
+	 * Post section
+	 */
+
+	@Test
+	void post_testCanSaveItem() {
+		var userToSave = validUsersEntity("username", "password");
+		var savedUser = validUsersEntity(1L, "username", "password");
+
+		when(usersRepository.save(userToSave)).thenReturn(savedUser);
+
+		assertEquals(savedUser, userDetailServiceImpl.post(userToSave));
+	}
+
+	private static UsersEntity validUsersEntity(Long id, String username, String password) {
+		return UsersEntity.builder().id(id).username(username).password(password).build();
+	}
+
+	private static UsersEntity validUsersEntity(String username, String password) {
+		return UsersEntity.builder().username(username).password(password).build();
+	}
+
 }
