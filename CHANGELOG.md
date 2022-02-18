@@ -11,6 +11,7 @@
 + Add JWT - Part 9 - Add UsersService POST (create)
 + Add JWT - Part 10 - Add AuthController Register
 + Add JWT - Part 11 - Add AuthController Login
++ Add JWT - Part 12 - Set route under authenticated token
 
 
 ## 0.3.0
