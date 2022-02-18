@@ -8,6 +8,8 @@
 + Add JWT - Part 6 - Add JwtUtils
 + Add JWT - Part 7 - Add AuthTokenFilter
 + Add JWT - Part 8 - Configure Spring Security
++ Add JWT - Part 9 - Add UsersService POST (create)
+
 
 ## 0.3.0
 + Upgrade dependencies
