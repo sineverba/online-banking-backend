@@ -9,6 +9,7 @@
 + Add JWT - Part 7 - Add AuthTokenFilter
 + Add JWT - Part 8 - Configure Spring Security
 + Add JWT - Part 9 - Add UsersService POST (create)
++ Add JWT - Part 10 - Add AuthController Register
 
 
 ## 0.3.0
