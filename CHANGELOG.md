@@ -1,4 +1,7 @@
-# 0.4.0
+# 0.5.0
++ Enable registration URL only when APP properties is true
+
+## 0.4.0
 + Remove JWT configuration part 1
 + Add JWT - Part 1 - Application Property + Entity
 + Add JWT - Part 2 - Add UserRepository
