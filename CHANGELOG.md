@@ -1,4 +1,4 @@
-# Next version
+# 0.5.0
 + Enable registration URL only when APP properties is true
 
 ## 0.4.0
