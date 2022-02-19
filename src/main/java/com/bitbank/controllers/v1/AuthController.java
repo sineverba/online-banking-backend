@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -41,23 +42,36 @@ public class AuthController {
 	@Autowired
 	JwtUtils jwtUtils;
 
+	@Value("${app.enableRegistration}")
+	private Boolean enableRegistration;
+
+	private Boolean getEnableRegistration() {
+		return this.enableRegistration;
+	}
+
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Map<String, String> post(@RequestBody UsersDTO usersDTO) {
 
-		String username = usersDTO.getUsername();
-		String password = usersDTO.getPassword();
-		String encodedPassword = passwordEncoder.encode(password);
-
-		UsersDTO encodedUsersDTO = new UsersDTO();
-		encodedUsersDTO.setUsername(username);
-		encodedUsersDTO.setPassword(encodedPassword);
-
-		UsersEntity usersEntity = convertToEntity(encodedUsersDTO);
-		usersService.post(usersEntity);
 		Map<String, String> map = new LinkedHashMap<>();
-		map.put("status", "ok - new user created");
+
+		if (Boolean.TRUE.equals(getEnableRegistration())) {
+			String username = usersDTO.getUsername();
+			String password = usersDTO.getPassword();
+			String encodedPassword = passwordEncoder.encode(password);
+
+			UsersDTO encodedUsersDTO = new UsersDTO();
+			encodedUsersDTO.setUsername(username);
+			encodedUsersDTO.setPassword(encodedPassword);
+
+			UsersEntity usersEntity = convertToEntity(encodedUsersDTO);
+			usersService.post(usersEntity);
+			map.put("status", "ok - new user created");
+			return map;
+		}
+		map.put("status", "registrations are disabled");
 		return map;
+
 	}
 
 	@PostMapping("/login")
