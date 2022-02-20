@@ -12,8 +12,7 @@ global_job_config:
 blocks:
   - name: "Test"
     skip:
-      #when: "tag =~ '.*'"
-      when: true
+      when: "tag =~ '.*'"
     task:
       jobs:
       - name: Test
@@ -32,6 +31,4 @@ promotions:
   - name: Deploy
     pipeline_file: build-deploy.yml
     auto_promote:
-      #when: "result = 'passed' and tag =~ '.*'"
-      when: true
-          
+      when: "result = 'passed' and tag =~ '.*'"
