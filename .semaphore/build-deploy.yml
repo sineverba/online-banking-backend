@@ -9,6 +9,7 @@ agent:
 global_job_config:
   secrets:
     - name: ACCESS_TOKENS
+    - name: VPS
 
   env_vars:
     - name: HEROKU_REGISTRY_IMAGE
@@ -22,6 +23,7 @@ global_job_config:
 
 blocks:
   - name: "Build and deploy image"
+    dependencies: []
     task:
       jobs:
         - name: Build, push and deploy to Heroku
@@ -40,3 +42,19 @@ blocks:
             - docker login -u semaphore -p $GITLAB_TOKEN $GITLAB_REGISTRY
             - docker build --tag $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:0.0.1 --file docker/Dockerfile "."
             - docker push $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:0.0.1
+  - name: "Deploy to VPS"
+    dependencies: ["Build and deploy image"]
+    task:
+      jobs:
+        - name: Deploy to VPS
+          commands:
+            - ssh-keyscan -H $VPS_GCP_URL >> ~/.ssh/known_hosts
+            - chmod 0600 ~/.ssh/id_rsa_semaphoreci
+            - ssh-add ~/.ssh/id_rsa_semaphoreci
+            - ssh -t $VPS_GCP_USERNAME@$VPS_GCP_URL "docker pull $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:0.0.1"
+            - ssh -t $VPS_GCP_USERNAME@$VPS_GCP_URL ""
+            - ssh -t $VPS_GCP_USERNAME@$VPS_GCP_URL "cd $GITLAB_IMAGE_NAME"
+            - exit
+        
+            
+            
