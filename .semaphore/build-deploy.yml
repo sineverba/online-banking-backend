@@ -22,28 +22,28 @@ global_job_config:
       value: online-banking-backend
 
 blocks:
-  - name: "Build and deploy image"
-    dependencies: []
-    task:
-      jobs:
-        - name: Build, push and deploy to Heroku
-          commands:
-            - checkout
-            - docker build --tag $HEROKU_REGISTRY_IMAGE --file docker/Dockerfile "."
-            - docker login -u _ -p $HEROKU_API_KEY registry.heroku.com
-            - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
-            - heroku config:set APP_VERSION=$SEMAPHORE_GIT_TAG_NAME -a $HEROKU_APP
-            - docker push $HEROKU_REGISTRY_IMAGE
-            - heroku container:release web -a $HEROKU_APP
-            - heroku labs:enable -a $HEROKU_APP runtime-new-layer-extract
-        - name: Build and push to Gitlab
-          commands:
-            - checkout
-            - docker login -u semaphore -p $GITLAB_TOKEN $GITLAB_REGISTRY
-            - docker build --tag $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:0.0.1 --file docker/Dockerfile "."
-            - docker push $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:0.0.1
+  #- name: "Build and deploy image"
+  #  dependencies: []
+  #  task:
+  #    jobs:
+  #      - name: Build, push and deploy to Heroku
+  #        commands:
+  #          - checkout
+  #          - docker build --tag $HEROKU_REGISTRY_IMAGE --file docker/Dockerfile "."
+  #          - docker login -u _ -p $HEROKU_API_KEY registry.heroku.com
+  #          - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+  #          - heroku config:set APP_VERSION=$SEMAPHORE_GIT_TAG_NAME -a $HEROKU_APP
+  #          - docker push $HEROKU_REGISTRY_IMAGE
+  #          - heroku container:release web -a $HEROKU_APP
+  #          - heroku labs:enable -a $HEROKU_APP runtime-new-layer-extract
+  #      - name: Build and push to Gitlab
+  #        commands:
+  #          - checkout
+  #          - docker login -u semaphore -p $GITLAB_TOKEN $GITLAB_REGISTRY
+  #          - docker build --tag $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest --file docker/Dockerfile "."
+  #          - docker push $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest
   - name: "Deploy to VPS"
-    dependencies: ["Build and deploy image"]
+  #  dependencies: ["Build and deploy image"]
     task:
       jobs:
         - name: Deploy to VPS
@@ -51,10 +51,10 @@ blocks:
             - ssh-keyscan -H $VPS_GCP_URL >> ~/.ssh/known_hosts
             - chmod 0600 ~/.ssh/id_rsa_semaphoreci
             - ssh-add ~/.ssh/id_rsa_semaphoreci
-            - ssh -t $VPS_GCP_USERNAME@$VPS_GCP_URL "docker pull $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:0.0.1"
-            - ssh -t $VPS_GCP_USERNAME@$VPS_GCP_URL ""
-            - ssh -t $VPS_GCP_USERNAME@$VPS_GCP_URL "cd $GITLAB_IMAGE_NAME"
-            - exit
+            - ssh -t $VPS_GCP_USERNAME@$VPS_GCP_URL "docker pull $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest && exit"
+            - ssh -t $VPS_GCP_USERNAME@$VPS_GCP_URL "docker container stop $GITLAB_IMAGE_NAME && docker container rm $GITLAB_IMAGE_NAME && exit"
+            - ssh -t $VPS_GCP_USERNAME@$VPS_GCP_URL "sed -i \"/APP_VERSION=/c\APP_VERSION=$SEMAPHORE_GIT_TAG_NAME\" $GITLAB_IMAGE_NAME/.env && exit"
+            - ssh -t $VPS_GCP_USERNAME@$VPS_GCP_URL "docker run --name $GITLAB_IMAGE_NAME --env-file ./GITLAB_IMAGE_NAME/envfile -p "9876:9876" $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest && exit"
         
             
             
