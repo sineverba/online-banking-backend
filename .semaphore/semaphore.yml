@@ -7,13 +7,13 @@ agent:
     
 global_job_config:
   secrets:
-    #- name: ONLINE_BANKING_BACKEND
     - name: ACCESS_TOKENS
 
 blocks:
   - name: "Test"
     skip:
-      when: "tag =~ '.*'"
+      #when: "tag =~ '.*'"
+      when: true
     task:
       jobs:
       - name: Test
@@ -32,5 +32,6 @@ promotions:
   - name: Deploy
     pipeline_file: build-deploy.yml
     auto_promote:
-      when: "result = 'passed' and tag =~ '.*'"
+      #when: "result = 'passed' and tag =~ '.*'"
+      when: true
           

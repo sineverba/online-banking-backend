@@ -13,9 +13,11 @@ global_job_config:
   env_vars:
     - name: HEROKU_APP
       value: online-banking-demo-api
-    - name: HEROKU_REGISTRY_IMAGE
-      value: registry.heroku.com/$HEROKU_APP/web
-    - name: GITLAB_REGISTRY_IMAGE
+    - name: HEROKU_REGISTRY
+      value: registry.heroku.com
+    - name: HEROKU_IMAGE
+      value: $HEROKU_REGISTRY/$HEROKU_APP/web
+    - name: GITLAB_REGISTRY
       value: registry.gitlab.com
     - name: GITLAB_IMAGE_NAME
       value: online-banking-backend
@@ -27,16 +29,16 @@ blocks:
         - name: Build, push and deploy to Heroku
           commands:
             - checkout
-            - docker login -u _ -p $HEROKU_API_KEY registry.heroku.com
-            - docker build --tag $HEROKU_REGISTRY_IMAGE --file docker/Dockerfile "."
+            - docker login -u _ -p $HEROKU_API_KEY $HEROKU_REGISTRY
+            - docker build --tag $HEROKU_IMAGE --file docker/Dockerfile "."
             - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
             - heroku config:set APP_VERSION=$SEMAPHORE_GIT_TAG_NAME -a $HEROKU_APP
-            - docker push $HEROKU_REGISTRY_IMAGE
+            - docker push $HEROKU_IMAGE
             - heroku container:release web -a $HEROKU_APP
             - heroku labs:enable -a $HEROKU_APP runtime-new-layer-extract
         - name: Build and push to Gitlab
           commands:
             - checkout
-            - docker login -u semaphore -p $GITLAB_TOKEN login $GITLAB_REGISTRY_IMAGE
+            - docker login -u semaphore -p $GITLAB_TOKEN $GITLAB_REGISTRY
             - docker build --tag $GITLAB_REGISTRY_IMAGE/private-registry/$GITLAB_IMAGE_NAME:0.0.1 --file docker/Dockerfile "."
             - docker push $GITLAB_REGISTRY_IMAGE/private-registry/$GITLAB_IMAGE_NAME:0.0.1
