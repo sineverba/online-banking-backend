@@ -16,7 +16,7 @@ global_job_config:
     - name: HEROKU_REGISTRY
       value: registry.heroku.com
     - name: HEROKU_IMAGE
-      value: $HEROKU_REGISTRY/$HEROKU_APP/web
+      value: "$HEROKU_REGISTRY/$HEROKU_APP/web"
     - name: GITLAB_REGISTRY
       value: registry.gitlab.com
     - name: GITLAB_IMAGE_NAME
@@ -40,5 +40,5 @@ blocks:
           commands:
             - checkout
             - docker login -u semaphore -p $GITLAB_TOKEN $GITLAB_REGISTRY
-            - docker build --tag $GITLAB_REGISTRY_IMAGE/private-registry/$GITLAB_IMAGE_NAME:0.0.1 --file docker/Dockerfile "."
+            - docker build --tag $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:0.0.1 --file docker/Dockerfile "."
             - docker push $GITLAB_REGISTRY_IMAGE/private-registry/$GITLAB_IMAGE_NAME:0.0.1
