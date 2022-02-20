@@ -22,10 +22,10 @@ global_job_config:
       value: online-banking-backend
 
 blocks:
-  #- name: "Build and deploy image"
-  #  dependencies: []
-  #  task:
-  #    jobs:
+  - name: "Build and deploy image"
+    dependencies: []
+    task:
+      jobs:
   #      - name: Build, push and deploy to Heroku
   #        commands:
   #          - checkout
@@ -36,14 +36,14 @@ blocks:
   #          - docker push $HEROKU_REGISTRY_IMAGE
   #          - heroku container:release web -a $HEROKU_APP
   #          - heroku labs:enable -a $HEROKU_APP runtime-new-layer-extract
-  #      - name: Build and push to Gitlab
-  #        commands:
-  #          - checkout
-  #          - docker login -u semaphore -p $GITLAB_TOKEN $GITLAB_REGISTRY
-  #          - docker build --tag $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest --file docker/Dockerfile "."
-  #          - docker push $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest
+        - name: Build and push to Gitlab
+          commands:
+            - checkout
+            - docker login -u semaphore -p $GITLAB_TOKEN $GITLAB_REGISTRY
+            - docker build --tag $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest --file docker/Dockerfile "."
+            - docker push $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest
   - name: "Deploy to VPS"
-  #  dependencies: ["Build and deploy image"]
+    dependencies: ["Build and deploy image"]
     task:
       jobs:
         - name: Deploy to VPS
