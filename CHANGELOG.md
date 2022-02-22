@@ -1,6 +1,7 @@
 # Next version
 + Upgrade dependencies
 + Refactor Semaphore
++ Add production configuration
 
 ## 0.5.0
 + Enable registration URL only when APP properties is true
