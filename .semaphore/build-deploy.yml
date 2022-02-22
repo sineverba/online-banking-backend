@@ -28,7 +28,16 @@ blocks:
       jobs:
         - name: Build and push to Gitlab
           commands:
-            #- checkout
+            - checkout
+            - docker login -u semaphore -p $GITLAB_TOKEN $GITLAB_REGISTRY
+            - docker build --tag $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest --file docker/Dockerfile "."
+            - docker push $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest
+  - name: "Deploy to VPS"
+    dependencies: ["Build and deploy image"]
+    task:
+      jobs:
+        - name: Deploy to VPS
+          commands:
             - ssh-keyscan -p 7654 -H $VPS_DOC_URL >> ~/.ssh/known_hosts
             - chmod 0600 ~/.ssh/id_rsa_semaphoreci
             - ssh-add ~/.ssh/id_rsa_semaphoreci
@@ -37,23 +46,3 @@ blocks:
             - ssh -t $VPS_DOC_USERNAME@$VPS_DOC_URL -p 7654 "docker pull $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest && exit"
             - ssh -t $VPS_DOC_USERNAME@$VPS_DOC_URL -p 7654 "sed -i \"/APP_VERSION=/c\APP_VERSION=$SEMAPHORE_GIT_TAG_NAME\" $GITLAB_IMAGE_NAME/.env && exit"
             - ssh -t $VPS_DOC_USERNAME@$VPS_DOC_URL -p 7654 "cd $GITLAB_IMAGE_NAME && docker-compose up -d && exit"
-            #- checkout
-            #- docker login -u semaphore -p $GITLAB_TOKEN $GITLAB_REGISTRY
-            #- docker build --tag $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest --file docker/Dockerfile "."
-            #- docker push $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest
-  - name: "Deploy to VPS"
-    dependencies: ["Build and deploy image"]
-    task:
-      jobs:
-        - name: Deploy to VPS
-          commands:
-            - ssh-keyscan -H $VPS_DOC_URL >> ~/.ssh/known_hosts
-            - chmod 0600 ~/.ssh/id_rsa_semaphoreci
-            - ssh-add ~/.ssh/id_rsa_semaphoreci
-            - ssh -t $VPS_DOC_USERNAME@$VPS_DOC_URL -p 7654 "cd $GITLAB_IMAGE_NAME && docker-compose stop && docker container rm $GITLAB_IMAGE_NAME && docker image rm $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest && exit"
-            - ssh -t $VPS_DOC_USERNAME@$VPS_DOC_URL -p 7654 "docker pull $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest && exit"
-            - ssh -t $VPS_DOC_USERNAME@$VPS_DOC_URL -p 7654 "cd $GITLAB_IMAGE_NAME && sed -i \"/APP_VERSION=/c\APP_VERSION=$SEMAPHORE_GIT_TAG_NAME\" $GITLAB_IMAGE_NAME/.env && exit"
-            - ssh -t $VPS_DOC_USERNAME@$VPS_DOC_URL -p 7654 "cd $GITLAB_IMAGE_NAME && docker compose up -d && exit"
-        
-            
-            
