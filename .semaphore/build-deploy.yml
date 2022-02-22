@@ -28,7 +28,7 @@ blocks:
       jobs:
         - name: Build and push to Gitlab
           commands:
-            #- ssh-keyscan -H $VPS_DOC_URL >> ~/.ssh/known_hosts
+            - ssh-keyscan -H $VPS_DOC_URL -p 7654 >> ~/.ssh/known_hosts
             - chmod 0600 ~/.ssh/id_rsa_semaphoreci
             - ssh-add ~/.ssh/id_rsa_semaphoreci
             - ssh -t $VPS_DOC_USERNAME@$VPS_DOC_URL -p 7654 "cd $GITLAB_IMAGE_NAME && docker-compose stop && docker container rm $GITLAB_IMAGE_NAME && docker image rm $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest && exit"
