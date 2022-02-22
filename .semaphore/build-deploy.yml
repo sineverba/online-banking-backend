@@ -28,6 +28,7 @@ blocks:
       jobs:
         - name: Build and push to Gitlab
           commands:
+            - checkout
             - ssh-keyscan -p 7654 -H $VPS_DOC_URL >> ~/.ssh/known_hosts
             - chmod 0600 ~/.ssh/id_rsa_semaphoreci
             - ssh-add ~/.ssh/id_rsa_semaphoreci
