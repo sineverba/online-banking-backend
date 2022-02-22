@@ -2,6 +2,7 @@
 + Upgrade dependencies
 + Refactor Semaphore
 + Add production configuration
++ Refactor Response Entity for JWT
 
 ## 0.5.0
 + Enable registration URL only when APP properties is true

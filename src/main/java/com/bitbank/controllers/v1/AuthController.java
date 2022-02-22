@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bitbank.dto.v1.UsersDTO;
 import com.bitbank.entities.v1.UsersEntity;
+import com.bitbank.responses.v1.JwtResponse;
 import com.bitbank.services.v1.UserDetailsServiceImpl;
 import com.bitbank.utils.JwtUtils;
 
@@ -75,7 +77,7 @@ public class AuthController {
 	}
 
 	@PostMapping("/login")
-	public Map<String, String> login(@RequestBody UsersDTO usersDTO) {
+	public ResponseEntity<JwtResponse> login(@RequestBody UsersDTO usersDTO) {
 
 		String username = usersDTO.getUsername();
 		String password = usersDTO.getPassword();
@@ -85,10 +87,8 @@ public class AuthController {
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
-
-		Map<String, String> map = new LinkedHashMap<>();
-		map.put("access_token", jwt);
-		return map;
+		
+		return ResponseEntity.ok(new JwtResponse(jwt));
 	}
 
 	/**
