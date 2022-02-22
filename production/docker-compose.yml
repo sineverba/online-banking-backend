@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  online-banking-backend-api:
+  online-banking-backend:
     image: registry.gitlab.com/private-registry/online-banking-backend:latest
     container_name: ${CONTAINER_NAME}
     restart: unless-stopped
@@ -23,4 +23,3 @@ networks:
   databases:
     name: databases
     driver: bridge
-  
