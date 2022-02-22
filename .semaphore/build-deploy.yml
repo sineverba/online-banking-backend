@@ -34,7 +34,7 @@ blocks:
             - ssh -t $VPS_DOC_USERNAME@$VPS_DOC_URL -p 7654 "cd $GITLAB_IMAGE_NAME && docker-compose stop && exit"
             - ssh -t $VPS_DOC_USERNAME@$VPS_DOC_URL -p 7654 "docker container rm $GITLAB_IMAGE_NAME-api && docker image rm $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest && exit"
             - ssh -t $VPS_DOC_USERNAME@$VPS_DOC_URL -p 7654 "docker pull $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest && exit"
-            - ssh -t $VPS_DOC_USERNAME@$VPS_DOC_URL -p 7654 "cd $GITLAB_IMAGE_NAME && sed -i \"/APP_VERSION=/c\APP_VERSION=$SEMAPHORE_GIT_TAG_NAME\" $GITLAB_IMAGE_NAME/.env && exit"
+            - ssh -t $VPS_DOC_USERNAME@$VPS_DOC_URL -p 7654 "sed -i \"/APP_VERSION=/c\APP_VERSION=$SEMAPHORE_GIT_TAG_NAME\" $GITLAB_IMAGE_NAME/.env && exit"
             - ssh -t $VPS_DOC_USERNAME@$VPS_DOC_URL -p 7654 "cd $GITLAB_IMAGE_NAME && docker compose up -d && exit"
             #- checkout
             #- docker login -u semaphore -p $GITLAB_TOKEN $GITLAB_REGISTRY
