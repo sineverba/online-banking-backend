@@ -5,6 +5,7 @@
 + Refactor Response Entity for JWT
 + Refactor docker-compose for production
 + Refactor Response Entity for PingController
++ Migrate to custom Sonarqube. Fix double CSRF disable
 
 ## 0.5.0
 + Enable registration URL only when APP properties is true

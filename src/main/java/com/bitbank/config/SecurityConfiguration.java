@@ -42,11 +42,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		return Arrays.asList("http://localhost:[*]", "https://online-banking-frontend.netlify.app",
 				"https://online-banking-frontend.vercel.app");
 	}
-	
+
 	@Override
 	@Bean
 	public AuthenticationManager authenticationManagerBean() throws Exception {
-	    return super.authenticationManagerBean();
+		return super.authenticationManagerBean();
 	}
 
 	@Bean
@@ -61,14 +61,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		// Enable CORS and disable CSRF
-		http = http.cors().and().csrf().disable();
-
 		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(authEntryPointJwt).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-				.mvcMatchers("/api/v1/ping").permitAll()
-				.mvcMatchers("/api/v1/auth/register").permitAll().mvcMatchers("/api/v1/auth/login").permitAll()
-				.anyRequest().authenticated();
+				.mvcMatchers("/api/v1/ping").permitAll().mvcMatchers("/api/v1/auth/register").permitAll()
+				.mvcMatchers("/api/v1/auth/login").permitAll().anyRequest().authenticated();
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
 	}
