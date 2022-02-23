@@ -4,6 +4,7 @@
 + Add production configuration
 + Refactor Response Entity for JWT
 + Refactor docker-compose for production
++ Refactor Response Entity for PingController
 
 ## 0.5.0
 + Enable registration URL only when APP properties is true
