@@ -1,4 +1,14 @@
-# 0.5.0
+# 0.6.0
++ Upgrade dependencies
++ Refactor Semaphore
++ Add production configuration
++ Refactor Response Entity for JWT
++ Refactor docker-compose for production
++ Refactor Response Entity for PingController
++ Migrate to custom Sonarqube. Fix double CSRF disable
++ Refactor Message Entity for Registration Controller
+
+## 0.5.0
 + Enable registration URL only when APP properties is true
 
 ## 0.4.0

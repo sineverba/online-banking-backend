@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  online-banking-backend:
+    image: registry.gitlab.com/private-registry/online-banking-backend:latest
+    container_name: ${CONTAINER_NAME}
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    networks:
+      - proxy
+      - databases
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.${CONTAINER_NAME}.entrypoints=websecure"
+      - "traefik.http.routers.${CONTAINER_NAME}.service=${CONTAINER_NAME}"
+      - "traefik.http.routers.${CONTAINER_NAME}.rule=Host(`${HOST}`)"
+      - "traefik.http.services.${CONTAINER_NAME}.loadbalancer.server.port=${PORT}"
+
+networks:
+  proxy:
+    external: true
+  databases:
+    name: databases
+    driver: bridge

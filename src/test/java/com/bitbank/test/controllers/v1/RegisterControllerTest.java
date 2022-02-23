@@ -68,8 +68,9 @@ class RegisterControllerTest {
 		when(userDetailsServiceImpl.post(userToSave)).thenReturn(savedUser);
 
 		mvc.perform(post("/api/v1/auth/register/").contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsBytes(userToSave))).andExpect(status().isCreated())
-				.andExpect(jsonPath("$.status", is("registrations are disabled")));
+				.content(objectMapper.writeValueAsBytes(userToSave))).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.status", is("error")))
+				.andExpect(jsonPath("$.message", is("registrations disabled")));
 	}
 
 	private static UsersEntity validUserEntity(String username, String password) {

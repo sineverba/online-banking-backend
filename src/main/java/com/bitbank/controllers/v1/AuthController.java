@@ -1,12 +1,10 @@
 package com.bitbank.controllers.v1;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bitbank.dto.v1.UsersDTO;
 import com.bitbank.entities.v1.UsersEntity;
+import com.bitbank.responses.v1.JwtResponse;
+import com.bitbank.responses.v1.MessageResponse;
 import com.bitbank.services.v1.UserDetailsServiceImpl;
 import com.bitbank.utils.JwtUtils;
 
@@ -51,9 +51,7 @@ public class AuthController {
 
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Map<String, String> post(@RequestBody UsersDTO usersDTO) {
-
-		Map<String, String> map = new LinkedHashMap<>();
+	public ResponseEntity<MessageResponse> post(@RequestBody UsersDTO usersDTO) {
 
 		if (Boolean.TRUE.equals(getEnableRegistration())) {
 			String username = usersDTO.getUsername();
@@ -66,16 +64,15 @@ public class AuthController {
 
 			UsersEntity usersEntity = convertToEntity(encodedUsersDTO);
 			usersService.post(usersEntity);
-			map.put("status", "ok - new user created");
-			return map;
+			return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("ok", "new user created"));
 		}
-		map.put("status", "registrations are disabled");
-		return map;
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(new MessageResponse("error", "registrations disabled"));
 
 	}
 
 	@PostMapping("/login")
-	public Map<String, String> login(@RequestBody UsersDTO usersDTO) {
+	public ResponseEntity<JwtResponse> login(@RequestBody UsersDTO usersDTO) {
 
 		String username = usersDTO.getUsername();
 		String password = usersDTO.getPassword();
@@ -86,9 +83,7 @@ public class AuthController {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
 
-		Map<String, String> map = new LinkedHashMap<>();
-		map.put("access_token", jwt);
-		return map;
+		return ResponseEntity.ok(new JwtResponse(jwt));
 	}
 
 	/**
