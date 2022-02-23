@@ -1,4 +1,4 @@
-# Next version
+# 0.6.0
 + Upgrade dependencies
 + Refactor Semaphore
 + Add production configuration
