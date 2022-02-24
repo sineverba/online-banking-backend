@@ -15,8 +15,8 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.TestPropertySource;
 
-import com.bitbank.entities.v1.UsersEntity;
-import com.bitbank.services.v1.UserDetailsImpl;
+import com.bitbank.entities.UsersEntity;
+import com.bitbank.services.UserDetailsImpl;
 import com.bitbank.utils.JwtUtils;
 import com.bitbank.utils.TimeSource;
 
