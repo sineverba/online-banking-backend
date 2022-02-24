@@ -1,4 +1,7 @@
-# 0.6.0
+# Next version
++ Add Balance repository
+
+## 0.6.0
 + Upgrade dependencies
 + Refactor Semaphore
 + Add production configuration
