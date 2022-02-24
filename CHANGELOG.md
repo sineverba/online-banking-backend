@@ -1,4 +1,9 @@
-# 0.6.0
+# 0.7.0
++ Add balance to BankAccountTransactionsRepository
++ Add balance to BankAccountTransactionsService
++ Add Balance controller
+
+## 0.6.0
 + Upgrade dependencies
 + Refactor Semaphore
 + Add production configuration
