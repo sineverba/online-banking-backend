@@ -1,4 +1,4 @@
-package com.bitbank.test.config;
+package com.bitbank.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
