@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bitbank.entities.v1.BankAccountTransactionsEntity;
-import com.bitbank.repository.v1.BankAccountTransactionsRepository;
+import com.bitbank.repositories.v1.BankAccountTransactionsRepository;
 
 @Service
 public class BankAccountTransactionsService {

@@ -15,7 +15,7 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.bitbank.entities.v1.UsersEntity;
-import com.bitbank.repository.v1.UsersRepository;
+import com.bitbank.repositories.v1.UsersRepository;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest

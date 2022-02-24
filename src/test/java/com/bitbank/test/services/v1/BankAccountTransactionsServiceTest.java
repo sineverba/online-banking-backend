@@ -15,7 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.bitbank.entities.v1.BankAccountTransactionsEntity;
-import com.bitbank.repository.v1.BankAccountTransactionsRepository;
+import com.bitbank.repositories.v1.BankAccountTransactionsRepository;
 import com.bitbank.services.v1.BankAccountTransactionsService;
 
 @ExtendWith(MockitoExtension.class)

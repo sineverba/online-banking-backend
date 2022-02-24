@@ -1,4 +1,7 @@
-# 0.7.0
+# Next version
++ Rename repositories in repository
+
+## 0.7.0
 + Add balance to BankAccountTransactionsRepository
 + Add balance to BankAccountTransactionsService
 + Add Balance controller

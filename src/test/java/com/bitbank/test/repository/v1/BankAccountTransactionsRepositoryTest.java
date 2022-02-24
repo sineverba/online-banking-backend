@@ -15,7 +15,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.bitbank.entities.v1.BankAccountTransactionsEntity;
-import com.bitbank.repository.v1.BankAccountTransactionsRepository;
+import com.bitbank.repositories.v1.BankAccountTransactionsRepository;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
