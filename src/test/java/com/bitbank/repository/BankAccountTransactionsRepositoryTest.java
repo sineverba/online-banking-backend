@@ -1,4 +1,4 @@
-package com.bitbank.test.repository;
+package com.bitbank.repository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,4 +1,4 @@
-package com.bitbank.test.controllers;
+package com.bitbank.controllers;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.when;

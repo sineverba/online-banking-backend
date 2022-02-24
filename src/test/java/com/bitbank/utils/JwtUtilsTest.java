@@ -1,4 +1,4 @@
-package com.bitbank.test.utils;
+package com.bitbank.utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
