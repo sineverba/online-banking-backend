@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bitbank.entities.v1.UsersEntity;
-import com.bitbank.repository.v1.UsersRepository;
+import com.bitbank.repositories.v1.UsersRepository;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {

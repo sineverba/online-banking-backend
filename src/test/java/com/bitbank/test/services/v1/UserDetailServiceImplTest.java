@@ -16,7 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.bitbank.entities.v1.UsersEntity;
-import com.bitbank.repository.v1.UsersRepository;
+import com.bitbank.repositories.v1.UsersRepository;
 import com.bitbank.services.v1.UserDetailsServiceImpl;
 
 @ExtendWith(MockitoExtension.class)

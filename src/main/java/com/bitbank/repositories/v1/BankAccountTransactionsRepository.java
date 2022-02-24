@@ -1,4 +1,4 @@
-package com.bitbank.repository.v1;
+package com.bitbank.repositories.v1;
 
 import java.math.BigDecimal;
 
