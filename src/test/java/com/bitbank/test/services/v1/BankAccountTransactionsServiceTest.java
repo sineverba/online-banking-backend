@@ -1,11 +1,13 @@
 package com.bitbank.test.services.v1;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -59,6 +61,21 @@ class BankAccountTransactionsServiceTest {
 		when(bankAccountTransactionsRepository.save(transactionToSave)).thenReturn(savedTransaction);
 		
 		assertEquals(savedTransaction, bankAccountTransactionsService.post(transactionToSave));
+	}
+	
+	
+	/**
+	 * Balance section
+	 */
+	
+	@Test
+	void testCanGetBalance() {
+		
+		BigDecimal balance = new BigDecimal(15000);
+		
+		when(bankAccountTransactionsRepository.balance()).thenReturn(new BigDecimal(15000));
+		
+		assertThat(balance, Matchers.comparesEqualTo(bankAccountTransactionsService.balance()));
 	}
 	
 	/**

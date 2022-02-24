@@ -1,5 +1,6 @@
 # Next version
-+ Add Balance repository
++ Add balance to BankAccountTransactionsRepository
++ Add balance to BankAccountTransactionsService
 
 ## 0.6.0
 + Upgrade dependencies
