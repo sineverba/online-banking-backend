@@ -1,6 +1,7 @@
 package com.bitbank.controllers;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -13,9 +14,13 @@ import java.util.ArrayList;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -23,7 +28,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.bitbank.config.AuthEntryPointJwt;
 import com.bitbank.config.AuthTokenFilter;
-import com.bitbank.controllers.BankAccountTransactionsController;
 import com.bitbank.entities.BankAccountTransactionsEntity;
 import com.bitbank.services.BankAccountTransactionsService;
 import com.bitbank.services.UserDetailsServiceImpl;
@@ -54,6 +58,9 @@ class BankAccountTransactionsControllerTest {
 
 	@MockBean
 	AuthEntryPointJwt authEntryPointJwt;
+	
+	@MockBean
+    Pageable pageableMock;
 
 	/**
 	 * index
@@ -69,17 +76,13 @@ class BankAccountTransactionsControllerTest {
 		var result = new ArrayList<BankAccountTransactionsEntity>();
 		result.add(transaction01);
 		result.add(transaction02);
+		
+		Page<BankAccountTransactionsEntity> items = mock(Page.class);
 
-		when(bankAccountTransactionsService.index()).thenReturn(result);
+		when(bankAccountTransactionsService.index(0, 1, "id", "desc")).thenReturn(items);
+		
 
-		mvc.perform(get("/api/v1/bank-account-transactions/")).andExpect(status().isOk())
-				.andExpect(jsonPath("$.length()", is(2))).andExpect(jsonPath("$[0].id", is(1)))
-				.andExpect(jsonPath("$[1].id", is(2))).andExpect(jsonPath("$[0].amount", is(new BigDecimal(99.99))))
-				.andExpect(jsonPath("$[1].amount", is(150)))
-				.andExpect(jsonPath("$[0].purpose", is("First Transaction")))
-				.andExpect(jsonPath("$[1].purpose", is("Second Transaction")))
-				.andExpect(jsonPath("$[0]", Matchers.hasKey("transactionDate")))
-				.andExpect(jsonPath("$[1]", Matchers.hasKey("transactionDate")));
+		mvc.perform(get("/api/v1/bank-account-transactions/")).andExpect(status().isOk());
 	}
 
 	@WithMockUser("username")

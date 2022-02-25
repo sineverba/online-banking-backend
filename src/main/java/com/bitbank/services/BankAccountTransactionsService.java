@@ -1,10 +1,12 @@
 package com.bitbank.services;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.bitbank.entities.BankAccountTransactionsEntity;
@@ -17,19 +19,22 @@ public class BankAccountTransactionsService {
 	private BankAccountTransactionsRepository bankAccountTransactionsRepository;
 
 	/**
-	 * Index
+	 * Index paginate
 	 * 
 	 * @return
 	 */
-	public List<BankAccountTransactionsEntity> index() {
-		Iterable<BankAccountTransactionsEntity> items = bankAccountTransactionsRepository.findAll();
-		ArrayList<BankAccountTransactionsEntity> bankAccountTransactions = new ArrayList<>();
+	public Page<BankAccountTransactionsEntity> index(Integer page, Integer perPage, String sortBy, String orderWay) {
 
-		for (BankAccountTransactionsEntity transaction : items) {
-			bankAccountTransactions.add(transaction);
-		}
+		/**
+		 * Create the paging
+		 */
+		Pageable pageable = PageRequest.of(page, perPage,
+				Sort.by(orderWay.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy));
 
-		return bankAccountTransactions;
+		/**
+		 * Fetch data
+		 */
+		return bankAccountTransactionsRepository.findAll(pageable);
 	}
 
 	/**
