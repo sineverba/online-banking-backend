@@ -2,6 +2,7 @@
 + Rename repositories in repository
 + Remove V1 from packages
 + Remove test from packages tests
++ Add pagination
 
 ## 0.7.0
 + Add balance to BankAccountTransactionsRepository
