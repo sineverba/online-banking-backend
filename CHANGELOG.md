@@ -1,4 +1,10 @@
-# 0.7.0
+# 0.8.0
++ Rename repositories in repository
++ Remove V1 from packages
++ Remove test from packages tests
++ Add pagination
+
+## 0.7.0
 + Add balance to BankAccountTransactionsRepository
 + Add balance to BankAccountTransactionsService
 + Add Balance controller

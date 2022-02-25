@@ -20,7 +20,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import com.bitbank.services.v1.UserDetailsServiceImpl;
+import com.bitbank.services.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
