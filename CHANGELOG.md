@@ -1,4 +1,4 @@
-# Next version
+# 0.10.0
 + Change swagger server
 + Merge commons application properties
 
