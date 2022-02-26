@@ -12,6 +12,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 
 @SpringBootApplication
 public class OnlineBankingBackendApplication {
@@ -35,6 +36,8 @@ public class OnlineBankingBackendApplication {
 		PingService pingService = new PingService();
 
 		return new OpenAPI()
+				.addServersItem(new Server().url("http://localhost:8080").description("Local"))
+				.addServersItem(new Server().url("https://online-banking-backend.k2p.it").description("Production"))
 				.components(new Components().addSecuritySchemes("bearer-key",
 						new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")))
 				.info(new Info().title("Online Banking Backend").version(pingService.show())

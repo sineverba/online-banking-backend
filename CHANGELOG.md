@@ -1,4 +1,8 @@
-# 0.9.0
+# 0.10.0
++ Change swagger server
++ Merge commons application properties
+
+## 0.9.0
 + Add swagger
 
 ## 0.8.0
