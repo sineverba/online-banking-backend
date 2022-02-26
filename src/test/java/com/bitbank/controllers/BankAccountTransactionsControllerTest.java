@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -65,19 +64,10 @@ class BankAccountTransactionsControllerTest {
 	@WithMockUser("username")
 	@Test
 	void testCanIndex() throws Exception {
-		var transaction01 = BankAccountTransactionsControllerTest.validBankAccountTransactionsEntity(1L,
-				new BigDecimal(99.99), "First Transaction");
-		var transaction02 = BankAccountTransactionsControllerTest.validBankAccountTransactionsEntity(2L,
-				new BigDecimal(150.00), "Second Transaction");
-
-		var result = new ArrayList<BankAccountTransactionsEntity>();
-		result.add(transaction01);
-		result.add(transaction02);
-
+		
+		@SuppressWarnings("unchecked")
 		Page<BankAccountTransactionsEntity> items = mock(Page.class);
-
 		when(bankAccountTransactionsService.index(0, 1, "id", "desc")).thenReturn(items);
-
 		mvc.perform(get("/api/v1/bank-account-transactions/")).andExpect(status().isOk());
 	}
 

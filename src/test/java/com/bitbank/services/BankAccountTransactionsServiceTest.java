@@ -49,6 +49,7 @@ class BankAccountTransactionsServiceTest {
 		result.add(transaction01);
 		result.add(transaction02);
 
+		@SuppressWarnings("unchecked")
 		Page<BankAccountTransactionsEntity> items = mock(Page.class);
 		Pageable pageable = PageRequest.of(0, 1, Sort.by(Sort.Direction.ASC, "id"));
 		when(bankAccountTransactionsRepository.findAll(pageable)).thenReturn(items);
