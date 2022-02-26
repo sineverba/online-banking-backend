@@ -1,4 +1,7 @@
-# 0.9.0
+# Next version
++ Change swagger server
+
+## 0.9.0
 + Add swagger
 
 ## 0.8.0
