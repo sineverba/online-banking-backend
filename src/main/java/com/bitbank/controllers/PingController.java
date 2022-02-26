@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bitbank.responses.PingResponse;
 import com.bitbank.services.PingService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/v1/ping")
+@Tag(name = "Ping", description = "Ping")
 public class PingController {
 
 	@Autowired
