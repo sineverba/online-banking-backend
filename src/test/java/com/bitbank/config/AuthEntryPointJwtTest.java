@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-import com.bitbank.config.AuthEntryPointJwt;
-
 class AuthEntryPointJwtTest {
 
 	@Test

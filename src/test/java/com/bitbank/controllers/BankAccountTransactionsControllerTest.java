@@ -11,16 +11,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -58,9 +55,9 @@ class BankAccountTransactionsControllerTest {
 
 	@MockBean
 	AuthEntryPointJwt authEntryPointJwt;
-	
+
 	@MockBean
-    Pageable pageableMock;
+	Pageable pageableMock;
 
 	/**
 	 * index
@@ -76,11 +73,10 @@ class BankAccountTransactionsControllerTest {
 		var result = new ArrayList<BankAccountTransactionsEntity>();
 		result.add(transaction01);
 		result.add(transaction02);
-		
+
 		Page<BankAccountTransactionsEntity> items = mock(Page.class);
 
 		when(bankAccountTransactionsService.index(0, 1, "id", "desc")).thenReturn(items);
-		
 
 		mvc.perform(get("/api/v1/bank-account-transactions/")).andExpect(status().isOk());
 	}

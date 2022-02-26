@@ -17,8 +17,6 @@ import org.springframework.test.context.TestPropertySource;
 
 import com.bitbank.entities.UsersEntity;
 import com.bitbank.services.UserDetailsImpl;
-import com.bitbank.utils.JwtUtils;
-import com.bitbank.utils.TimeSource;
 
 @SpringBootTest
 @TestPropertySource("classpath:application.properties")

@@ -12,8 +12,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.bitbank.config.AuthEntryPointJwt;
-import com.bitbank.config.AuthTokenFilter;
 import com.bitbank.controllers.PingController;
 import com.bitbank.services.PingService;
 import com.bitbank.services.UserDetailsServiceImpl;
@@ -37,7 +35,7 @@ class AuthTokenFilterTest {
 
 	@MockBean
 	private PingService pingService;
-	
+
 	@MockBean
 	AuthEntryPointJwt authEntryPointJwt;
 
