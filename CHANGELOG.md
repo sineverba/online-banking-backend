@@ -1,5 +1,6 @@
 # Next version
 + Change swagger server
++ Merge commons application properties
 
 ## 0.9.0
 + Add swagger
