@@ -23,8 +23,11 @@ import com.bitbank.responses.MessageResponse;
 import com.bitbank.services.UserDetailsServiceImpl;
 import com.bitbank.utils.JwtUtils;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/v1/auth")
+@Tag(name = "Authorization", description = "List of authorizations url")
 public class AuthController {
 
 	@Autowired
