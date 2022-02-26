@@ -1,4 +1,7 @@
-# 0.8.0
+# Next version
++ Add swagger
+
+## 0.8.0
 + Rename repositories in repository
 + Remove V1 from packages
 + Remove test from packages tests

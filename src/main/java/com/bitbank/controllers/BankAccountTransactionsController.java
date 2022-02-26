@@ -18,8 +18,13 @@ import com.bitbank.dto.BankAccountTransactionsDTO;
 import com.bitbank.entities.BankAccountTransactionsEntity;
 import com.bitbank.services.BankAccountTransactionsService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/v1/bank-account-transactions")
+@Tag(name = "Transactions", description = "Bank Account Transactions")
 public class BankAccountTransactionsController {
 
 	@Autowired
@@ -33,6 +38,7 @@ public class BankAccountTransactionsController {
 		this.bankAccountTransactionsService = bankAccountTransactionsService;
 	}
 
+	@Operation(security = { @SecurityRequirement(name = "bearer-key") })
 	@GetMapping
 	public ResponseEntity<Page<BankAccountTransactionsEntity>> index(@RequestParam(defaultValue = "0") Integer page,
 			@RequestParam(defaultValue = "10") Integer perPage,
@@ -44,6 +50,7 @@ public class BankAccountTransactionsController {
 
 	}
 
+	@Operation(security = { @SecurityRequirement(name = "bearer-key") })
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public BankAccountTransactionsDTO post(@RequestBody BankAccountTransactionsDTO bankAccountTransactionsDTO) {
