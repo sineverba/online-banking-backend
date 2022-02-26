@@ -82,4 +82,4 @@ There is a dummy database, pre-populated. At first spin, MySQL will re-populate 
 | 20 | Add JWT - Part 11 - Add AuthController Login | POST | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/c16a2e40a1b76959771b269c9fc94250ec42acc5) |
 | 21 | Add JWT - Part 12 - Set route under authenticated token | N.A. | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/73037762c84f04f419d405b8fee7f2c229625f35) |
 | 22 | Add Pagination | N.A. | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/8e45e02c2a2761d67f889173e51ae82e6dd95fdc)  |
-| 23 | Add Swagger | N.A. | [Link to commit]() |
+| 23 | Add Swagger | N.A. | [Link to commit](https://github.com/sineverba/online-banking-backend/commit/ef240cfdab9e7e2381ea3a633c27a0ccf47795e3) |
