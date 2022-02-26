@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.bitbank.entities.UsersEntity;
-import com.bitbank.services.UserDetailsImpl;
 
 class UserDetailsImplTest {
 

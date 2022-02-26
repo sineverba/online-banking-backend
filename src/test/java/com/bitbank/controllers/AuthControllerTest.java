@@ -23,7 +23,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.bitbank.config.AuthEntryPointJwt;
 import com.bitbank.config.AuthTokenFilter;
-import com.bitbank.controllers.AuthController;
 import com.bitbank.entities.UsersEntity;
 import com.bitbank.services.UserDetailsImpl;
 import com.bitbank.services.UserDetailsServiceImpl;
