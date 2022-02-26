@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.bitbank</groupId>
 	<artifactId>online-banking-backend</artifactId>
-	<version>0.9.0</version>
+	<version>0.10.0</version>
 	<name>online-banking-backend</name>
 	<description>Demo project for an online banking</description>
 	<properties>
