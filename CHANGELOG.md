@@ -1,6 +1,7 @@
 # Next version
 + Remove unused imports
 + Fix "Type safety: The expression of type Page needs unchecked conversion to conform to Page<BankAccountTransactionsEntity>"
++ Return JSON if not authorized
 
 ## 0.10.0
 + Change swagger server
