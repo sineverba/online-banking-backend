@@ -1,5 +1,7 @@
 package com.bitbank.controllers;
 
+import javax.validation.Valid;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -53,7 +55,7 @@ public class BankAccountTransactionsController {
 	@Operation(security = { @SecurityRequirement(name = "bearer-key") })
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public BankAccountTransactionsDTO post(@RequestBody BankAccountTransactionsDTO bankAccountTransactionsDTO) {
+	public BankAccountTransactionsDTO post(@Valid @RequestBody BankAccountTransactionsDTO bankAccountTransactionsDTO) {
 		BankAccountTransactionsEntity bankAccountTransactionsEntity = convertToEntity(bankAccountTransactionsDTO);
 		BankAccountTransactionsEntity savedBankAccountTransactionsEntity = bankAccountTransactionsService
 				.post(bankAccountTransactionsEntity);
@@ -62,6 +64,14 @@ public class BankAccountTransactionsController {
 
 	/**
 	 * Convert the Entity to the DTO
+	 * 
+	 * Why is this necessary?
+	 * 
+	 * See Sonar S4684
+	 * 
+	 * "Replace this persistent entity with a simple POJO or DTO object."
+	 * "Persistent entities should not be used as arguments of "@RequestMapping"
+	 * methods"
 	 * 
 	 * @param bankAccountTransactionsEntity
 	 * @return
