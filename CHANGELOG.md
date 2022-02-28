@@ -3,6 +3,7 @@
 + Fix "Type safety: The expression of type Page needs unchecked conversion to conform to Page<BankAccountTransactionsEntity>"
 + Return JSON if not authorized
 + Add Bank Account validation
++ Add Login validation
 
 ## 0.10.0
 + Change swagger server
