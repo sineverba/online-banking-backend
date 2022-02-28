@@ -1,4 +1,4 @@
-# Next version
+# 0.11.0
 + Remove unused imports
 + Fix "Type safety: The expression of type Page needs unchecked conversion to conform to Page<BankAccountTransactionsEntity>"
 + Return JSON if not authorized
