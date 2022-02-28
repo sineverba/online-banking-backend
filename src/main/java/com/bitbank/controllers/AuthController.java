@@ -1,5 +1,7 @@
 package com.bitbank.controllers;
 
+import javax.validation.Valid;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -75,7 +77,7 @@ public class AuthController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<JwtResponse> login(@RequestBody UsersDTO usersDTO) {
+	public ResponseEntity<JwtResponse> login(@Valid @RequestBody UsersDTO usersDTO) {
 
 		String username = usersDTO.getUsername();
 		String password = usersDTO.getPassword();

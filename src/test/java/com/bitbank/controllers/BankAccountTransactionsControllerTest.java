@@ -9,18 +9,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.stream.Stream;
 
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -58,9 +57,9 @@ class BankAccountTransactionsControllerTest {
 
 	@MockBean
 	AuthEntryPointJwt authEntryPointJwt;
-	
+
 	@MockBean
-    Pageable pageableMock;
+	Pageable pageableMock;
 
 	/**
 	 * index
@@ -68,20 +67,10 @@ class BankAccountTransactionsControllerTest {
 	@WithMockUser("username")
 	@Test
 	void testCanIndex() throws Exception {
-		var transaction01 = BankAccountTransactionsControllerTest.validBankAccountTransactionsEntity(1L,
-				new BigDecimal(99.99), "First Transaction");
-		var transaction02 = BankAccountTransactionsControllerTest.validBankAccountTransactionsEntity(2L,
-				new BigDecimal(150.00), "Second Transaction");
 
-		var result = new ArrayList<BankAccountTransactionsEntity>();
-		result.add(transaction01);
-		result.add(transaction02);
-		
+		@SuppressWarnings("unchecked")
 		Page<BankAccountTransactionsEntity> items = mock(Page.class);
-
 		when(bankAccountTransactionsService.index(0, 1, "id", "desc")).thenReturn(items);
-		
-
 		mvc.perform(get("/api/v1/bank-account-transactions/")).andExpect(status().isOk());
 	}
 
@@ -98,6 +87,28 @@ class BankAccountTransactionsControllerTest {
 				.content(objectMapper.writeValueAsBytes(transactionToSave))).andExpect(status().isCreated())
 				.andExpect(jsonPath("$.id", is((int) id)))
 				.andExpect(jsonPath("$.amount", is(transactionToSave.getAmount())));
+	}
+
+	@WithMockUser("username")
+	@ParameterizedTest
+	@MethodSource("getInvalidBankAccountTransactions")
+	void testCanCatchException(BankAccountTransactionsEntity invalidBankAccountTransactionsEntity) throws Exception {
+
+		mvc.perform(post("/api/v1/bank-account-transactions/").contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsBytes(invalidBankAccountTransactionsEntity)))
+				.andExpect(status().isBadRequest());
+
+	}
+	
+	private static Stream<BankAccountTransactionsEntity> getInvalidBankAccountTransactions() {
+		// Create a valid entity
+		var validBankAccountTransactionsEntity = validBankAccountTransactionsEntity(new BigDecimal(100), "ok");
+		
+		return Stream.of(
+				validBankAccountTransactionsEntity.toBuilder().amount(null).build(),
+				validBankAccountTransactionsEntity.toBuilder().purpose(null).build(),
+				validBankAccountTransactionsEntity.toBuilder().purpose("").build()
+				);
 	}
 
 	private static BankAccountTransactionsEntity validBankAccountTransactionsEntity(Long id, BigDecimal amount,

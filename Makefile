@@ -3,6 +3,9 @@ include .env
 IMAGE_NAME=registry.heroku.com/online-banking-demo-api/web
 CONTAINER_NAME=online-banking-demo-api
 
+dc:
+	docker-compose --profile dev up -d
+
 check-update:
 	mvn versions:display-dependency-updates
 	

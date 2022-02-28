@@ -6,8 +6,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -23,7 +27,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.bitbank.config.AuthEntryPointJwt;
 import com.bitbank.config.AuthTokenFilter;
-import com.bitbank.controllers.AuthController;
 import com.bitbank.entities.UsersEntity;
 import com.bitbank.services.UserDetailsImpl;
 import com.bitbank.services.UserDetailsServiceImpl;
@@ -91,6 +94,24 @@ class AuthControllerTest {
 		mvc.perform(post("/api/v1/auth/login/").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(userToLogin))).andExpect(status().isOk())
 				.andExpect(jsonPath("$.access_token", is(token)));
+	}
+
+	@ParameterizedTest
+	@MethodSource("getInvalidUsers")
+	void testCanCatchException(UsersEntity invalidUsersEntity) throws Exception {
+
+		mvc.perform(post("/api/v1/auth/login/").contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsBytes(invalidUsersEntity))).andExpect(status().isBadRequest());
+
+	}
+
+	private static Stream<UsersEntity> getInvalidUsers() {
+		// Create a valid entity
+		var validUsersEntity = validUserEntity("username", "password");
+
+		return Stream.of(validUsersEntity.toBuilder().username(null).build(),
+				validUsersEntity.toBuilder().username("").build(), validUsersEntity.toBuilder().password(null).build(),
+				validUsersEntity.toBuilder().password("").build());
 	}
 
 	private static UsersEntity validUserEntity(String username, String password) {

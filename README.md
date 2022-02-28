@@ -26,6 +26,8 @@ __This project uses:__
 
 There is a dummy database, pre-populated. At first spin, MySQL will re-populate the database with some data.
 
+With a custom Sonar setup, launch them with `$ docker-compose profile --dev up` and you will not get Sonar images.
+
 
 ## Test
 `$ make test`
