@@ -3,6 +3,7 @@
 + Add UUID for token
 + Add Instant to TimeSource
 + Add Refresh Token Service
++ Rename repository test package
 
 ## 0.11.0
 + Remove unused imports
