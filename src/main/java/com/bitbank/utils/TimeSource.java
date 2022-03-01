@@ -17,12 +17,12 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class TimeSource implements Serializable {
-	
+
 	@Value("${app.jwtRefreshTokenExpirationMs}")
 	private Long refreshTokenDurationMs;
-	
+
 	private static final long serialVersionUID = -20220210203900L;
-	
+
 	/**
 	 * Return current time in millis.
 	 * 
@@ -31,7 +31,7 @@ public class TimeSource implements Serializable {
 	public Long getCurrentTimeMillis() {
 		return System.currentTimeMillis();
 	}
-	
+
 	/**
 	 * Return a date in the future: the expiry date of Refresh token.
 	 * 
@@ -40,5 +40,5 @@ public class TimeSource implements Serializable {
 	public Instant getRefreshTokenExpiryDate() {
 		return Instant.now().plusMillis(refreshTokenDurationMs);
 	}
-	
+
 }
