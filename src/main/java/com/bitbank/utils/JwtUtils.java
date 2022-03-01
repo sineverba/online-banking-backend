@@ -1,6 +1,7 @@
 package com.bitbank.utils;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,5 +45,9 @@ public class JwtUtils {
 		} catch (MalformedJwtException | ExpiredJwtException e) {
 			return false;
 		}
+	}
+
+	public String generateRefreshToken() {
+		return UUID.randomUUID().toString();
 	}
 }
