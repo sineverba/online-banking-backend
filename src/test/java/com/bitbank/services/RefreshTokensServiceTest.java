@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.Authentication;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.webjars.NotFoundException;
@@ -21,6 +22,7 @@ import com.bitbank.entities.RefreshTokensEntity;
 import com.bitbank.entities.UsersEntity;
 import com.bitbank.repositories.RefreshTokensRepository;
 import com.bitbank.repositories.UsersRepository;
+import com.bitbank.utils.AuthenticationUtils;
 import com.bitbank.utils.JwtUtils;
 import com.bitbank.utils.TimeSource;
 
@@ -38,6 +40,12 @@ class RefreshTokensServiceTest {
 
 	@Mock
 	private JwtUtils jwtUtils;
+	
+	@Mock
+	private Authentication authentication;
+	
+	@Mock
+	private AuthenticationUtils authenticationUtils;
 
 	@InjectMocks
 	private RefreshTokensService refreshTokensService;
@@ -75,15 +83,19 @@ class RefreshTokensServiceTest {
 		Instant expiryDate = Instant.now();
 		when(timeSource.getRefreshTokenExpiryDate()).thenReturn(expiryDate);
 
+		// We need an usersEntity because both tables are joined.
 		var usersEntity = UsersEntity.builder().id(7L).username("username").password("thisIsAPassword").build();
 
 		var refreshTokensEntity = validRefreshTokensEntity(null, refreshToken, usersEntity, expiryDate);
 		var savedRefreshTokensEntity = validRefreshTokensEntity(1L, refreshToken, usersEntity, expiryDate);
-
+		
 		when(usersRepository.findById(7L)).thenReturn(Optional.of(usersEntity));
 		when(refreshTokensRepository.save(refreshTokensEntity)).thenReturn(savedRefreshTokensEntity);
+		
+		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
+		when(authenticationUtils.getPrincipal(authentication)).thenReturn(user);
 
-		assertEquals(savedRefreshTokensEntity, refreshTokensService.createRefreshToken(7L));
+		assertEquals(savedRefreshTokensEntity, refreshTokensService.createRefreshToken(authentication));
 
 	}
 
@@ -94,32 +106,20 @@ class RefreshTokensServiceTest {
 	@Test
 	void testCanThrowException() {
 
-		String refreshToken = "this-is-a-refreh-token";
-		when(jwtUtils.generateRefreshToken()).thenReturn(refreshToken);
-
-		Instant expiryDate = Instant.now();
-		when(timeSource.getRefreshTokenExpiryDate()).thenReturn(expiryDate);
-
-		var usersEntity = UsersEntity.builder().id(7L).username("username").password("thisIsAPassword").build();
-
-		var refreshTokensEntity = validRefreshTokensEntity(null, refreshToken, usersEntity, expiryDate);
-		var savedRefreshTokensEntity = validRefreshTokensEntity(1L, refreshToken, usersEntity, expiryDate);
-
 		when(usersRepository.findById(7L)).thenReturn(Optional.empty());
-		when(refreshTokensRepository.save(refreshTokensEntity)).thenReturn(savedRefreshTokensEntity);
+		
+		var usersEntity = UsersEntity.builder().id(7L).username("username").password("thisIsAPassword").build();
+		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
+		when(authenticationUtils.getPrincipal(authentication)).thenReturn(user);
 
 		NotFoundException notFoundException = assertThrows(NotFoundException.class, () -> {
-			refreshTokensService.createRefreshToken(7L);
+			refreshTokensService.createRefreshToken(authentication);
 		});
 
 		String expectedMessage = "User not found";
 		String actualMessage = notFoundException.getMessage();
 
 		assertTrue(actualMessage.contains(expectedMessage));
-	}
-
-	private static RefreshTokensEntity validRefreshTokensEntity(String token, UsersEntity user, Instant expiryDate) {
-		return RefreshTokensEntity.builder().token(token).usersEntity(user).expiryDate(expiryDate).build();
 	}
 
 	private static RefreshTokensEntity validRefreshTokensEntity(Long id, String token, UsersEntity user,

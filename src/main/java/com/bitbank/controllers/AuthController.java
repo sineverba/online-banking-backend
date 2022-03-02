@@ -19,10 +19,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bitbank.dto.UsersDTO;
+import com.bitbank.entities.RefreshTokensEntity;
 import com.bitbank.entities.UsersEntity;
 import com.bitbank.responses.JwtResponse;
 import com.bitbank.responses.MessageResponse;
+import com.bitbank.services.RefreshTokensService;
 import com.bitbank.services.UserDetailsServiceImpl;
+import com.bitbank.utils.AuthenticationUtils;
 import com.bitbank.utils.JwtUtils;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,6 +49,12 @@ public class AuthController {
 
 	@Autowired
 	JwtUtils jwtUtils;
+
+	@Autowired
+	AuthenticationUtils authenticationUtils;
+
+	@Autowired
+	RefreshTokensService refreshTokensService;
 
 	@Value("${app.enableRegistration}")
 	private Boolean enableRegistration;
@@ -88,7 +97,12 @@ public class AuthController {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
 
-		return ResponseEntity.ok(new JwtResponse(jwt));
+		/**
+		 * Create the refresh token
+		 */
+		RefreshTokensEntity refreshTokensEntity = refreshTokensService.createRefreshToken(authentication);
+
+		return ResponseEntity.ok(new JwtResponse(jwt, refreshTokensEntity.getToken()));
 	}
 
 	/**

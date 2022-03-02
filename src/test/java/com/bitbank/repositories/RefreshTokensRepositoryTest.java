@@ -16,13 +16,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.bitbank.entities.RefreshTokensEntity;
 import com.bitbank.entities.UsersEntity;
-import com.bitbank.repositories.RefreshTokensRepository;
-import com.bitbank.repositories.UsersRepository;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 // DirtiesContext reset DB before each test method
-@DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD) 
+@DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 class RefreshTokensRepositoryTest {
 
 	@Autowired

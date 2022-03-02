@@ -1,6 +1,7 @@
 package com.bitbank.controllers;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -27,9 +28,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.bitbank.config.AuthEntryPointJwt;
 import com.bitbank.config.AuthTokenFilter;
+import com.bitbank.entities.RefreshTokensEntity;
 import com.bitbank.entities.UsersEntity;
+import com.bitbank.services.RefreshTokensService;
 import com.bitbank.services.UserDetailsImpl;
 import com.bitbank.services.UserDetailsServiceImpl;
+import com.bitbank.utils.AuthenticationUtils;
 import com.bitbank.utils.JwtUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -65,6 +69,12 @@ class AuthControllerTest {
 	@MockBean
 	SecurityContext securityContext;
 
+	@MockBean
+	AuthenticationUtils authenticationUtils;
+
+	@MockBean
+	RefreshTokensService refreshTokensService;
+
 	@Test
 	void canRegisterNewUser() throws Exception {
 
@@ -81,19 +91,27 @@ class AuthControllerTest {
 	@Test
 	void canLogin() throws Exception {
 
-		var userToLogin = validUserEntity("username", "password");
-
 		UsersEntity usersEntity = new UsersEntity(1L, "username", "password");
 
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 		when(securityContext.getAuthentication()).thenReturn(authentication);
 		when(authentication.getPrincipal()).thenReturn(user);
+
 		SecurityContextHolder.setContext(securityContext);
+
 		String token = jwtUtils.generateJwtToken(authentication);
 
+		when(authenticationUtils.getPrincipal(authentication)).thenReturn(user);
+		
+		String refreshToken = "this-is-refresh-token";
+		RefreshTokensEntity refreshTokensEntity = new RefreshTokensEntity(1L, refreshToken, null, null);		
+		when(refreshTokensService.createRefreshToken(any())).thenReturn(refreshTokensEntity);
+		
+		var userToLogin = validUserEntity("username", "password");
 		mvc.perform(post("/api/v1/auth/login/").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(userToLogin))).andExpect(status().isOk())
-				.andExpect(jsonPath("$.access_token", is(token)));
+				.andExpect(jsonPath("$.access_token", is(token)))
+				.andExpect(jsonPath("$.refresh_token", is(refreshToken)));
 	}
 
 	@ParameterizedTest

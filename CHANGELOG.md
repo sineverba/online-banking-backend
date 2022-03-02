@@ -5,6 +5,7 @@
 + Add Refresh Token Service
 + Rename repository test package
 + Add Authentication util class
++ Add Refresh token to login response
 
 ## 0.11.0
 + Remove unused imports

@@ -22,7 +22,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.bitbank.config.AuthEntryPointJwt;
 import com.bitbank.config.AuthTokenFilter;
 import com.bitbank.entities.UsersEntity;
+import com.bitbank.services.RefreshTokensService;
 import com.bitbank.services.UserDetailsServiceImpl;
+import com.bitbank.utils.AuthenticationUtils;
 import com.bitbank.utils.JwtUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -57,6 +59,12 @@ class RegisterControllerTest {
 
 	@MockBean
 	SecurityContext securityContext;
+	
+	@MockBean
+	AuthenticationUtils authenticationUtils;
+	
+	@MockBean
+	RefreshTokensService refreshTokensService;
 
 	@Test
 	void cannotRegisterUserWhenRegistrationsAreDisabled() throws Exception {
