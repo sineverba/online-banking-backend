@@ -101,7 +101,7 @@ class JwtUtilsTest {
 
 		assertFalse(jwtUtils.validateJwtToken(token));
 	}
-	
+
 	@Test
 	void canGenerateRefreshToken() {
 		String refreshToken = jwtUtils.generateRefreshToken();
