@@ -105,6 +105,30 @@ class AuthControllerTest {
 
 	}
 
+	@WithMockUser("username")
+	@Test
+	void testCanRefreshToken() throws Exception {
+
+		// Create an usersEntity to build by userDetailsImpl
+		UsersEntity usersEntity = new UsersEntity(1L, "username", "password");
+		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
+
+		// Mock some method...
+		when(securityContext.getAuthentication()).thenReturn(authentication);
+		when(authentication.getPrincipal()).thenReturn(user);
+		SecurityContextHolder.setContext(securityContext);
+
+		// Create a fake token
+		String token = "a1.b2.c3";
+		String refreshedToken = "re.fre.shed";
+		when(jwtUtils.generateJwtToken(authentication)).thenReturn(token);
+		when(jwtUtils.generateJwtToken(token)).thenReturn(refreshedToken);
+
+		// Make the call
+		mvc.perform(post("/api/v1/auth/refresh-token/").contentType(MediaType.APPLICATION_JSON).header("Authorization",
+				token)).andExpect(status().isOk()).andExpect(jsonPath("$.access_token", is(refreshedToken)));
+	}
+
 	private static Stream<UsersEntity> getInvalidUsers() {
 		// Create a valid entity
 		var validUsersEntity = validUserEntity("username", "password");
