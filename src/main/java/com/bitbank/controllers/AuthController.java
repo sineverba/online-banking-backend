@@ -1,5 +1,6 @@
 package com.bitbank.controllers;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
@@ -87,6 +88,15 @@ public class AuthController {
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
+
+		return ResponseEntity.ok(new JwtResponse(jwt));
+	}
+
+	@PostMapping("/refresh-token")
+	public ResponseEntity<JwtResponse> refreshToken(HttpServletRequest httpServletRequest) {
+
+		String token = httpServletRequest.getHeader("Authorization").replace("Bearer ", "");
+		String jwt = jwtUtils.generateJwtToken(token);
 
 		return ResponseEntity.ok(new JwtResponse(jwt));
 	}
