@@ -2,6 +2,7 @@ package com.bitbank.utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -100,5 +101,21 @@ class JwtUtilsTest {
 		String token = jwtUtils.generateJwtToken(authentication);
 
 		assertFalse(jwtUtils.validateJwtToken(token));
+	}
+
+	@Test
+	void canGenerateTokenFromTokenItself() {
+
+		UsersEntity usersEntity = new UsersEntity(1L, "username", "password");
+		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
+
+		when(timeSource.getCurrentTimeMillis()).thenReturn(System.currentTimeMillis());
+		when(securityContext.getAuthentication()).thenReturn(authentication);
+		when(authentication.getPrincipal()).thenReturn(user);
+		SecurityContextHolder.setContext(securityContext);
+		String token = jwtUtils.generateJwtToken(authentication);
+		assertFalse(token.isEmpty());
+		String newToken = jwtUtils.generateJwtToken(token);
+		assertNotNull(newToken);
 	}
 }
