@@ -77,6 +77,12 @@ public class AuthController {
 
 	}
 
+	/**
+	 * Perform login. Returns a ResponseEntity with token and expiry_at
+	 * 
+	 * @param usersDTO
+	 * @return the jwt token
+	 */
 	@PostMapping("/login")
 	public ResponseEntity<JwtResponse> login(@Valid @RequestBody UsersDTO usersDTO) {
 
@@ -87,9 +93,13 @@ public class AuthController {
 				.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String jwt = jwtUtils.generateJwtToken(authentication);
 
-		return ResponseEntity.ok(new JwtResponse(jwt));
+		// This is the token
+		String jwt = jwtUtils.generateJwtToken(authentication);
+		// Get the expiry at value
+		String expiryAt = jwtUtils.getExpiryDateFromJwtToken(jwt).toString();
+
+		return ResponseEntity.ok(new JwtResponse(jwt, expiryAt));
 	}
 
 	@PostMapping("/refresh-token")
