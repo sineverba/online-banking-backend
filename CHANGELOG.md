@@ -1,4 +1,4 @@
-# Next version
+# 0.12.0
 + Generate token from token
 + Add Refreh Token route
 + Get expiry date from token
