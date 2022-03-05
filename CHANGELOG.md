@@ -1,4 +1,12 @@
-# 0.11.0
+# 0.12.0
++ Generate token from token
++ Add Refreh Token route
++ Get expiry date from token
++ Add Expiry at on jwt response on login
++ Add Expiry at on jwt response on refresh
+
+
+## 0.11.0
 + Remove unused imports
 + Fix "Type safety: The expression of type Page needs unchecked conversion to conform to Page<BankAccountTransactionsEntity>"
 + Return JSON if not authorized

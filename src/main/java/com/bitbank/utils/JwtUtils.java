@@ -25,18 +25,56 @@ public class JwtUtils {
 	@Autowired
 	private TimeSource timeSource;
 
+	/**
+	 * Generate the JWT token from an Authentication. If you have a String token,
+	 * use other.
+	 * 
+	 * @param authentication
+	 * @return The JWT
+	 */
 	public String generateJwtToken(Authentication authentication) {
 		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-		return Jwts.builder().setSubject(userPrincipal.getUsername())
-				.setIssuedAt(new Date(timeSource.getCurrentTimeMillis()))
-				.setExpiration(new Date(timeSource.getCurrentTimeMillis() + jwtExpirationMs))
-				.signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
+		return this.getJwt(userPrincipal.getUsername());
 	}
 
+	/**
+	 * Generate the JWT token from a String. If you have an Authentication, use
+	 * other.
+	 * 
+	 * @param authentication
+	 * @return The JWT
+	 */
+	public String generateJwtToken(String token) {
+		return this.getJwt(this.getUserNameFromJwtToken(token));
+	}
+
+	/**
+	 * 
+	 * Get the username from a token.
+	 * 
+	 * @param token
+	 * @return the username
+	 */
 	public String getUserNameFromJwtToken(String token) {
 		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
 	}
 
+	/**
+	 * Get the expiry date from a token
+	 * 
+	 * @param token
+	 * @return the expiry date
+	 */
+	public Long getExpiryDateFromJwtToken(String token) {
+		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getExpiration().getTime();
+	}
+
+	/**
+	 * Validate a token.
+	 * 
+	 * @param authToken
+	 * @return
+	 */
 	public boolean validateJwtToken(String authToken) {
 		try {
 			Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
@@ -44,5 +82,16 @@ public class JwtUtils {
 		} catch (MalformedJwtException | ExpiredJwtException e) {
 			return false;
 		}
+	}
+
+	/**
+	 * 
+	 * @param username
+	 * @return
+	 */
+	private String getJwt(String username) {
+		return Jwts.builder().setSubject(username).setIssuedAt(new Date(timeSource.getCurrentTimeMillis()))
+				.setExpiration(new Date(timeSource.getCurrentTimeMillis() + jwtExpirationMs))
+				.signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
 	}
 }

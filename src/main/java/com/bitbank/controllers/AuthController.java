@@ -1,5 +1,6 @@
 package com.bitbank.controllers;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
@@ -76,6 +77,12 @@ public class AuthController {
 
 	}
 
+	/**
+	 * Perform login. Returns a ResponseEntity with token and expiry_at
+	 * 
+	 * @param usersDTO
+	 * @return the jwt token
+	 */
 	@PostMapping("/login")
 	public ResponseEntity<JwtResponse> login(@Valid @RequestBody UsersDTO usersDTO) {
 
@@ -86,9 +93,33 @@ public class AuthController {
 				.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String jwt = jwtUtils.generateJwtToken(authentication);
 
-		return ResponseEntity.ok(new JwtResponse(jwt));
+		// This is the token
+		String jwt = jwtUtils.generateJwtToken(authentication);
+		// Get the expiry at value
+		String expiryAt = jwtUtils.getExpiryDateFromJwtToken(jwt).toString();
+
+		return ResponseEntity.ok(new JwtResponse(jwt, expiryAt));
+	}
+
+	/**
+	 * Refresh a token.
+	 * 
+	 * Return a new jwt with new expiry date.
+	 * 
+	 * @param httpServletRequest
+	 * @return
+	 */
+	@PostMapping("/refresh-token")
+	public ResponseEntity<JwtResponse> refreshToken(HttpServletRequest httpServletRequest) {
+
+		String token = httpServletRequest.getHeader("Authorization").replace("Bearer ", "");
+		String jwt = jwtUtils.generateJwtToken(token);
+
+		// Get the expiry at value
+		String expiryAt = jwtUtils.getExpiryDateFromJwtToken(jwt).toString();
+
+		return ResponseEntity.ok(new JwtResponse(jwt, expiryAt));
 	}
 
 	/**

@@ -81,19 +81,29 @@ class AuthControllerTest {
 	@Test
 	void canLogin() throws Exception {
 
-		var userToLogin = validUserEntity("username", "password");
+		// Add security context
+		SecurityContextHolder.setContext(securityContext);
 
+		// Create a new usersentity to deal with authentication
 		UsersEntity usersEntity = new UsersEntity(1L, "username", "password");
-
+		// Build an user from usersEntity
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
+
+		// Mock some methods
 		when(securityContext.getAuthentication()).thenReturn(authentication);
 		when(authentication.getPrincipal()).thenReturn(user);
-		SecurityContextHolder.setContext(securityContext);
+
 		String token = jwtUtils.generateJwtToken(authentication);
+
+		Long expiryDate = jwtUtils.getExpiryDateFromJwtToken(token);
+
+		// Create an usersEntity to pass to the login
+		var userToLogin = validUserEntity("username", "password");
 
 		mvc.perform(post("/api/v1/auth/login/").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(userToLogin))).andExpect(status().isOk())
-				.andExpect(jsonPath("$.access_token", is(token)));
+				.andExpect(jsonPath("$.access_token", is(token)))
+				.andExpect(jsonPath("$.expiry_at", is(expiryDate.toString())));
 	}
 
 	@ParameterizedTest
@@ -103,6 +113,35 @@ class AuthControllerTest {
 		mvc.perform(post("/api/v1/auth/login/").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(invalidUsersEntity))).andExpect(status().isBadRequest());
 
+	}
+
+	@WithMockUser("username")
+	@Test
+	void testCanRefreshToken() throws Exception {
+
+		// Add the Security Context
+		SecurityContextHolder.setContext(securityContext);
+
+		// Create an usersEntity to build by userDetailsImpl
+		UsersEntity usersEntity = new UsersEntity(1L, "username", "password");
+		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
+
+		// Mock some method...
+		when(securityContext.getAuthentication()).thenReturn(authentication);
+		when(authentication.getPrincipal()).thenReturn(user);
+
+		// Create a fake token
+		String token = "a1.b2.c3";
+		String refreshedToken = "re.fre.shed";
+		Long expiryAt = 19999999L;
+		when(jwtUtils.generateJwtToken(authentication)).thenReturn(token);
+		when(jwtUtils.generateJwtToken(token)).thenReturn(refreshedToken);
+		when(jwtUtils.getExpiryDateFromJwtToken(refreshedToken)).thenReturn(expiryAt);
+
+		// Make the call
+		mvc.perform(post("/api/v1/auth/refresh-token/").contentType(MediaType.APPLICATION_JSON).header("Authorization",
+				token)).andExpect(status().isOk()).andExpect(jsonPath("$.access_token", is(refreshedToken)))
+				.andExpect(jsonPath("$.expiry_at", is(expiryAt.toString())));
 	}
 
 	private static Stream<UsersEntity> getInvalidUsers() {
