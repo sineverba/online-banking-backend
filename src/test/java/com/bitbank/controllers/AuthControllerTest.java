@@ -81,19 +81,29 @@ class AuthControllerTest {
 	@Test
 	void canLogin() throws Exception {
 
-		var userToLogin = validUserEntity("username", "password");
+		// Add security context
+		SecurityContextHolder.setContext(securityContext);
 
+		// Create a new usersentity to deal with authentication
 		UsersEntity usersEntity = new UsersEntity(1L, "username", "password");
-
+		// Build an user from usersEntity
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
+
+		// Mock some methods
 		when(securityContext.getAuthentication()).thenReturn(authentication);
 		when(authentication.getPrincipal()).thenReturn(user);
-		SecurityContextHolder.setContext(securityContext);
+
 		String token = jwtUtils.generateJwtToken(authentication);
+
+		Long expiryDate = jwtUtils.getExpiryDateFromJwtToken(token);
+
+		// Create an usersEntity to pass to the login
+		var userToLogin = validUserEntity("username", "password");
 
 		mvc.perform(post("/api/v1/auth/login/").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(userToLogin))).andExpect(status().isOk())
-				.andExpect(jsonPath("$.access_token", is(token)));
+				.andExpect(jsonPath("$.access_token", is(token)))
+				.andExpect(jsonPath("$.expiry_at", is(expiryDate.toString())));
 	}
 
 	@ParameterizedTest
