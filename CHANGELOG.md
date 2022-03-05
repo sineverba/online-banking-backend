@@ -2,7 +2,8 @@
 + Generate token from token
 + Add Refreh Token route
 + Get expiry date from token
-+ Add Expiry at on jwt response on login - refresh
++ Add Expiry at on jwt response on login
++ Add Expiry at on jwt response on refresh
 
 
 ## 0.11.0

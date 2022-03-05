@@ -119,6 +119,9 @@ class AuthControllerTest {
 	@Test
 	void testCanRefreshToken() throws Exception {
 
+		// Add the Security Context
+		SecurityContextHolder.setContext(securityContext);
+
 		// Create an usersEntity to build by userDetailsImpl
 		UsersEntity usersEntity = new UsersEntity(1L, "username", "password");
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
@@ -126,17 +129,19 @@ class AuthControllerTest {
 		// Mock some method...
 		when(securityContext.getAuthentication()).thenReturn(authentication);
 		when(authentication.getPrincipal()).thenReturn(user);
-		SecurityContextHolder.setContext(securityContext);
 
 		// Create a fake token
 		String token = "a1.b2.c3";
 		String refreshedToken = "re.fre.shed";
+		Long expiryAt = 19999999L;
 		when(jwtUtils.generateJwtToken(authentication)).thenReturn(token);
 		when(jwtUtils.generateJwtToken(token)).thenReturn(refreshedToken);
+		when(jwtUtils.getExpiryDateFromJwtToken(refreshedToken)).thenReturn(expiryAt);
 
 		// Make the call
 		mvc.perform(post("/api/v1/auth/refresh-token/").contentType(MediaType.APPLICATION_JSON).header("Authorization",
-				token)).andExpect(status().isOk()).andExpect(jsonPath("$.access_token", is(refreshedToken)));
+				token)).andExpect(status().isOk()).andExpect(jsonPath("$.access_token", is(refreshedToken)))
+				.andExpect(jsonPath("$.expiry_at", is(expiryAt.toString())));
 	}
 
 	private static Stream<UsersEntity> getInvalidUsers() {

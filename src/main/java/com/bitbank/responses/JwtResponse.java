@@ -10,12 +10,16 @@ public class JwtResponse {
 	@JsonProperty("expiry_at")
 	private String expiryAt;
 
-	public JwtResponse(String token) {
-		this.accessToken = token;
+	public JwtResponse(String token, String expiryAt) {
+		this.setAccessToken(token);
+		this.setExpiryAt(expiryAt);
 	}
 
-	public JwtResponse(String token, String expiryAt) {
-		this.accessToken = token;
+	private void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+	}
+
+	private void setExpiryAt(String expiryAt) {
 		this.expiryAt = expiryAt;
 	}
 

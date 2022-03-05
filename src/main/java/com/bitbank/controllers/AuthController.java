@@ -102,13 +102,24 @@ public class AuthController {
 		return ResponseEntity.ok(new JwtResponse(jwt, expiryAt));
 	}
 
+	/**
+	 * Refresh a token.
+	 * 
+	 * Return a new jwt with new expiry date.
+	 * 
+	 * @param httpServletRequest
+	 * @return
+	 */
 	@PostMapping("/refresh-token")
 	public ResponseEntity<JwtResponse> refreshToken(HttpServletRequest httpServletRequest) {
 
 		String token = httpServletRequest.getHeader("Authorization").replace("Bearer ", "");
 		String jwt = jwtUtils.generateJwtToken(token);
 
-		return ResponseEntity.ok(new JwtResponse(jwt));
+		// Get the expiry at value
+		String expiryAt = jwtUtils.getExpiryDateFromJwtToken(jwt).toString();
+
+		return ResponseEntity.ok(new JwtResponse(jwt, expiryAt));
 	}
 
 	/**
