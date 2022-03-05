@@ -60,6 +60,16 @@ public class JwtUtils {
 	}
 
 	/**
+	 * Get the expiry date from a token
+	 * 
+	 * @param token
+	 * @return the expiry date
+	 */
+	public Long getExpiryDateFromJwtToken(String token) {
+		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getExpiration().getTime();
+	}
+
+	/**
 	 * Validate a token.
 	 * 
 	 * @param authToken
