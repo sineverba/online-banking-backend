@@ -2,6 +2,8 @@ package com.bitbank.services;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -20,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import com.bitbank.entities.BankAccountTransactionsEntity;
+import com.bitbank.exceptions.BalanceNotEnoughException;
 import com.bitbank.repositories.BankAccountTransactionsRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -63,16 +66,19 @@ class BankAccountTransactionsServiceTest {
 	}
 
 	/**
-	 * Post section
+	 * Post section. Test can add or deduct
+	 * 
+	 * @throws BalanceNotEnoughException
 	 */
 
 	@Test
-	void post_testCanSaveItem() {
+	void post_testCanSaveItem() throws BalanceNotEnoughException {
 		var transactionToSave = BankAccountTransactionsServiceTest
 				.validBankAccountTransactionsEntity(new BigDecimal(99.99), "First Transaction");
 		var savedTransaction = BankAccountTransactionsServiceTest.validBankAccountTransactionsEntity(1L,
 				new BigDecimal(99.99), "First Transaction");
 
+		when(bankAccountTransactionsRepository.balance()).thenReturn(new BigDecimal(1000));
 		when(bankAccountTransactionsRepository.save(transactionToSave)).thenReturn(savedTransaction);
 
 		assertEquals(savedTransaction, bankAccountTransactionsService.post(transactionToSave));
@@ -90,6 +96,34 @@ class BankAccountTransactionsServiceTest {
 		when(bankAccountTransactionsRepository.balance()).thenReturn(new BigDecimal(15000));
 
 		assertThat(balance, Matchers.comparesEqualTo(bankAccountTransactionsService.balance()));
+	}
+
+	/**
+	 * Post section. Test can throw BalanceNotEnoughException
+	 * 
+	 * @throws BalanceNotEnoughException
+	 */
+
+	@Test
+	void testCanThrowBalanceNotEnoughException() {
+
+		// Create a valid transaction
+		var transactionToSave = BankAccountTransactionsServiceTest
+				.validBankAccountTransactionsEntity(new BigDecimal(100), "Test Transaction");
+
+		// Mock the balance
+		when(bankAccountTransactionsRepository.balance()).thenReturn(new BigDecimal(10));
+
+		// Throw the excecption
+		BalanceNotEnoughException balanceNotEnoughException = assertThrows(BalanceNotEnoughException.class, () -> {
+			bankAccountTransactionsService.post(transactionToSave);
+		});
+
+		// Compare string
+		String expectedMessage = "balance is not enough";
+		String actualMessage = balanceNotEnoughException.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	/**

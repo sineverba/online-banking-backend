@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.bitbank.entities.BankAccountTransactionsEntity;
+import com.bitbank.exceptions.BalanceNotEnoughException;
 import com.bitbank.repositories.BankAccountTransactionsRepository;
 
 @Service
@@ -38,9 +39,18 @@ public class BankAccountTransactionsService {
 	}
 
 	/**
-	 * Post
+	 * Add or deduct balance.
+	 * 
+	 * @throws BalanceNotEnoughException
 	 */
-	public BankAccountTransactionsEntity post(BankAccountTransactionsEntity bankAccountTransactionsEntity) {
+	public BankAccountTransactionsEntity post(BankAccountTransactionsEntity bankAccountTransactionsEntity)
+			throws BalanceNotEnoughException {
+		BigDecimal balance = this.balance();
+
+		if (balance.compareTo(bankAccountTransactionsEntity.getAmount()) < 0) {
+			throw new BalanceNotEnoughException("balance is not enough");
+		}
+
 		return bankAccountTransactionsRepository.save(bankAccountTransactionsEntity);
 	}
 

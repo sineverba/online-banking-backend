@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bitbank.dto.BankAccountTransactionsDTO;
 import com.bitbank.entities.BankAccountTransactionsEntity;
+import com.bitbank.exceptions.BalanceNotEnoughException;
 import com.bitbank.services.BankAccountTransactionsService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,13 +53,28 @@ public class BankAccountTransactionsController {
 
 	}
 
+	/**
+	 * Add or deduct an amount.
+	 * 
+	 * If amount is positive, we ADD to the balance. If amount is negative, we
+	 * DEDUCT from the balance.
+	 * 
+	 * @param bankAccountTransactionsDTO
+	 * @return
+	 * @throws BalanceNotEnoughException
+	 */
 	@Operation(security = { @SecurityRequirement(name = "bearer-key") })
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public BankAccountTransactionsDTO post(@Valid @RequestBody BankAccountTransactionsDTO bankAccountTransactionsDTO) {
+	public BankAccountTransactionsDTO post(@Valid @RequestBody BankAccountTransactionsDTO bankAccountTransactionsDTO)
+			throws BalanceNotEnoughException {
 		BankAccountTransactionsEntity bankAccountTransactionsEntity = convertToEntity(bankAccountTransactionsDTO);
-		BankAccountTransactionsEntity savedBankAccountTransactionsEntity = bankAccountTransactionsService
-				.post(bankAccountTransactionsEntity);
+		BankAccountTransactionsEntity savedBankAccountTransactionsEntity;
+		try {
+			savedBankAccountTransactionsEntity = bankAccountTransactionsService.post(bankAccountTransactionsEntity);
+		} catch (BalanceNotEnoughException e) {
+			throw new BalanceNotEnoughException(e.getMessage());
+		}
 		return convertToDto(savedBankAccountTransactionsEntity);
 	}
 
