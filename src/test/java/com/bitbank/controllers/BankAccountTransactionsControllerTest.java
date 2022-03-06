@@ -132,11 +132,14 @@ class BankAccountTransactionsControllerTest {
 		// Create a valid entity to submit.
 		var transactionToSave = validBankAccountTransactionsEntity(new BigDecimal(100), "test");
 
-		when(bankAccountTransactionsService.post(transactionToSave)).thenThrow(BalanceNotEnoughException.class);
+		// when(bankAccountTransactionsService.post(transactionToSave)).thenThrow(BalanceNotEnoughException.class);
+		when(bankAccountTransactionsService.post(transactionToSave))
+				.thenThrow(new BalanceNotEnoughException("balance is not enough to deduct 100"));
 
 		mvc.perform(post("/api/v1/bank-account-transactions/").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(transactionToSave))).andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$.error", is("balance is not enough")));
+				.andExpect(
+						jsonPath("$.error", is("balance is not enough to deduct " + (new BigDecimal(100).toString()))));
 
 	}
 

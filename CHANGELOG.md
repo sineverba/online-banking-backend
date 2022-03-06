@@ -1,5 +1,6 @@
 # Next version
 + Add `BalanceNotEnoughException`
++ Refactor `BalanceNotEnoughException`
 
 ## 0.12.0
 + Generate token from token

@@ -41,7 +41,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 	 */
 	@ExceptionHandler(BalanceNotEnoughException.class)
 	protected ResponseEntity<Object> handleBalanceNotEnough(BalanceNotEnoughException ex) {
-		return ResponseEntity.badRequest().body(new ErrorResponse("balance is not enough"));
+		return ResponseEntity.badRequest().body(new ErrorResponse(ex.getMessage()));
 	}
 
 }
