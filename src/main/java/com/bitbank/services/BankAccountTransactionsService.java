@@ -45,10 +45,17 @@ public class BankAccountTransactionsService {
 	 */
 	public BankAccountTransactionsEntity post(BankAccountTransactionsEntity bankAccountTransactionsEntity)
 			throws BalanceNotEnoughException {
-		BigDecimal balance = this.balance();
 
-		if (balance.compareTo(bankAccountTransactionsEntity.getAmount()) < 0) {
-			throw new BalanceNotEnoughException("balance is not enough");
+		// Get current balance
+		BigDecimal balance = this.balance();
+		// Get amount
+		BigDecimal amount = bankAccountTransactionsEntity.getAmount();
+		// Arithmetical sum between balance and amount
+		BigDecimal arithmeticalSum = balance.add(amount);
+
+		// Compare data
+		if (arithmeticalSum.compareTo(BigDecimal.ZERO) < 0) {
+			throw new BalanceNotEnoughException("balance is not enough to deduct " + amount.toString());
 		}
 
 		return bankAccountTransactionsRepository.save(bankAccountTransactionsEntity);

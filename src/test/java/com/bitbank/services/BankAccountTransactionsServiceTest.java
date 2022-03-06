@@ -109,18 +109,18 @@ class BankAccountTransactionsServiceTest {
 
 		// Create a valid transaction
 		var transactionToSave = BankAccountTransactionsServiceTest
-				.validBankAccountTransactionsEntity(new BigDecimal(100), "Test Transaction");
+				.validBankAccountTransactionsEntity(new BigDecimal(-100), "Test Transaction");
 
 		// Mock the balance
 		when(bankAccountTransactionsRepository.balance()).thenReturn(new BigDecimal(10));
 
-		// Throw the excecption
+		// Throw the exception
 		BalanceNotEnoughException balanceNotEnoughException = assertThrows(BalanceNotEnoughException.class, () -> {
 			bankAccountTransactionsService.post(transactionToSave);
 		});
 
 		// Compare string
-		String expectedMessage = "balance is not enough";
+		String expectedMessage = "balance is not enough to deduct -100";
 		String actualMessage = balanceNotEnoughException.getMessage();
 
 		assertTrue(actualMessage.contains(expectedMessage));
