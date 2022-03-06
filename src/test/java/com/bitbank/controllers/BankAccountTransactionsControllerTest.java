@@ -22,12 +22,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.bitbank.config.AuthEntryPointJwt;
 import com.bitbank.config.AuthTokenFilter;
 import com.bitbank.entities.BankAccountTransactionsEntity;
+import com.bitbank.exceptions.BalanceNotEnoughException;
 import com.bitbank.services.BankAccountTransactionsService;
 import com.bitbank.services.UserDetailsServiceImpl;
 import com.bitbank.utils.JwtUtils;
@@ -35,6 +38,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(BankAccountTransactionsController.class)
+// Delete database before each test
+@DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 class BankAccountTransactionsControllerTest {
 
 	@Autowired
@@ -99,23 +104,63 @@ class BankAccountTransactionsControllerTest {
 				.andExpect(status().isBadRequest());
 
 	}
-	
+
+	/**
+	 * Method source to get a list of INVALID bank account transactions.
+	 * 
+	 * See test above.
+	 * 
+	 * @return
+	 */
 	private static Stream<BankAccountTransactionsEntity> getInvalidBankAccountTransactions() {
 		// Create a valid entity
 		var validBankAccountTransactionsEntity = validBankAccountTransactionsEntity(new BigDecimal(100), "ok");
-		
-		return Stream.of(
-				validBankAccountTransactionsEntity.toBuilder().amount(null).build(),
+
+		return Stream.of(validBankAccountTransactionsEntity.toBuilder().amount(null).build(),
 				validBankAccountTransactionsEntity.toBuilder().purpose(null).build(),
-				validBankAccountTransactionsEntity.toBuilder().purpose("").build()
-				);
+				validBankAccountTransactionsEntity.toBuilder().purpose("").build());
 	}
 
+	/**
+	 * Test not enough deduct throws BalanceNotEnoughException
+	 * 
+	 */
+	@WithMockUser("username")
+	@Test
+	void testCanThrowsBalanceNotEnoughException() throws Exception {
+
+		// Create a valid entity to submit.
+		var transactionToSave = validBankAccountTransactionsEntity(new BigDecimal(100), "test");
+
+		when(bankAccountTransactionsService.post(transactionToSave)).thenThrow(BalanceNotEnoughException.class);
+
+		mvc.perform(post("/api/v1/bank-account-transactions/").contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsBytes(transactionToSave))).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.error", is("balance is not enough")));
+
+	}
+
+	/**
+	 * Generate a valid transaction.
+	 * 
+	 * @param id
+	 * @param amount
+	 * @param purpose
+	 * @return
+	 */
 	private static BankAccountTransactionsEntity validBankAccountTransactionsEntity(Long id, BigDecimal amount,
 			String purpose) {
 		return BankAccountTransactionsEntity.builder().id(id).amount(amount).purpose(purpose).build();
 	}
 
+	/**
+	 * Generate a valid transaction.
+	 * 
+	 * @param id
+	 * @param amount
+	 * @param purpose
+	 * @return
+	 */
 	private static BankAccountTransactionsEntity validBankAccountTransactionsEntity(BigDecimal amount, String purpose) {
 		return BankAccountTransactionsEntity.builder().amount(amount).purpose(purpose).build();
 	}
