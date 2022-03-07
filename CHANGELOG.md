@@ -1,6 +1,7 @@
 # Next version
 + Add `BalanceNotEnoughException`
 + Refactor `BalanceNotEnoughException`
++ Refactor CORS
 
 ## 0.12.0
 + Generate token from token

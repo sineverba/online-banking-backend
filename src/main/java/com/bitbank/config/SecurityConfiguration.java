@@ -38,9 +38,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		return new AuthTokenFilter();
 	}
 
+	/**
+	 * Return the allowed origins.
+	 * 
+	 * @return
+	 */
 	private List<String> getAllowedOrigins() {
-		return Arrays.asList("http://localhost:[*]", "https://online-banking-frontend.netlify.app",
-				"https://online-banking-frontend.vercel.app");
+		return Arrays.asList("http://localhost:[*]", "https://bitbank.k2p.it");
 	}
 
 	@Override
@@ -64,11 +68,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(authEntryPointJwt).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
 				.mvcMatchers("/api/v1/ping").permitAll().mvcMatchers("/api/v1/auth/register").permitAll()
-				.mvcMatchers("/api/v1/auth/login").permitAll()
-				.mvcMatchers("/api-docs/**").permitAll().mvcMatchers("/swagger-ui/**").permitAll().mvcMatchers("/swagger-ui.html").permitAll()
-				.mvcMatchers("/documentation").permitAll()
-				.mvcMatchers("/").permitAll()
-				.anyRequest().authenticated();
+				.mvcMatchers("/api/v1/auth/login").permitAll().mvcMatchers("/api-docs/**").permitAll()
+				.mvcMatchers("/swagger-ui/**").permitAll().mvcMatchers("/swagger-ui.html").permitAll()
+				.mvcMatchers("/documentation").permitAll().mvcMatchers("/").permitAll().anyRequest().authenticated();
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
 	}
