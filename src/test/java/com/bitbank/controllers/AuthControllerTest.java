@@ -106,9 +106,15 @@ class AuthControllerTest {
 				.andExpect(jsonPath("$.expiry_at", is(expiryDate.toString())));
 	}
 
+	/**
+	 * Perform several tests, with invalid input.
+	 * 
+	 * @param invalidUsersEntity
+	 * @throws Exception
+	 */
 	@ParameterizedTest
 	@MethodSource("getInvalidUsers")
-	void testCanCatchException(UsersEntity invalidUsersEntity) throws Exception {
+	void testCanCatchExceptionOnLogin(UsersEntity invalidUsersEntity) throws Exception {
 
 		mvc.perform(post("/api/v1/auth/login/").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(invalidUsersEntity))).andExpect(status().isBadRequest());
@@ -144,6 +150,26 @@ class AuthControllerTest {
 				.andExpect(jsonPath("$.expiry_at", is(expiryAt.toString())));
 	}
 
+	/**
+	 * Perform several tests, with invalid input.
+	 * 
+	 * @param invalidUsersEntity
+	 * @throws Exception
+	 */
+	@ParameterizedTest
+	@MethodSource("getInvalidUsers")
+	void testCanCatchExceptionOnRegistration(UsersEntity invalidUsersEntity) throws Exception {
+
+		mvc.perform(post("/api/v1/auth/register/").contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsBytes(invalidUsersEntity))).andExpect(status().isBadRequest());
+
+	}
+
+	/**
+	 * Return a series of invalid users
+	 * 
+	 * @return
+	 */
 	private static Stream<UsersEntity> getInvalidUsers() {
 		// Create a valid entity
 		var validUsersEntity = validUserEntity("username", "password");
