@@ -55,9 +55,15 @@ public class AuthController {
 		return this.enableRegistration;
 	}
 
+	/**
+	 * Performs registration, if registrations are enabled.
+	 * 
+	 * @param usersDTO
+	 * @return
+	 */
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<MessageResponse> post(@RequestBody UsersDTO usersDTO) {
+	public ResponseEntity<MessageResponse> post(@Valid @RequestBody UsersDTO usersDTO) {
 
 		if (Boolean.TRUE.equals(getEnableRegistration())) {
 			String username = usersDTO.getUsername();

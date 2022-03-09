@@ -2,6 +2,7 @@
 + Add `BalanceNotEnoughException`
 + Refactor `BalanceNotEnoughException`
 + Refactor CORS
++ Validate registration
 
 ## 0.12.0
 + Generate token from token
