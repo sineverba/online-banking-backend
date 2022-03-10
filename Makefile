@@ -24,7 +24,7 @@ sonar:
 build:
 	docker build --tag $(IMAGE_NAME):latest --file ./docker/Dockerfile .
 	
-run:
+spin:
 	docker run --name $(CONTAINER_NAME) -e "PORT=9876" -p "9876:9876" $(IMAGE_NAME)
 	
 stop:
@@ -34,7 +34,5 @@ stop:
 destroy:
 	docker image rm $(IMAGE_NAME)
 	
-deploy:
-	docker push $(IMAGE_NAME)
-	heroku container:release web -a $(CONTAINER_NAME)
-	heroku labs:enable -a $(CONTAINER_NAME) runtime-new-layer-extract
+push:
+	docker push $(IMAGE_NAME):latest
