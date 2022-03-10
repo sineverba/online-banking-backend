@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -38,13 +39,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		return new AuthTokenFilter();
 	}
 
+	@Value("${app.allowedOrigins}")
+	private String allowedOriginsFromApplicationProperties;
+
+	/**
+	 * Return allowedOrigins from application properties
+	 */
+	private String getAllowedOriginsFromApplicationProperties() {
+		return this.allowedOriginsFromApplicationProperties;
+	}
+
 	/**
 	 * Return the allowed origins.
 	 * 
 	 * @return
 	 */
 	private List<String> getAllowedOrigins() {
-		return Arrays.asList("http://localhost:[*]", "https://bitbank.k2p.it");
+		String[] allowedOrigins = this.getAllowedOriginsFromApplicationProperties().split(",");
+		return Arrays.asList(allowedOrigins);
 	}
 
 	@Override

@@ -3,6 +3,7 @@
 + Refactor `BalanceNotEnoughException`
 + Refactor CORS
 + Validate registration
++ Move CORS to application properties
 
 ## 0.12.0
 + Generate token from token
