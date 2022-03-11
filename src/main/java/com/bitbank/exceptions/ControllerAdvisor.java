@@ -11,8 +11,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import com.bitbank.responses.ErrorResponse;
 
 @ControllerAdvice
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
@@ -26,6 +29,19 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 						Collectors.mapping(DefaultMessageSourceResolvable::getDefaultMessage, Collectors.toList())));
 
 		return ResponseEntity.badRequest().body(result);
+	}
+
+	/**
+	 * Manage the Balance Not Enough Exception.
+	 * 
+	 * Return the entity with Error response.
+	 * 
+	 * @param ex
+	 * @return
+	 */
+	@ExceptionHandler(BalanceNotEnoughException.class)
+	protected ResponseEntity<Object> handleBalanceNotEnough(BalanceNotEnoughException ex) {
+		return ResponseEntity.badRequest().body(new ErrorResponse(ex.getMessage()));
 	}
 
 }

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -38,9 +39,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		return new AuthTokenFilter();
 	}
 
+	@Value("${app.allowedOrigins}")
+	private String allowedOriginsFromApplicationProperties;
+
+	/**
+	 * Return allowedOrigins from application properties
+	 */
+	private String getAllowedOriginsFromApplicationProperties() {
+		return this.allowedOriginsFromApplicationProperties;
+	}
+
+	/**
+	 * Return the allowed origins.
+	 * 
+	 * @return
+	 */
 	private List<String> getAllowedOrigins() {
-		return Arrays.asList("http://localhost:[*]", "https://online-banking-frontend.netlify.app",
-				"https://online-banking-frontend.vercel.app");
+		String[] allowedOrigins = this.getAllowedOriginsFromApplicationProperties().split(",");
+		return Arrays.asList(allowedOrigins);
 	}
 
 	@Override
@@ -64,11 +80,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(authEntryPointJwt).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
 				.mvcMatchers("/api/v1/ping").permitAll().mvcMatchers("/api/v1/auth/register").permitAll()
-				.mvcMatchers("/api/v1/auth/login").permitAll()
-				.mvcMatchers("/api-docs/**").permitAll().mvcMatchers("/swagger-ui/**").permitAll().mvcMatchers("/swagger-ui.html").permitAll()
-				.mvcMatchers("/documentation").permitAll()
-				.mvcMatchers("/").permitAll()
-				.anyRequest().authenticated();
+				.mvcMatchers("/api/v1/auth/login").permitAll().mvcMatchers("/api-docs/**").permitAll()
+				.mvcMatchers("/swagger-ui/**").permitAll().mvcMatchers("/swagger-ui.html").permitAll()
+				.mvcMatchers("/documentation").permitAll().mvcMatchers("/").permitAll().anyRequest().authenticated();
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
 	}

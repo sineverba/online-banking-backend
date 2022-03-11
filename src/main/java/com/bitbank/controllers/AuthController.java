@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -32,6 +34,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/api/v1/auth")
 @Tag(name = "Authorization", description = "List of authorizations url")
 public class AuthController {
+	
+	/**
+	 * Create our logger
+	 */
+	Logger logger = LoggerFactory.getLogger(AuthController.class);
 
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -55,12 +62,18 @@ public class AuthController {
 		return this.enableRegistration;
 	}
 
+	/**
+	 * Performs registration, if registrations are enabled.
+	 * 
+	 * @param usersDTO
+	 * @return
+	 */
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<MessageResponse> post(@RequestBody UsersDTO usersDTO) {
+	public ResponseEntity<MessageResponse> post(@Valid @RequestBody UsersDTO usersDTO) {
 
+		String username = usersDTO.getUsername();
 		if (Boolean.TRUE.equals(getEnableRegistration())) {
-			String username = usersDTO.getUsername();
 			String password = usersDTO.getPassword();
 			String encodedPassword = passwordEncoder.encode(password);
 
@@ -72,6 +85,7 @@ public class AuthController {
 			usersService.post(usersEntity);
 			return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("ok", "new user created"));
 		}
+		logger.warn("A user with {} username has attempted to register itself", username);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(new MessageResponse("error", "registrations disabled"));
 
