@@ -2,6 +2,8 @@ package com.bitbank.services;
 
 import java.math.BigDecimal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +17,11 @@ import com.bitbank.repositories.BankAccountTransactionsRepository;
 
 @Service
 public class BankAccountTransactionsService {
+
+	/**
+	 * Create our logger
+	 */
+	Logger logger = LoggerFactory.getLogger(BankAccountTransactionsService.class);
 
 	@Autowired
 	private BankAccountTransactionsRepository bankAccountTransactionsRepository;
@@ -55,6 +62,10 @@ public class BankAccountTransactionsService {
 
 		// Compare data
 		if (arithmeticalSum.compareTo(BigDecimal.ZERO) < 0) {
+			/**
+			 * "Preconditions" and logging arguments should not require evaluation
+			 */
+			logger.info("Cannot deduct {} from {}", amount, balance);
 			throw new BalanceNotEnoughException("balance is not enough to deduct " + amount.toString());
 		}
 

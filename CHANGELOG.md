@@ -4,6 +4,7 @@
 + Refactor CORS
 + Validate registration
 + Move CORS to application properties
++ Add logger configuration
 
 ## 0.12.0
 + Generate token from token
