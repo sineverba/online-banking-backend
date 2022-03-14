@@ -1,4 +1,4 @@
-package com.bitbank.repository;
+package com.bitbank.repositories;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,7 +15,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.bitbank.entities.BankAccountTransactionsEntity;
-import com.bitbank.repositories.BankAccountTransactionsRepository;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
