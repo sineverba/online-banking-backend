@@ -23,7 +23,7 @@ services:
       
   postgres:
     profiles: ["all"]
-    image: postgres:14-alpine3.15
+    image: postgres:14.2-alpine3.15
     container_name: online-banking-backend-postgres
     environment:
       POSTGRES_USER: sonar
