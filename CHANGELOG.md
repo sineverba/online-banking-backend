@@ -2,6 +2,7 @@
 + Upgrade dependencies
 + Refactor BankAccountTransactionsDTO for API post
 + Refactor repository package test in repositories
++ Add `me` route
 
 ## 0.13.0
 + Add `BalanceNotEnoughException`

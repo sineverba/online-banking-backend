@@ -94,6 +94,8 @@ class AuthControllerTest {
 		when(authentication.getPrincipal()).thenReturn(user);
 
 		String token = jwtUtils.generateJwtToken(authentication);
+		
+		System.out.println(token);
 
 		Long expiryDate = jwtUtils.getExpiryDateFromJwtToken(token);
 
