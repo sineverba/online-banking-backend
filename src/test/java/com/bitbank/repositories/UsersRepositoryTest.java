@@ -1,4 +1,4 @@
-package com.bitbank.repository;
+package com.bitbank.repositories;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -15,7 +15,6 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.bitbank.entities.UsersEntity;
-import com.bitbank.repositories.UsersRepository;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
