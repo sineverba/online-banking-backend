@@ -1,4 +1,7 @@
-# 0.13.0
+# Next version
++ Upgrade dependencies
+
+## 0.13.0
 + Add `BalanceNotEnoughException`
 + Refactor `BalanceNotEnoughException`
 + Refactor CORS
