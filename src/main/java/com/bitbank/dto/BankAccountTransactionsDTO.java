@@ -1,10 +1,15 @@
 package com.bitbank.dto;
 
+/**
+ * Class to validate BankAccountTransactions data passed
+ * from Controller.
+ * 
+ * Manages also conversion from DTO to entity (and vice-versa)
+ * 
+ */
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
@@ -13,11 +18,8 @@ public class BankAccountTransactionsDTO {
 
 	private Long id;
 
-	@NotNull(message = "has to be present")
 	private BigDecimal amount;
 
-	@NotNull(message = "has to be present")
-	@NotEmpty(message = "has to be present")
 	private String purpose;
 
 	private LocalDateTime transactionDate;

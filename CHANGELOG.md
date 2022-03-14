@@ -1,5 +1,6 @@
 # Next version
 + Upgrade dependencies
++ Refactor BankAccountTransactionsDTO for API post
 
 ## 0.13.0
 + Add `BalanceNotEnoughException`

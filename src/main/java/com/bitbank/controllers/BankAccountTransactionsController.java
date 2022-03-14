@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bitbank.dto.BankAccountTransactionsDTO;
+import com.bitbank.dto.BankAccountTransactionsPostDTO;
 import com.bitbank.entities.BankAccountTransactionsEntity;
 import com.bitbank.exceptions.BalanceNotEnoughException;
 import com.bitbank.services.BankAccountTransactionsService;
@@ -66,7 +67,8 @@ public class BankAccountTransactionsController {
 	@Operation(security = { @SecurityRequirement(name = "bearer-key") })
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public BankAccountTransactionsDTO post(@Valid @RequestBody BankAccountTransactionsDTO bankAccountTransactionsDTO)
+	public BankAccountTransactionsDTO post(
+			@Valid @RequestBody BankAccountTransactionsPostDTO bankAccountTransactionsDTO)
 			throws BalanceNotEnoughException {
 		BankAccountTransactionsEntity bankAccountTransactionsEntity = convertToEntity(bankAccountTransactionsDTO);
 		BankAccountTransactionsEntity savedBankAccountTransactionsEntity;
@@ -102,7 +104,7 @@ public class BankAccountTransactionsController {
 	 * @param bankAccountTransactionsEntity
 	 * @return
 	 */
-	private BankAccountTransactionsEntity convertToEntity(BankAccountTransactionsDTO bankAccountTransactionsDTO) {
+	private BankAccountTransactionsEntity convertToEntity(BankAccountTransactionsPostDTO bankAccountTransactionsDTO) {
 		return modelMapper.map(bankAccountTransactionsDTO, BankAccountTransactionsEntity.class);
 	}
 }
