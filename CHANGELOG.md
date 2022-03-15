@@ -1,4 +1,10 @@
-# 0.13.0
+# 0.14.0
++ Upgrade dependencies
++ Refactor BankAccountTransactionsDTO for API post
++ Refactor repository package test in repositories
++ Add `me` route
+
+## 0.13.0
 + Add `BalanceNotEnoughException`
 + Refactor `BalanceNotEnoughException`
 + Refactor CORS
