@@ -20,7 +20,7 @@ class UserDetailsImplTest {
 
 	@BeforeEach
 	public void buildUserDetailsImpl() {
-		UsersEntity usersEntity = new UsersEntity(1L, "username", "password");
+		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", null);
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 		this.user = user;
 	}

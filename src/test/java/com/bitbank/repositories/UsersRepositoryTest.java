@@ -3,8 +3,10 @@ package com.bitbank.repositories;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +16,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.bitbank.entities.RolesEntity;
 import com.bitbank.entities.UsersEntity;
 
 @ExtendWith(SpringExtension.class)
@@ -24,10 +27,6 @@ class UsersRepositoryTest {
 	@Autowired
 	private UsersRepository usersRepository;
 
-	private static UsersEntity usersEntity(Long id, String username, String password) {
-		return UsersEntity.builder().id(id).username(username).password(password).build();
-	}
-
 	/**
 	 * Index
 	 */
@@ -36,6 +35,20 @@ class UsersRepositoryTest {
 
 		List<UsersEntity> list = new ArrayList<UsersEntity>();
 		List<UsersEntity> result = new ArrayList<UsersEntity>();
+
+		// ADMIN - Initialize the set
+		Set<RolesEntity> adminRole = new HashSet<>();
+		// ADMIN - Generate the entity
+		RolesEntity adminRolesEntity = rolesEntity(1L, ERole.valueOf("ADMIN"));
+		// ADMIN - Add the entity to the set
+		adminRole.add(adminRolesEntity);
+
+		// CUSTOMER - Initialize the set
+		Set<RolesEntity> customerRole = new HashSet<>();
+		// CUSTOMER - Generate the entity
+		RolesEntity customerRolesEntity = rolesEntity(2L, ERole.valueOf("CUSTOMER"));
+		// CUSTOMER - Add the entity to the set
+		customerRole.add(customerRolesEntity);
 
 		list.add(usersEntity(1L, "username", "password"));
 		list.add(usersEntity(2L, "anotherUsername", "anotherPassword"));
@@ -56,6 +69,20 @@ class UsersRepositoryTest {
 
 		List<UsersEntity> list = new ArrayList<UsersEntity>();
 
+		// ADMIN - Initialize the set
+		Set<RolesEntity> adminRole = new HashSet<>();
+		// ADMIN - Generate the entity
+		RolesEntity adminRolesEntity = rolesEntity(1L, ERole.valueOf("ADMIN"));
+		// ADMIN - Add the entity to the set
+		adminRole.add(adminRolesEntity);
+
+		// CUSTOMER - Initialize the set
+		Set<RolesEntity> customerRole = new HashSet<>();
+		// CUSTOMER - Generate the entity
+		RolesEntity customerRolesEntity = rolesEntity(2L, ERole.valueOf("CUSTOMER"));
+		// CUSTOMER - Add the entity to the set
+		customerRole.add(customerRolesEntity);
+
 		UsersEntity usersEntity01 = usersEntity(1L, "username", "password");
 		list.add(usersEntity01);
 		list.add(usersEntity(2L, "anotherUsername", "anotherPassword"));
@@ -67,5 +94,24 @@ class UsersRepositoryTest {
 		Optional<UsersEntity> result = Optional.of(usersEntity01);
 
 		assertEquals(result, usersRepository.findByUsername("username"));
+	}
+
+	/**
+	 * Generate a valid UsersEntity to use in tests.
+	 * 
+	 * @param id
+	 * @param username
+	 * @param password
+	 * @return
+	 */
+	private static UsersEntity usersEntity(Long id, String username, String password) {
+		return UsersEntity.builder().id(id).username(username).password(password).build();
+	}
+
+	/**
+	 * Generate a RolesEntity
+	 */
+	private static RolesEntity rolesEntity(Long id, ERole role) {
+		return RolesEntity.builder().id(id).role(role).build();
 	}
 }
