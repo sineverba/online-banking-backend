@@ -1,5 +1,6 @@
 # Next version
 + Add `Roles` Repository
++ Add roles to UsersEntity
 
 ## 0.14.0
 + Upgrade dependencies

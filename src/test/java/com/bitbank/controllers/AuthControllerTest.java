@@ -85,7 +85,7 @@ class AuthControllerTest {
 		SecurityContextHolder.setContext(securityContext);
 
 		// Create a new usersentity to deal with authentication
-		UsersEntity usersEntity = new UsersEntity(1L, "username", "password");
+		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", null);
 		// Build an user from usersEntity
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 
@@ -131,7 +131,7 @@ class AuthControllerTest {
 		SecurityContextHolder.setContext(securityContext);
 
 		// Create an usersEntity to build by userDetailsImpl
-		UsersEntity usersEntity = new UsersEntity(1L, "username", "password");
+		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", null);
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 
 		// Mock some method...

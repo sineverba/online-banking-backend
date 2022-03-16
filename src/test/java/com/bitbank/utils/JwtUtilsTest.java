@@ -45,7 +45,7 @@ class JwtUtilsTest {
 	@Test
 	void canGenerateToken() {
 
-		UsersEntity usersEntity = new UsersEntity(1L, "username", "password");
+		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", null);
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 
 		when(timeSource.getCurrentTimeMillis()).thenReturn(System.currentTimeMillis());
@@ -58,7 +58,7 @@ class JwtUtilsTest {
 
 	@Test
 	void canGetUserNameFromJwtToken() {
-		UsersEntity usersEntity = new UsersEntity(1L, "username", "password");
+		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", null);
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 
 		when(timeSource.getCurrentTimeMillis()).thenReturn(System.currentTimeMillis());
@@ -73,7 +73,7 @@ class JwtUtilsTest {
 
 	@Test
 	void canValidateToken() {
-		UsersEntity usersEntity = new UsersEntity(1L, "username", "password");
+		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", null);
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 
 		when(timeSource.getCurrentTimeMillis()).thenReturn(System.currentTimeMillis());
@@ -94,7 +94,7 @@ class JwtUtilsTest {
 
 	@Test
 	void canCheckTokenIsExpired() {
-		UsersEntity usersEntity = new UsersEntity(1L, "username", "password");
+		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", null);
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 
 		// 1262344822000 == 01 Jan 2010 11:20:22 UTC
@@ -110,7 +110,7 @@ class JwtUtilsTest {
 	@Test
 	void canGenerateTokenFromTokenItself() {
 
-		UsersEntity usersEntity = new UsersEntity(1L, "username", "password");
+		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", null);
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 
 		when(timeSource.getCurrentTimeMillis()).thenReturn(System.currentTimeMillis());
@@ -137,7 +137,7 @@ class JwtUtilsTest {
 		when(securityContext.getAuthentication()).thenReturn(authentication);
 
 		// Create an usersEntitiy
-		UsersEntity usersEntity = new UsersEntity(1L, "username", "password");
+		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", null);
 		// Build the entity to return from getPrincipal
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 		when(authentication.getPrincipal()).thenReturn(user);

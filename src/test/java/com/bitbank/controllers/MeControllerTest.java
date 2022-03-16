@@ -28,7 +28,6 @@ import com.bitbank.services.UserDetailsImpl;
 import com.bitbank.services.UserDetailsServiceImpl;
 import com.bitbank.utils.JwtUtils;
 import com.bitbank.utils.TimeSource;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(MeController.class)
@@ -46,9 +45,6 @@ class MeControllerTest {
 
 	@MockBean
 	JwtUtils jwtUtils;
-
-	@Autowired
-	private ObjectMapper objectMapper;
 
 	@MockBean
 	UserDetailsServiceImpl userDetailsServiceImpl;
@@ -73,7 +69,7 @@ class MeControllerTest {
 		SecurityContextHolder.setContext(securityContext);
 
 		// Create an usersEntity to build by userDetailsImpl
-		UsersEntity usersEntity = new UsersEntity(1L, "testusername", "password");
+		UsersEntity usersEntity = new UsersEntity(1L, "testusername", "password", null);
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 
 		// Mock some method...
@@ -88,17 +84,6 @@ class MeControllerTest {
 
 		mvc.perform(get("/api/v1/me/").contentType(MediaType.APPLICATION_JSON).header("Authorization", token))
 				.andExpect(status().isOk()).andExpect(jsonPath("$.username", is("testusername")));
-	}
-
-	/**
-	 * Return a valid user entity
-	 * 
-	 * @param username
-	 * @param password
-	 * @return
-	 */
-	private static UsersEntity validUserEntity(String username, String password) {
-		return UsersEntity.builder().username(username).password(password).build();
 	}
 
 }
