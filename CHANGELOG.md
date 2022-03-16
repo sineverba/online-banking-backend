@@ -1,4 +1,7 @@
-# 0.14.0
+# Next version
++ Add `Roles` Repository
+
+## 0.14.0
 + Upgrade dependencies
 + Refactor BankAccountTransactionsDTO for API post
 + Refactor repository package test in repositories
