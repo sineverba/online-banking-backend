@@ -3,6 +3,7 @@
 + Add roles to UsersEntity
 + Add authorities to UserDetails
 + Implement `findByName` in Roles Repository
++ Add set authorities in SecurityContext
 
 ## 0.14.0
 + Upgrade dependencies

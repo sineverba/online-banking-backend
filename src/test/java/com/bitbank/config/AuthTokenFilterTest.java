@@ -9,10 +9,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.bitbank.controllers.PingController;
+import com.bitbank.entities.UsersEntity;
+import com.bitbank.repositories.UsersRepository;
 import com.bitbank.services.PingService;
 import com.bitbank.services.UserDetailsServiceImpl;
 import com.bitbank.utils.JwtUtils;
@@ -34,23 +37,50 @@ class AuthTokenFilterTest {
 	UserDetailsServiceImpl userDetailsServiceImpl;
 
 	@MockBean
+	UserDetails userDetails;
+
+	@MockBean
 	private PingService pingService;
 
 	@MockBean
 	AuthEntryPointJwt authEntryPointJwt;
+
+	@MockBean
+	UsersRepository usersRepository;
 
 	@Test
 	void testCanReturnNullIfJwtIsMissing() throws Exception {
 		mvc.perform(get("/api/v1/ping")).andExpect(status().isOk());
 	}
 
+	/**
+	 * Test can validate the token.
+	 * 
+	 * Use /ping route because it is the route out of security, so we can
+	 * concentrate to the AuthTokenFilter class.
+	 * 
+	 * @throws Exception
+	 */
 	@Test
 	void testCanValidateToken() throws Exception {
 		String token = "a1.b2.c3";
+
 		when(jwtUtils.validateJwtToken(token)).thenReturn(true);
+		when(jwtUtils.getUserNameFromJwtToken(token)).thenReturn("username");
+		when(userDetailsServiceImpl.loadUserByUsername("username")).thenReturn(userDetails);
+		when(userDetails.getAuthorities()).thenReturn(null);
+
 		mvc.perform(get("/api/v1/ping").header("Authorization", "Bearer " + token)).andExpect(status().isOk());
 	}
 
+	/**
+	 * Test cannot validate the token.
+	 * 
+	 * Use /ping route because it is the route out of security, so we can
+	 * concentrate to the AuthTokenFilter class.
+	 * 
+	 * @throws Exception
+	 */
 	@Test
 	void testCannotValidateToken() throws Exception {
 		String token = "a1.b2.c3";
@@ -58,11 +88,31 @@ class AuthTokenFilterTest {
 		mvc.perform(get("/api/v1/ping").header("Authorization", "Bearer " + token)).andExpect(status().isOk());
 	}
 
+	/**
+	 * Test cannot validate the token if the header is missing.
+	 * 
+	 * Use /ping route because it is the route out of security, so we can
+	 * concentrate to the AuthTokenFilter class.
+	 * 
+	 * @throws Exception
+	 */
 	@Test
 	void testCanReturnNullIfJwtIsMissingButOtherHeaderIsInPlace() throws Exception {
 		String token = "a1.b2.c3";
 		mvc.perform(get("/api/v1/ping").header("Authorization", "NotStartWithBearer " + token))
 				.andExpect(status().isOk());
+	}
+
+	/**
+	 * Generate a valid user entity for tests.
+	 * 
+	 * @param id
+	 * @param username
+	 * @param password
+	 * @return
+	 */
+	private static UsersEntity validUsersEntity(Long id, String username, String password) {
+		return UsersEntity.builder().id(id).username(username).password(password).build();
 	}
 
 }
