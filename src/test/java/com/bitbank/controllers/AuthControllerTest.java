@@ -6,8 +6,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -27,7 +30,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.bitbank.config.AuthEntryPointJwt;
 import com.bitbank.config.AuthTokenFilter;
+import com.bitbank.entities.RolesEntity;
 import com.bitbank.entities.UsersEntity;
+import com.bitbank.repositories.ERole;
 import com.bitbank.services.UserDetailsImpl;
 import com.bitbank.services.UserDetailsServiceImpl;
 import com.bitbank.utils.JwtUtils;
@@ -65,11 +70,38 @@ class AuthControllerTest {
 	@MockBean
 	SecurityContext securityContext;
 
+	/**
+	 * Generate an authority before every test
+	 * 
+	 * @return
+	 */
+	@BeforeEach
+	private void buildAdminRoleAuthority() {
+		// ADMIN - Initialize the set
+		Set<RolesEntity> adminRole = new HashSet<>();
+		// ADMIN - Generate the entity
+		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ADMIN"));
+		// ADMIN - Add the entity to the set
+		adminRole.add(adminRolesEntity);
+		this.adminRole = adminRole;
+	}
+
+	/**
+	 * The autority to use
+	 * 
+	 * @throws Exception
+	 */
+	private Set adminRole;
+
+	private Set getAdminRole() {
+		return this.adminRole;
+	}
+
 	@Test
 	void canRegisterNewUser() throws Exception {
 
-		var userToSave = validUserEntity("username", "password");
-		var savedUser = validUserEntity("username", "a1.b2.c3");
+		var userToSave = validUserEntity("username", "password", this.getAdminRole());
+		var savedUser = validUserEntity("username", "a1.b2.c3", this.getAdminRole());
 
 		when(userDetailsServiceImpl.post(userToSave)).thenReturn(savedUser);
 
@@ -85,7 +117,7 @@ class AuthControllerTest {
 		SecurityContextHolder.setContext(securityContext);
 
 		// Create a new usersentity to deal with authentication
-		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", null);
+		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", this.getAdminRole());
 		// Build an user from usersEntity
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 
@@ -94,13 +126,14 @@ class AuthControllerTest {
 		when(authentication.getPrincipal()).thenReturn(user);
 
 		String token = jwtUtils.generateJwtToken(authentication);
-		
+
 		System.out.println(token);
 
 		Long expiryDate = jwtUtils.getExpiryDateFromJwtToken(token);
 
 		// Create an usersEntity to pass to the login
-		var userToLogin = validUserEntity("username", "password");
+
+		var userToLogin = validUserEntity("username", "password", this.getAdminRole());
 
 		mvc.perform(post("/api/v1/auth/login/").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(userToLogin))).andExpect(status().isOk())
@@ -131,7 +164,7 @@ class AuthControllerTest {
 		SecurityContextHolder.setContext(securityContext);
 
 		// Create an usersEntity to build by userDetailsImpl
-		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", null);
+		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", this.getAdminRole());
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 
 		// Mock some method...
@@ -173,16 +206,36 @@ class AuthControllerTest {
 	 * @return
 	 */
 	private static Stream<UsersEntity> getInvalidUsers() {
+		// ADMIN - Initialize the set
+		Set<RolesEntity> adminRole = new HashSet<>();
+		// ADMIN - Generate the entity
+		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ADMIN"));
+		// ADMIN - Add the entity to the set
+		adminRole.add(adminRolesEntity);
 		// Create a valid entity
-		var validUsersEntity = validUserEntity("username", "password");
+		var validUsersEntity = validUserEntity("username", "password", adminRole);
 
 		return Stream.of(validUsersEntity.toBuilder().username(null).build(),
 				validUsersEntity.toBuilder().username("").build(), validUsersEntity.toBuilder().password(null).build(),
 				validUsersEntity.toBuilder().password("").build());
 	}
 
-	private static UsersEntity validUserEntity(String username, String password) {
-		return UsersEntity.builder().username(username).password(password).build();
+	/**
+	 * Generate a user entity
+	 * 
+	 * @param username
+	 * @param password
+	 * @return
+	 */
+	private static UsersEntity validUserEntity(String username, String password, Set roles) {
+		return UsersEntity.builder().username(username).password(password).rolesEntity(roles).build();
+	}
+
+	/**
+	 * Generate a RolesEntity
+	 */
+	private static RolesEntity validRolesEntity(Long id, ERole role) {
+		return RolesEntity.builder().id(id).role(role).build();
 	}
 
 }

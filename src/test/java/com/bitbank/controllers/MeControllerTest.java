@@ -6,6 +6,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +26,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.bitbank.config.AuthEntryPointJwt;
 import com.bitbank.config.AuthTokenFilter;
+import com.bitbank.entities.RolesEntity;
 import com.bitbank.entities.UsersEntity;
+import com.bitbank.repositories.ERole;
 import com.bitbank.services.UserDetailsImpl;
 import com.bitbank.services.UserDetailsServiceImpl;
 import com.bitbank.utils.JwtUtils;
@@ -69,7 +74,13 @@ class MeControllerTest {
 		SecurityContextHolder.setContext(securityContext);
 
 		// Create an usersEntity to build by userDetailsImpl
-		UsersEntity usersEntity = new UsersEntity(1L, "testusername", "password", null);
+		// ADMIN - Initialize the set
+		Set<RolesEntity> adminRole = new HashSet<>();
+		// ADMIN - Generate the entity
+		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ADMIN"));
+		// ADMIN - Add the entity to the set
+		adminRole.add(adminRolesEntity);
+		UsersEntity usersEntity = new UsersEntity(1L, "testusername", "password", adminRole);
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 
 		// Mock some method...
@@ -84,6 +95,13 @@ class MeControllerTest {
 
 		mvc.perform(get("/api/v1/me/").contentType(MediaType.APPLICATION_JSON).header("Authorization", token))
 				.andExpect(status().isOk()).andExpect(jsonPath("$.username", is("testusername")));
+	}
+
+	/**
+	 * Generate a RolesEntity
+	 */
+	private static RolesEntity validRolesEntity(Long id, ERole role) {
+		return RolesEntity.builder().id(id).role(role).build();
 	}
 
 }
