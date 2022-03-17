@@ -27,14 +27,10 @@ class UserDetailServiceImplTest {
 	@InjectMocks
 	private UserDetailsServiceImpl userDetailServiceImpl;
 
-	private static UsersEntity usersEntity(Long id, String username, String password) {
-		return UsersEntity.builder().id(id).username(username).password(password).build();
-	}
-
 	@Test
 	void testCanLoadUserByUsername() {
 
-		UsersEntity usersEntity = usersEntity(1L, "username", "password");
+		UsersEntity usersEntity = validUsersEntity(1L, "username", "password");
 		Optional<UsersEntity> result = Optional.of(usersEntity);
 
 		when(usersRepository.findByUsername("username")).thenReturn(result);
@@ -72,6 +68,14 @@ class UserDetailServiceImplTest {
 		assertEquals(savedUser, userDetailServiceImpl.post(userToSave));
 	}
 
+	/**
+	 * Generate a valid user entity for tests.
+	 * 
+	 * @param id
+	 * @param username
+	 * @param password
+	 * @return
+	 */
 	private static UsersEntity validUsersEntity(Long id, String username, String password) {
 		return UsersEntity.builder().id(id).username(username).password(password).build();
 	}
