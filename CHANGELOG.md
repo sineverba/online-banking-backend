@@ -2,6 +2,7 @@
 + Add `Roles` Repository
 + Add roles to UsersEntity
 + Add authorities to UserDetails
++ Implement `findByName` in Roles Repository
 
 ## 0.14.0
 + Upgrade dependencies

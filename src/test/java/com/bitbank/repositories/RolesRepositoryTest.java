@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,8 +33,8 @@ class RolesRepositoryTest {
 		List<RolesEntity> list = new ArrayList<RolesEntity>();
 		List<RolesEntity> result = new ArrayList<RolesEntity>();
 
-		list.add(rolesEntity(1L, ERole.valueOf("ADMIN")));
-		list.add(rolesEntity(2L, ERole.valueOf("CUSTOMER")));
+		list.add(validRolesEntity(1L, ERole.valueOf("ADMIN")));
+		list.add(validRolesEntity(2L, ERole.valueOf("CUSTOMER")));
 
 		for (RolesEntity entity : list) {
 			rolesRepository.save(entity);
@@ -44,9 +45,27 @@ class RolesRepositoryTest {
 	}
 
 	/**
+	 * Test can findByRole
+	 */
+	@Test
+	void testCanFindByRole() {
+
+		// Create new RolesEntity
+		RolesEntity rolesEntity = validRolesEntity(1L, ERole.valueOf("ADMIN"));
+
+		// Save the entities
+		rolesRepository.save(rolesEntity);
+
+		// Create an optional result
+		Optional<RolesEntity> result = Optional.of(rolesEntity);
+
+		assertEquals(result, rolesRepository.findByRole(ERole.ADMIN));
+	}
+
+	/**
 	 * Generate a RolesEntity
 	 */
-	private static RolesEntity rolesEntity(Long id, ERole role) {
+	private static RolesEntity validRolesEntity(Long id, ERole role) {
 		return RolesEntity.builder().id(id).role(role).build();
 	}
 }
