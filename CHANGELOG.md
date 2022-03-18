@@ -4,6 +4,7 @@
 + Add authorities to UserDetails
 + Implement `findByName` in Roles Repository
 + Add set authorities in SecurityContext
++ Add get roles list
 
 ## 0.14.0
 + Upgrade dependencies
