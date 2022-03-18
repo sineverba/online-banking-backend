@@ -1,5 +1,6 @@
 package com.bitbank.utils;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -7,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -23,7 +25,6 @@ import org.springframework.test.context.TestPropertySource;
 import com.bitbank.entities.RolesEntity;
 import com.bitbank.entities.UsersEntity;
 import com.bitbank.repositories.ERole;
-import com.bitbank.repositories.RolesRepository;
 import com.bitbank.services.UserDetailsImpl;
 
 @SpringBootTest
@@ -47,9 +48,6 @@ class JwtUtilsTest {
 
 	@Value("${app.jwtExpirationMs}")
 	private String jwtExpirationMs;
-
-	@Autowired
-	private RolesRepository rolesRepository;
 
 	@Test
 	void canGenerateToken() {
@@ -212,6 +210,38 @@ class JwtUtilsTest {
 		// Finally, assert equals. Accept a small clock shift
 		Long expectedExpiryDate = currentTimeMillis + Long.parseLong(jwtExpirationMs);
 		assertEquals(expectedExpiryDate / 10000, expiryDate / 10000);
+	}
+
+	@Test
+	void getGetRolesFromAuthentication() {
+
+		// Set the security context
+		SecurityContextHolder.setContext(securityContext);
+
+		// Mock the time at.. now
+		Long currentTimeMillis = System.currentTimeMillis();
+
+		// Mock the methods
+		when(timeSource.getCurrentTimeMillis()).thenReturn(currentTimeMillis);
+		when(securityContext.getAuthentication()).thenReturn(authentication);
+
+		// Create an usersEntitiy
+
+		// ADMIN - Initialize the set
+		Set<RolesEntity> adminRole = new HashSet<>();
+		// ADMIN - Generate the entity
+		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ADMIN"));
+		// ADMIN - Add the entity to the set
+		adminRole.add(adminRolesEntity);
+
+		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", adminRole);
+		// Build the entity to return from getPrincipal
+		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
+		when(authentication.getPrincipal()).thenReturn(user);
+
+		List<String> roles = jwtUtils.getAuthorities(authentication);
+
+		assertThat(roles).contains("ADMIN").doesNotContain("CUSTOMER");
 	}
 
 	/**
