@@ -39,14 +39,14 @@ class UsersRepositoryTest {
 		// ADMIN - Initialize the set
 		Set<RolesEntity> adminRole = new HashSet<>();
 		// ADMIN - Generate the entity
-		RolesEntity adminRolesEntity = rolesEntity(1L, ERole.valueOf("ADMIN"));
+		RolesEntity adminRolesEntity = rolesEntity(1L, ERole.valueOf("ROLE_ADMIN"));
 		// ADMIN - Add the entity to the set
 		adminRole.add(adminRolesEntity);
 
 		// CUSTOMER - Initialize the set
 		Set<RolesEntity> customerRole = new HashSet<>();
 		// CUSTOMER - Generate the entity
-		RolesEntity customerRolesEntity = rolesEntity(2L, ERole.valueOf("CUSTOMER"));
+		RolesEntity customerRolesEntity = rolesEntity(2L, ERole.valueOf("ROLE_CUSTOMER"));
 		// CUSTOMER - Add the entity to the set
 		customerRole.add(customerRolesEntity);
 
@@ -72,14 +72,14 @@ class UsersRepositoryTest {
 		// ADMIN - Initialize the set
 		Set<RolesEntity> adminRole = new HashSet<>();
 		// ADMIN - Generate the entity
-		RolesEntity adminRolesEntity = rolesEntity(1L, ERole.valueOf("ADMIN"));
+		RolesEntity adminRolesEntity = rolesEntity(1L, ERole.valueOf("ROLE_ADMIN"));
 		// ADMIN - Add the entity to the set
 		adminRole.add(adminRolesEntity);
 
 		// CUSTOMER - Initialize the set
 		Set<RolesEntity> customerRole = new HashSet<>();
 		// CUSTOMER - Generate the entity
-		RolesEntity customerRolesEntity = rolesEntity(2L, ERole.valueOf("CUSTOMER"));
+		RolesEntity customerRolesEntity = rolesEntity(2L, ERole.valueOf("ROLE_CUSTOMER"));
 		// CUSTOMER - Add the entity to the set
 		customerRole.add(customerRolesEntity);
 

@@ -55,7 +55,7 @@ class JwtUtilsTest {
 		// ADMIN - Initialize the set
 		Set<RolesEntity> adminRole = new HashSet<>();
 		// ADMIN - Generate the entity
-		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ADMIN"));
+		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ROLE_ADMIN"));
 		// ADMIN - Add the entity to the set
 		adminRole.add(adminRolesEntity);
 
@@ -77,7 +77,7 @@ class JwtUtilsTest {
 		// ADMIN - Initialize the set
 		Set<RolesEntity> adminRole = new HashSet<>();
 		// ADMIN - Generate the entity
-		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ADMIN"));
+		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ROLE_ADMIN"));
 		// ADMIN - Add the entity to the set
 		adminRole.add(adminRolesEntity);
 
@@ -100,7 +100,7 @@ class JwtUtilsTest {
 		// ADMIN - Initialize the set
 		Set<RolesEntity> adminRole = new HashSet<>();
 		// ADMIN - Generate the entity
-		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ADMIN"));
+		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ROLE_ADMIN"));
 		// ADMIN - Add the entity to the set
 		adminRole.add(adminRolesEntity);
 
@@ -129,7 +129,7 @@ class JwtUtilsTest {
 		// ADMIN - Initialize the set
 		Set<RolesEntity> adminRole = new HashSet<>();
 		// ADMIN - Generate the entity
-		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ADMIN"));
+		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ROLE_ADMIN"));
 		// ADMIN - Add the entity to the set
 		adminRole.add(adminRolesEntity);
 
@@ -157,7 +157,7 @@ class JwtUtilsTest {
 		// ADMIN - Initialize the set
 		Set<RolesEntity> adminRole = new HashSet<>();
 		// ADMIN - Generate the entity
-		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ADMIN"));
+		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ROLE_ADMIN"));
 		// ADMIN - Add the entity to the set
 		adminRole.add(adminRolesEntity);
 
@@ -192,7 +192,7 @@ class JwtUtilsTest {
 		// ADMIN - Initialize the set
 		Set<RolesEntity> adminRole = new HashSet<>();
 		// ADMIN - Generate the entity
-		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ADMIN"));
+		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ROLE_ADMIN"));
 		// ADMIN - Add the entity to the set
 		adminRole.add(adminRolesEntity);
 
@@ -230,7 +230,7 @@ class JwtUtilsTest {
 		// ADMIN - Initialize the set
 		Set<RolesEntity> adminRole = new HashSet<>();
 		// ADMIN - Generate the entity
-		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ADMIN"));
+		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ROLE_ADMIN"));
 		// ADMIN - Add the entity to the set
 		adminRole.add(adminRolesEntity);
 
@@ -241,7 +241,7 @@ class JwtUtilsTest {
 
 		List<String> roles = jwtUtils.getAuthorities(authentication);
 
-		assertThat(roles).contains("ADMIN").doesNotContain("CUSTOMER");
+		assertThat(roles).contains("ROLE_ADMIN").doesNotContain("ROLE_CUSTOMER");
 	}
 
 	/**

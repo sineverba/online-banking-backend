@@ -48,7 +48,7 @@ class BalanceControllerTest {
 	/**
 	 * Can get Balance
 	 */
-	@WithMockUser("username")
+	@WithMockUser(username = "username", authorities = { "ROLE_CUSTOMER" })
 	@Test
 	void testCanGetBalance() throws Exception {
 

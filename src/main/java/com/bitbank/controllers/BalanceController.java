@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +24,14 @@ public class BalanceController {
 	@Autowired
 	private BankAccountTransactionsService bankAccountTransactionsService;
 
+	/**
+	 * Get balance.
+	 * 
+	 * Preauthorize will check role named ROLE_CUSTOMER
+	 * @return
+	 */
 	@GetMapping
+	@PreAuthorize("hasRole('CUSTOMER')")
 	@Operation(security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<BalanceResponse> show() {
 		BigDecimal balance = bankAccountTransactionsService.balance();

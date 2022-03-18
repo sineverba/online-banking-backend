@@ -33,8 +33,8 @@ class RolesRepositoryTest {
 		List<RolesEntity> list = new ArrayList<RolesEntity>();
 		List<RolesEntity> result = new ArrayList<RolesEntity>();
 
-		list.add(validRolesEntity(1L, ERole.valueOf("ADMIN")));
-		list.add(validRolesEntity(2L, ERole.valueOf("CUSTOMER")));
+		list.add(validRolesEntity(1L, ERole.valueOf("ROLE_ADMIN")));
+		list.add(validRolesEntity(2L, ERole.valueOf("ROLE_CUSTOMER")));
 
 		for (RolesEntity entity : list) {
 			rolesRepository.save(entity);
@@ -51,7 +51,7 @@ class RolesRepositoryTest {
 	void testCanFindByRole() {
 
 		// Create new RolesEntity
-		RolesEntity rolesEntity = validRolesEntity(1L, ERole.valueOf("ADMIN"));
+		RolesEntity rolesEntity = validRolesEntity(1L, ERole.valueOf("ROLE_ADMIN"));
 
 		// Save the entities
 		rolesRepository.save(rolesEntity);
@@ -59,7 +59,7 @@ class RolesRepositoryTest {
 		// Create an optional result
 		Optional<RolesEntity> result = Optional.of(rolesEntity);
 
-		assertEquals(result, rolesRepository.findByRole(ERole.ADMIN));
+		assertEquals(result, rolesRepository.findByRole(ERole.ROLE_ADMIN));
 	}
 
 	/**
