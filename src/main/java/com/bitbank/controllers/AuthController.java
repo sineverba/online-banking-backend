@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -72,6 +73,7 @@ public class AuthController {
 	 */
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<MessageResponse> post(@Valid @RequestBody UsersDTO usersDTO) {
 
 		String username = usersDTO.getUsername();
@@ -130,6 +132,7 @@ public class AuthController {
 	 * @return
 	 */
 	@PostMapping("/refresh-token")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
 	public ResponseEntity<JwtResponse> refreshToken(HttpServletRequest httpServletRequest) {
 
 		String token = httpServletRequest.getHeader("Authorization").replace("Bearer ", "");

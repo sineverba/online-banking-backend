@@ -1,5 +1,5 @@
 package com.bitbank.repositories;
 
 public enum ERole {
-	ADMIN, CUSTOMER
+	ROLE_ADMIN, ROLE_CUSTOMER
 }

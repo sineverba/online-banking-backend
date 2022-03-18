@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,6 +45,7 @@ public class BankAccountTransactionsController {
 
 	@Operation(security = { @SecurityRequirement(name = "bearer-key") })
 	@GetMapping
+	@PreAuthorize("hasRole('CUSTOMER')")
 	public ResponseEntity<Page<BankAccountTransactionsEntity>> index(@RequestParam(defaultValue = "0") Integer page,
 			@RequestParam(defaultValue = "10") Integer perPage,
 			@RequestParam(defaultValue = "transactionDate") String orderBy,
@@ -66,6 +68,7 @@ public class BankAccountTransactionsController {
 	 */
 	@Operation(security = { @SecurityRequirement(name = "bearer-key") })
 	@PostMapping
+	@PreAuthorize("hasRole('CUSTOMER')")
 	@ResponseStatus(HttpStatus.CREATED)
 	public BankAccountTransactionsDTO post(
 			@Valid @RequestBody BankAccountTransactionsPostDTO bankAccountTransactionsDTO)

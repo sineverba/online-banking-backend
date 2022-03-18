@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -59,6 +60,7 @@ class RegisterControllerTest {
 	SecurityContext securityContext;
 
 	@Test
+	@WithMockUser(username = "username", authorities = { "ROLE_ADMIN" })
 	void cannotRegisterUserWhenRegistrationsAreDisabled() throws Exception {
 
 		var userToSave = validUserEntity("username", "password");

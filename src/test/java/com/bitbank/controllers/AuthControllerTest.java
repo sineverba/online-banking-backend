@@ -6,9 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -83,7 +81,7 @@ class AuthControllerTest {
 		// ADMIN - Initialize the set
 		Set<RolesEntity> adminRole = new HashSet<>();
 		// ADMIN - Generate the entity
-		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ADMIN"));
+		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ROLE_ADMIN"));
 		// ADMIN - Add the entity to the set
 		adminRole.add(adminRolesEntity);
 		this.adminRole = adminRole;
@@ -101,6 +99,7 @@ class AuthControllerTest {
 	}
 
 	@Test
+	@WithMockUser(username = "username", authorities = { "ROLE_ADMIN" })
 	void canRegisterNewUser() throws Exception {
 
 		var userToSave = validUserEntity("username", "password", this.getAdminRole());
@@ -112,8 +111,8 @@ class AuthControllerTest {
 				.content(objectMapper.writeValueAsBytes(userToSave))).andExpect(status().isCreated());
 	}
 
-	@WithMockUser("username")
 	@Test
+	@WithMockUser(username = "username", authorities = { "ROLE_ADMIN" })
 	void canLogin() throws Exception {
 
 		// Add security context
@@ -127,7 +126,7 @@ class AuthControllerTest {
 		// Mock some methods
 		when(securityContext.getAuthentication()).thenReturn(authentication);
 		when(authentication.getPrincipal()).thenReturn(user);
-		
+
 		String token = jwtUtils.generateJwtToken(authentication);
 		Long expiryDate = jwtUtils.getExpiryDateFromJwtToken(token);
 
@@ -156,8 +155,8 @@ class AuthControllerTest {
 
 	}
 
-	@WithMockUser("username")
 	@Test
+	@WithMockUser(username = "username", authorities = { "ROLE_CUSTOMER" })
 	void testCanRefreshToken() throws Exception {
 
 		// Add the Security Context
@@ -209,7 +208,7 @@ class AuthControllerTest {
 		// ADMIN - Initialize the set
 		Set<RolesEntity> adminRole = new HashSet<>();
 		// ADMIN - Generate the entity
-		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ADMIN"));
+		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ROLE_ADMIN"));
 		// ADMIN - Add the entity to the set
 		adminRole.add(adminRolesEntity);
 		// Create a valid entity

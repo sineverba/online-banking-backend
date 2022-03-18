@@ -66,7 +66,7 @@ class MeControllerTest {
 	@MockBean
 	private TimeSource timeSource;
 
-	@WithMockUser("testusername")
+	@WithMockUser(username = "testusername", authorities = { "ROLE_CUSTOMER" })
 	@Test
 	void testCanReturnUsername() throws Exception {
 
@@ -77,7 +77,7 @@ class MeControllerTest {
 		// ADMIN - Initialize the set
 		Set<RolesEntity> adminRole = new HashSet<>();
 		// ADMIN - Generate the entity
-		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ADMIN"));
+		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ROLE_ADMIN"));
 		// ADMIN - Add the entity to the set
 		adminRole.add(adminRolesEntity);
 		UsersEntity usersEntity = new UsersEntity(1L, "testusername", "password", adminRole);
