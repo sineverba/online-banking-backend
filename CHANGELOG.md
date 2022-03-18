@@ -5,6 +5,7 @@
 + Implement `findByName` in Roles Repository
 + Add set authorities in SecurityContext
 + Add get roles list
++ Return roles on login
 
 ## 0.14.0
 + Upgrade dependencies

@@ -1,5 +1,7 @@
 package com.bitbank.controllers;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -34,7 +36,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/api/v1/auth")
 @Tag(name = "Authorization", description = "List of authorizations url")
 public class AuthController {
-	
+
 	/**
 	 * Create our logger
 	 */
@@ -113,7 +115,10 @@ public class AuthController {
 		// Get the expiry at value
 		String expiryAt = jwtUtils.getExpiryDateFromJwtToken(jwt).toString();
 
-		return ResponseEntity.ok(new JwtResponse(jwt, expiryAt));
+		// Get the autorithies
+		List<String> roles = jwtUtils.getAuthorities(authentication);
+
+		return ResponseEntity.ok(new JwtResponse(jwt, expiryAt, roles));
 	}
 
 	/**
@@ -133,7 +138,7 @@ public class AuthController {
 		// Get the expiry at value
 		String expiryAt = jwtUtils.getExpiryDateFromJwtToken(jwt).toString();
 
-		return ResponseEntity.ok(new JwtResponse(jwt, expiryAt));
+		return ResponseEntity.ok(new JwtResponse(jwt, expiryAt, null));
 	}
 
 	/**

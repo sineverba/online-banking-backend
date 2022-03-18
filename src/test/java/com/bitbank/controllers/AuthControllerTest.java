@@ -6,10 +6,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -124,21 +127,18 @@ class AuthControllerTest {
 		// Mock some methods
 		when(securityContext.getAuthentication()).thenReturn(authentication);
 		when(authentication.getPrincipal()).thenReturn(user);
-
+		
 		String token = jwtUtils.generateJwtToken(authentication);
-
-		System.out.println(token);
-
 		Long expiryDate = jwtUtils.getExpiryDateFromJwtToken(token);
 
 		// Create an usersEntity to pass to the login
-
-		var userToLogin = validUserEntity("username", "password", this.getAdminRole());
+		UsersEntity userToLogin = validUserEntity("username", "password", this.getAdminRole());
 
 		mvc.perform(post("/api/v1/auth/login/").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(userToLogin))).andExpect(status().isOk())
 				.andExpect(jsonPath("$.access_token", is(token)))
-				.andExpect(jsonPath("$.expiry_at", is(expiryDate.toString())));
+				.andExpect(jsonPath("$.expiry_at", is(expiryDate.toString())))
+				.andExpect(jsonPath("$.roles", Matchers.empty()));
 	}
 
 	/**

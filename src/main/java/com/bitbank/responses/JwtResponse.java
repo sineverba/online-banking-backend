@@ -1,5 +1,7 @@
 package com.bitbank.responses;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class JwtResponse {
@@ -10,9 +12,12 @@ public class JwtResponse {
 	@JsonProperty("expiry_at")
 	private String expiryAt;
 
-	public JwtResponse(String token, String expiryAt) {
+	private List<String> roles;
+
+	public JwtResponse(String token, String expiryAt, List<String> roles) {
 		this.setAccessToken(token);
 		this.setExpiryAt(expiryAt);
+		this.setRoles(roles);
 	}
 
 	private void setAccessToken(String accessToken) {
@@ -23,12 +28,20 @@ public class JwtResponse {
 		this.expiryAt = expiryAt;
 	}
 
+	private void setRoles(List<String> roles) {
+		this.roles = roles;
+	}
+
 	public String getAccessToken() {
 		return this.accessToken;
 	}
 
 	public String getExpiryAt() {
 		return this.expiryAt;
+	}
+
+	public List<String> getRoles() {
+		return this.roles;
 	}
 
 }
