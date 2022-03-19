@@ -8,6 +8,7 @@
 + Return roles on login
 + Add check on routes for roles
 + Handle AccessDenied Exception
++ Add Roles Service
 
 ## 0.14.0
 + Upgrade dependencies
