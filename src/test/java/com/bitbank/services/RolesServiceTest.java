@@ -1,6 +1,7 @@
 package com.bitbank.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -13,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.bitbank.entities.RolesEntity;
+import com.bitbank.exceptions.RoleOrAuthorityNotFoundException;
 import com.bitbank.repositories.ERole;
 import com.bitbank.repositories.RolesRepository;
 
@@ -26,9 +28,11 @@ class RolesServiceTest {
 
 	/**
 	 * Test can get a Role by findByRole
+	 * 
+	 * @throws RoleOrAuthorityNotFoundException
 	 */
 	@Test
-	void testCanGetFindByRole() {
+	void testCanGetFindByRole() throws RoleOrAuthorityNotFoundException {
 
 		// Generate a valid role
 		RolesEntity rolesEntity = validRolesEntity(1L, ERole.valueOf("ROLE_ADMIN"));
@@ -44,15 +48,32 @@ class RolesServiceTest {
 	}
 
 	/**
-	 * Test can handle empty role
+	 * Post section. Test can throw BalanceNotEnoughException
+	 * 
+	 * @throws RoleOrAuthorityNotFoundException
 	 */
+
 	@Test
-	void testCanHandleEmptyRole() {
+	void testCanThrowRoleOrAuthorityNotFoundException() {
 
-		when(rolesRepository.findByRole(ERole.valueOf("ROLE_ADMIN"))).thenReturn(Optional.empty());
+		// Generate a valid role
+		// RolesEntity rolesEntity = validRolesEntity(1L, ERole.valueOf("ROLE_ADMIN"));
 
-		assertTrue(rolesService.show(ERole.valueOf("ROLE_ADMIN")).isEmpty());
+		// Mock the method
+		Optional<RolesEntity> optionalRolesEntity = Optional.empty();
+		when(rolesRepository.findByRole(ERole.valueOf("ROLE_ADMIN"))).thenReturn(optionalRolesEntity);
 
+		// Throw the exception
+		RoleOrAuthorityNotFoundException roleOrAuthorityNotFoundException = assertThrows(
+				RoleOrAuthorityNotFoundException.class, () -> {
+					rolesService.show(ERole.valueOf("ROLE_ADMIN"));
+				});
+
+		// Compare string
+		String expectedMessage = "cannot find role ROLE_ADMIN";
+		String actualMessage = roleOrAuthorityNotFoundException.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	/**
