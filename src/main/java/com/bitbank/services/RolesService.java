@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bitbank.entities.RolesEntity;
+import com.bitbank.exceptions.RoleOrAuthorityNotFoundException;
 import com.bitbank.repositories.ERole;
 import com.bitbank.repositories.RolesRepository;
 
@@ -17,9 +18,16 @@ public class RolesService {
 
 	/**
 	 * Return single item
+	 * 
+	 * @throws RoleOrAuthorityNotFoundException
 	 */
-	public Optional<RolesEntity> show(ERole role) {
-		return rolesRepository.findByRole(role);
+	public Optional<RolesEntity> show(ERole role) throws RoleOrAuthorityNotFoundException {
+
+		Optional<RolesEntity> optionalRolesEntity = rolesRepository.findByRole(role);
+		if (optionalRolesEntity.isEmpty()) {
+			throw new RoleOrAuthorityNotFoundException("cannot find role " + role);
+		}
+		return optionalRolesEntity;
 	}
 
 }

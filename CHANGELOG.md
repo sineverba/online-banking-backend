@@ -9,6 +9,7 @@
 + Add check on routes for roles
 + Handle AccessDenied Exception
 + Add Roles Service
++ Add Role not found Exception
 
 ## 0.14.0
 + Upgrade dependencies
