@@ -1,9 +1,10 @@
 package com.bitbank.services;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.bitbank.entities.UsersEntity;
@@ -23,10 +24,19 @@ public class UserDetailsImpl implements UserDetails {
 	private String username;
 	@JsonIgnore
 	private String password;
+	private Collection<? extends GrantedAuthority> authorities;
 
 	public static UserDetailsImpl build(UsersEntity usersEntity) {
 
-		return new UserDetailsImpl(usersEntity.getId(), usersEntity.getUsername(), usersEntity.getPassword());
+		/**
+		 * The list must contain a type that extends GrantedAuthorithy:
+		 * SimpleGrantedAuthority
+		 */
+		List<? extends GrantedAuthority> authorities = usersEntity.getRolesEntity().stream()
+				.map(role -> new SimpleGrantedAuthority(role.getRole().name())).toList();
+
+		return new UserDetailsImpl(usersEntity.getId(), usersEntity.getUsername(), usersEntity.getPassword(),
+				authorities);
 	}
 
 	@Override
@@ -51,6 +61,6 @@ public class UserDetailsImpl implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Collections.emptyList();
+		return authorities;
 	}
 }

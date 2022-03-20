@@ -1,10 +1,12 @@
 package com.bitbank.utils;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import com.bitbank.services.UserDetailsImpl;
@@ -27,7 +29,7 @@ public class JwtUtils {
 
 	/**
 	 * Generate the JWT token from an Authentication. If you have a String token,
-	 * use other.
+	 * use `generateJwtToken(String token)`
 	 * 
 	 * @param authentication
 	 * @return The JWT
@@ -39,7 +41,7 @@ public class JwtUtils {
 
 	/**
 	 * Generate the JWT token from a String. If you have an Authentication, use
-	 * other.
+	 * `generateJwtToken(Authentication authentication)`
 	 * 
 	 * @param authentication
 	 * @return The JWT
@@ -85,6 +87,7 @@ public class JwtUtils {
 	}
 
 	/**
+	 * Create a jwt starting from an username.
 	 * 
 	 * @param username
 	 * @return
@@ -93,5 +96,16 @@ public class JwtUtils {
 		return Jwts.builder().setSubject(username).setIssuedAt(new Date(timeSource.getCurrentTimeMillis()))
 				.setExpiration(new Date(timeSource.getCurrentTimeMillis() + jwtExpirationMs))
 				.signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
+	}
+
+	/**
+	 * Get list of roles from authentication
+	 * 
+	 * @param authentication
+	 * @return The JWT
+	 */
+	public List<String> getAuthorities(Authentication authentication) {
+		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+		return userPrincipal.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
 	}
 }

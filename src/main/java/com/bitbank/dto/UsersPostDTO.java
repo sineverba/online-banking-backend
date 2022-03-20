@@ -1,20 +1,20 @@
 package com.bitbank.dto;
 
 /**
- * DTO class to perform conversion to entity
+ * Class to validate Users data passed
+ * from Controller.
+ * 
+ * Valid only when submit, not other.
+ * 
  */
-
-import java.util.Set;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import com.bitbank.entities.RolesEntity;
-
 import lombok.Data;
 
 @Data
-public class UsersDTO {
+public class UsersPostDTO {
 
 	@NotNull(message = "has to be present")
 	@NotEmpty(message = "has to be not empty")
@@ -23,9 +23,5 @@ public class UsersDTO {
 	@NotNull(message = "has to be present")
 	@NotEmpty(message = "has to be not empty")
 	private String password;
-	
-	@NotNull(message = "has to be present")
-	@NotEmpty(message = "has to be not empty")
-	private Set<RolesEntity> rolesEntity;
-	
+
 }

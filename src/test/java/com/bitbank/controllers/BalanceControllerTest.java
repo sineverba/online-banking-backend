@@ -48,7 +48,7 @@ class BalanceControllerTest {
 	/**
 	 * Can get Balance
 	 */
-	@WithMockUser("username")
+	@WithMockUser(username = "username", authorities = { "ROLE_CUSTOMER" })
 	@Test
 	void testCanGetBalance() throws Exception {
 
@@ -58,5 +58,17 @@ class BalanceControllerTest {
 
 		mvc.perform(get("/api/v1/balance")).andExpect(status().isOk())
 				.andExpect(jsonPath("$.balance", is(balance.intValue())));
+	}
+	
+	/**
+	 * Test access denied exception.
+	 * 
+	 * Access with role admin to a route created for customer
+	 */
+	@WithMockUser(username = "username", authorities = { "ROLE_ADMIN" })
+	@Test
+	void testCanThrowCustomException() throws Exception {
+
+		mvc.perform(get("/api/v1/balance")).andExpect(status().isForbidden());
 	}
 }

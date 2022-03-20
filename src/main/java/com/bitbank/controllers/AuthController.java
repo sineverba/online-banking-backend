@@ -1,5 +1,9 @@
 package com.bitbank.controllers;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -10,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,9 +27,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bitbank.dto.UsersDTO;
+import com.bitbank.dto.UsersPostDTO;
+import com.bitbank.entities.RolesEntity;
 import com.bitbank.entities.UsersEntity;
+import com.bitbank.exceptions.RoleOrAuthorityNotFoundException;
+import com.bitbank.repositories.ERole;
 import com.bitbank.responses.JwtResponse;
 import com.bitbank.responses.MessageResponse;
+import com.bitbank.services.RolesService;
 import com.bitbank.services.UserDetailsServiceImpl;
 import com.bitbank.utils.JwtUtils;
 
@@ -34,7 +44,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/api/v1/auth")
 @Tag(name = "Authorization", description = "List of authorizations url")
 public class AuthController {
-	
+
 	/**
 	 * Create our logger
 	 */
@@ -55,6 +65,9 @@ public class AuthController {
 	@Autowired
 	JwtUtils jwtUtils;
 
+	@Autowired
+	private RolesService rolesService;
+
 	@Value("${app.enableRegistration}")
 	private Boolean enableRegistration;
 
@@ -67,19 +80,30 @@ public class AuthController {
 	 * 
 	 * @param usersDTO
 	 * @return
+	 * @throws RoleOrAuthorityNotFoundException
 	 */
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<MessageResponse> post(@Valid @RequestBody UsersDTO usersDTO) {
+	public ResponseEntity<MessageResponse> post(@Valid @RequestBody UsersPostDTO usersDTO) throws RoleOrAuthorityNotFoundException {
 
 		String username = usersDTO.getUsername();
 		if (Boolean.TRUE.equals(getEnableRegistration())) {
+
+			// Get username and password (enconded)
 			String password = usersDTO.getPassword();
 			String encodedPassword = passwordEncoder.encode(password);
 
+			// Prepare for roles
+			Set<RolesEntity> rolesEntity = new HashSet<>();
+			RolesEntity customerRole;
+			customerRole = rolesService.show(ERole.ROLE_CUSTOMER);
+			rolesEntity.add(customerRole);
+
+			// Instance UsersDTO and populate it
 			UsersDTO encodedUsersDTO = new UsersDTO();
 			encodedUsersDTO.setUsername(username);
 			encodedUsersDTO.setPassword(encodedPassword);
+			encodedUsersDTO.setRolesEntity(rolesEntity);
 
 			UsersEntity usersEntity = convertToEntity(encodedUsersDTO);
 			usersService.post(usersEntity);
@@ -98,7 +122,7 @@ public class AuthController {
 	 * @return the jwt token
 	 */
 	@PostMapping("/login")
-	public ResponseEntity<JwtResponse> login(@Valid @RequestBody UsersDTO usersDTO) {
+	public ResponseEntity<JwtResponse> login(@Valid @RequestBody UsersPostDTO usersDTO) {
 
 		String username = usersDTO.getUsername();
 		String password = usersDTO.getPassword();
@@ -113,7 +137,10 @@ public class AuthController {
 		// Get the expiry at value
 		String expiryAt = jwtUtils.getExpiryDateFromJwtToken(jwt).toString();
 
-		return ResponseEntity.ok(new JwtResponse(jwt, expiryAt));
+		// Get the autorithies
+		List<String> roles = jwtUtils.getAuthorities(authentication);
+
+		return ResponseEntity.ok(new JwtResponse(jwt, expiryAt, roles));
 	}
 
 	/**
@@ -125,6 +152,7 @@ public class AuthController {
 	 * @return
 	 */
 	@PostMapping("/refresh-token")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
 	public ResponseEntity<JwtResponse> refreshToken(HttpServletRequest httpServletRequest) {
 
 		String token = httpServletRequest.getHeader("Authorization").replace("Bearer ", "");
@@ -133,7 +161,7 @@ public class AuthController {
 		// Get the expiry at value
 		String expiryAt = jwtUtils.getExpiryDateFromJwtToken(jwt).toString();
 
-		return ResponseEntity.ok(new JwtResponse(jwt, expiryAt));
+		return ResponseEntity.ok(new JwtResponse(jwt, expiryAt, null));
 	}
 
 	/**
