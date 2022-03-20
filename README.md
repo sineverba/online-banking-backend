@@ -5,7 +5,7 @@ Online Banking Demo Backend
 
 | Service | Github link | Demo |
 | ------- | ----------- | ---- |
-| Backend | [https://github.com/sineverba/online-banking-backend](https://github.com/sineverba/online-banking-backend) | [Swagger](https://online-banking-backend.k2p.it) |
+| Backend | [https://github.com/sineverba/online-banking-backend](https://github.com/sineverba/online-banking-backend) | [Swagger](https://https://online-banking-backend-api.herokuapp.com) |
 | Frontend | [https://github.com/sineverba/online-banking-frontend](https://github.com/sineverba/online-banking-frontend) | [Demo](https://bitbank.k2p.it) |
 
 __This project uses:__
@@ -27,6 +27,10 @@ __This project uses:__
 There is a dummy database, pre-populated. At first spin, MySQL will re-populate the database with some data.
 
 With a custom Sonar setup, launch them with `$ docker-compose profile --dev up` and you will not get Sonar images.
+
+## How generate a random string to use for Jwt secret
+
+`$ tr -dc A-Za-z0-9 </dev/urandom | head -c 100 ; echo ''`
 
 ## How populate database
 

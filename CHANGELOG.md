@@ -1,6 +1,7 @@
 # Next version
 + Fix some Spring warnings
 + Refactor balance not enough exception
++ Move to Heroku
 
 ## 0.15.0
 + Add `Roles` Repository
