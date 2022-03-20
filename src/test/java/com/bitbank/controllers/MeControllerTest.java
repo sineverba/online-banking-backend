@@ -6,6 +6,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +26,13 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.bitbank.config.AuthEntryPointJwt;
 import com.bitbank.config.AuthTokenFilter;
+import com.bitbank.entities.RolesEntity;
 import com.bitbank.entities.UsersEntity;
+import com.bitbank.repositories.ERole;
 import com.bitbank.services.UserDetailsImpl;
 import com.bitbank.services.UserDetailsServiceImpl;
 import com.bitbank.utils.JwtUtils;
 import com.bitbank.utils.TimeSource;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(MeController.class)
@@ -47,9 +51,6 @@ class MeControllerTest {
 	@MockBean
 	JwtUtils jwtUtils;
 
-	@Autowired
-	private ObjectMapper objectMapper;
-
 	@MockBean
 	UserDetailsServiceImpl userDetailsServiceImpl;
 
@@ -65,7 +66,7 @@ class MeControllerTest {
 	@MockBean
 	private TimeSource timeSource;
 
-	@WithMockUser("testusername")
+	@WithMockUser(username = "testusername", authorities = { "ROLE_CUSTOMER" })
 	@Test
 	void testCanReturnUsername() throws Exception {
 
@@ -73,7 +74,13 @@ class MeControllerTest {
 		SecurityContextHolder.setContext(securityContext);
 
 		// Create an usersEntity to build by userDetailsImpl
-		UsersEntity usersEntity = new UsersEntity(1L, "testusername", "password");
+		// ADMIN - Initialize the set
+		Set<RolesEntity> adminRole = new HashSet<>();
+		// ADMIN - Generate the entity
+		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ROLE_ADMIN"));
+		// ADMIN - Add the entity to the set
+		adminRole.add(adminRolesEntity);
+		UsersEntity usersEntity = new UsersEntity(1L, "testusername", "password", adminRole);
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 
 		// Mock some method...
@@ -91,14 +98,10 @@ class MeControllerTest {
 	}
 
 	/**
-	 * Return a valid user entity
-	 * 
-	 * @param username
-	 * @param password
-	 * @return
+	 * Generate a RolesEntity
 	 */
-	private static UsersEntity validUserEntity(String username, String password) {
-		return UsersEntity.builder().username(username).password(password).build();
+	private static RolesEntity validRolesEntity(Long id, ERole role) {
+		return RolesEntity.builder().id(id).role(role).build();
 	}
 
 }

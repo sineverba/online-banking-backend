@@ -69,7 +69,7 @@ class BankAccountTransactionsControllerTest {
 	/**
 	 * index
 	 */
-	@WithMockUser("username")
+	@WithMockUser(username = "username", authorities = { "ROLE_CUSTOMER" })
 	@Test
 	void testCanIndex() throws Exception {
 
@@ -79,7 +79,7 @@ class BankAccountTransactionsControllerTest {
 		mvc.perform(get("/api/v1/bank-account-transactions/")).andExpect(status().isOk());
 	}
 
-	@WithMockUser("username")
+	@WithMockUser(username = "username", authorities = { "ROLE_CUSTOMER" })
 	@Test
 	void testCanSave() throws Exception {
 		var id = 1L;
@@ -94,7 +94,7 @@ class BankAccountTransactionsControllerTest {
 				.andExpect(jsonPath("$.amount", is(transactionToSave.getAmount())));
 	}
 
-	@WithMockUser("username")
+	@WithMockUser(username = "username", authorities = { "ROLE_CUSTOMER" })
 	@ParameterizedTest
 	@MethodSource("getInvalidBankAccountTransactions")
 	void testCanCatchException(BankAccountTransactionsEntity invalidBankAccountTransactionsEntity) throws Exception {
@@ -125,14 +125,13 @@ class BankAccountTransactionsControllerTest {
 	 * Test not enough deduct throws BalanceNotEnoughException
 	 * 
 	 */
-	@WithMockUser("username")
+	@WithMockUser(username = "username", authorities = { "ROLE_CUSTOMER" })
 	@Test
 	void testCanThrowsBalanceNotEnoughException() throws Exception {
 
 		// Create a valid entity to submit.
 		var transactionToSave = validBankAccountTransactionsEntity(new BigDecimal(100), "test");
 
-		// when(bankAccountTransactionsService.post(transactionToSave)).thenThrow(BalanceNotEnoughException.class);
 		when(bankAccountTransactionsService.post(transactionToSave))
 				.thenThrow(new BalanceNotEnoughException("balance is not enough to deduct 100"));
 

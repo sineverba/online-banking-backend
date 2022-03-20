@@ -28,7 +28,32 @@ INSERT INTO `bank_account_transactions` (`id`, `amount`, `purpose`, `transaction
 (9,	-30.00,	'Italian Tavern - Spaghetti \'n\' Mandolino',	'2022-02-23 19:25:24.386038'),
 (10,	250.00,	'Monthly Interest',	'2022-02-23 19:25:39.993603'),
 (11,	4.44,	'Daily Loan HGGYRT5',	'2022-02-24 19:02:39.883321'),
-(12,	11.11,	'Insurance KKW',	'2022-02-24 19:22:51.889850');
+(12,	11.11,	'Insurance KKW',	'2022-02-24 19:22:51.889850'),
+(13,	44.44,	'Stake 5HHIG',	'2022-03-09 12:31:13.544369'),
+(14,	-10.00,	'Netlify Monthly Subscription',	'2022-03-09 12:31:35.589276'),
+(15,	-10.00,	'Croissant Bar',	'2022-03-10 07:34:14.254201'),
+(16,	7.77,	'Stake 5HHIG',	'2022-03-10 07:34:21.296960'),
+(17,	2400.00,	'March Salary',	'2022-03-11 06:20:28.055431'),
+(18,	-1400.00,	'High School HGGDFGTRG',	'2022-03-14 07:08:10.554796'),
+(19,	7.77,	'Daily interest AGGF',	'2022-03-14 07:33:15.475434'),
+(20,	-30.00,	'Pizza and Pazza',	'2022-03-14 07:33:31.166137'),
+(21,	5.55,	'Daily interest AGGF',	'2022-03-14 07:44:47.942832'),
+(22,	-20.00,	'Bar',	'2022-03-14 07:44:55.961543'),
+(23,	5.55,	'Daily interest AGGF',	'2022-03-15 06:48:52.007560'),
+(24,	8.88,	'Daily interest AGGF',	'2022-03-17 12:55:04.431211'),
+(25,	-40.77,	'Supermarket ACME INC',	'2022-03-17 12:55:27.982661'),
+(26,	-12.99,	'FilmMovie INC - Monthly Subscription',	'2022-03-18 06:55:02.848138');
+
+DROP TABLE IF EXISTS `roles`;
+CREATE TABLE `roles` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `role` varchar(256) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `roles` (`id`, `role`) VALUES
+(1,	'ADMIN'),
+(2,	'CUSTOMER');
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
@@ -41,4 +66,17 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `password`, `username`) VALUES
 (1,	'$2a$10$SLZnEcosM46bVHrEmMS9euPJNKB/e3K/ITA0tOV8actbZsA4yEAkW',	'112233');
 
--- 2022-02-24 19:27:55
+DROP TABLE IF EXISTS `users_roles`;
+CREATE TABLE `users_roles` (
+  `users_id` int unsigned NOT NULL,
+  `roles_id` int unsigned NOT NULL,
+  PRIMARY KEY (`users_id`,`roles_id`),
+  KEY `FKa62j07k5mhgifpp955h37ponj` (`roles_id`),
+  CONSTRAINT `FKa62j07k5mhgifpp955h37ponj` FOREIGN KEY (`roles_id`) REFERENCES `roles` (`id`),
+  CONSTRAINT `FKml90kef4w2jy7oxyqv742tsfc` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `users_roles` (`users_id`, `roles_id`) VALUES
+(1,	2);
+
+-- 2022-03-18 07:43:39

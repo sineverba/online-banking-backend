@@ -1,4 +1,19 @@
-# 0.14.0
+# Next version
++ Add `Roles` Repository
++ Add roles to UsersEntity
++ Add authorities to UserDetails
++ Implement `findByName` in Roles Repository
++ Add set authorities in SecurityContext
++ Add get roles list
++ Return roles on login
++ Add check on routes for roles
++ Handle AccessDenied Exception
++ Add Roles Service
++ Add Role not found Exception
++ Refactor show method of RolesService
++ Add Customer Role when user subscribe
+
+## 0.14.0
 + Upgrade dependencies
 + Refactor BankAccountTransactionsDTO for API post
 + Refactor repository package test in repositories

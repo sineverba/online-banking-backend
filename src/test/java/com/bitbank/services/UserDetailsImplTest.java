@@ -4,11 +4,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import com.bitbank.entities.RolesEntity;
 import com.bitbank.entities.UsersEntity;
+import com.bitbank.repositories.ERole;
 
 class UserDetailsImplTest {
 
@@ -20,7 +25,13 @@ class UserDetailsImplTest {
 
 	@BeforeEach
 	public void buildUserDetailsImpl() {
-		UsersEntity usersEntity = new UsersEntity(1L, "username", "password");
+		// ADMIN - Initialize the set
+		Set<RolesEntity> adminRole = new HashSet<>();
+		// ADMIN - Generate the entity
+		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ROLE_ADMIN"));
+		// ADMIN - Add the entity to the set
+		adminRole.add(adminRolesEntity);
+		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", adminRole);
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 		this.user = user;
 	}
@@ -52,6 +63,14 @@ class UserDetailsImplTest {
 
 	@Test
 	void testGetAuthorities() {
-		assertEquals(Collections.EMPTY_LIST, this.getUser().getAuthorities());
+		assertEquals(Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN")),
+				this.getUser().getAuthorities());
+	}
+
+	/**
+	 * Generate a RolesEntity
+	 */
+	private static RolesEntity validRolesEntity(Long id, ERole role) {
+		return RolesEntity.builder().id(id).role(role).build();
 	}
 }
