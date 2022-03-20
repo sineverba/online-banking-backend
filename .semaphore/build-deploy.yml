@@ -16,10 +16,10 @@ global_job_config:
       value: registry.heroku.com/online-banking-backend-api/web
     - name: HEROKU_APP
       value: online-banking-backend-api
-    - name: GITLAB_REGISTRY
-      value: registry.gitlab.com
-    - name: GITLAB_IMAGE_NAME
-      value: online-banking-backend
+    #- name: GITLAB_REGISTRY
+    #  value: registry.gitlab.com
+    #- name: GITLAB_IMAGE_NAME
+    #  value: online-banking-backend
 
 blocks:
   - name: "Build and deploy image"
@@ -29,16 +29,19 @@ blocks:
         - name: Build and push to Heroku
           commands:
             - checkout
+            - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+            - docker login -u _ -p $HEROKU_API_KEY registry.heroku.com
             - docker build --tag $HEROKU_REGISTRY_IMAGE --file docker/Dockerfile "."
             - docker push $HEROKU_REGISTRY_IMAGE
+            - heroku config:set APP_VERSION=$SEMAPHORE_GIT_TAG_NAME -a $HEROKU_APP
             - heroku container:release web -a $HEROKU_APP
             - heroku labs:enable -a $HEROKU_APP runtime-new-layer-extract
-        - name: Build and push to Gitlab
-          commands:
-            - checkout
-            - docker login -u semaphore -p $GITLAB_TOKEN $GITLAB_REGISTRY
-            - docker build --tag $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest --file docker/Dockerfile "."
-            - docker push $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest
+        #- name: Build and push to Gitlab
+        #  commands:
+        #    - checkout
+        #    - docker login -u semaphore -p $GITLAB_TOKEN $GITLAB_REGISTRY
+        #    - docker build --tag $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest --file docker/Dockerfile "."
+        #    - docker push $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest
   #- name: "Deploy to VPS"
   #  dependencies: ["Build and deploy image"]
   #  task:

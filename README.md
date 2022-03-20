@@ -28,6 +28,10 @@ There is a dummy database, pre-populated. At first spin, MySQL will re-populate 
 
 With a custom Sonar setup, launch them with `$ docker-compose profile --dev up` and you will not get Sonar images.
 
+## How generate a random string to use for Jwt secret
+
+`$ tr -dc A-Za-z0-9 </dev/urandom | head -c 100 ; echo ''`
+
 ## How populate database
 
 If you don't use current database dump, you need to populate `roles` table with:
