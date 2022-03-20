@@ -13,9 +13,9 @@ global_job_config:
 
   env_vars:
     - name: HEROKU_REGISTRY_IMAGE
-      value: registry.heroku.com/online-banking-demo-api/web
+      value: registry.heroku.com/online-banking-backend-api/web
     - name: HEROKU_APP
-      value: online-banking-demo-api
+      value: online-banking-backend-api
     - name: GITLAB_REGISTRY
       value: registry.gitlab.com
     - name: GITLAB_IMAGE_NAME
@@ -26,23 +26,30 @@ blocks:
     dependencies: []
     task:
       jobs:
+        - name: Build and push to Heroku
+          commands:
+            - checkout
+            - docker build --tag $HEROKU_REGISTRY_IMAGE --file docker/Dockerfile "."
+            - docker push $HEROKU_REGISTRY_IMAGE
+            - heroku container:release web -a $HEROKU_APP
+            - heroku labs:enable -a $HEROKU_APP runtime-new-layer-extract
         - name: Build and push to Gitlab
           commands:
             - checkout
             - docker login -u semaphore -p $GITLAB_TOKEN $GITLAB_REGISTRY
             - docker build --tag $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest --file docker/Dockerfile "."
             - docker push $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest
-  - name: "Deploy to VPS"
-    dependencies: ["Build and deploy image"]
-    task:
-      jobs:
-        - name: Deploy to VPS
-          commands:
-            - ssh-keyscan -p 7654 -H $VPS_DOC_URL >> ~/.ssh/known_hosts
-            - chmod 0600 ~/.ssh/id_rsa_semaphoreci
-            - ssh-add ~/.ssh/id_rsa_semaphoreci
-            - ssh -t $VPS_DOC_USERNAME@$VPS_DOC_URL -p 7654 "cd $GITLAB_IMAGE_NAME && docker-compose stop && exit"
-            - ssh -t $VPS_DOC_USERNAME@$VPS_DOC_URL -p 7654 "docker container rm $GITLAB_IMAGE_NAME && docker image rm $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest && exit"
-            - ssh -t $VPS_DOC_USERNAME@$VPS_DOC_URL -p 7654 "docker pull $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest && exit"
-            - ssh -t $VPS_DOC_USERNAME@$VPS_DOC_URL -p 7654 "sed -i \"/APP_VERSION=/c\APP_VERSION=$SEMAPHORE_GIT_TAG_NAME\" $GITLAB_IMAGE_NAME/.env && exit"
-            - ssh -t $VPS_DOC_USERNAME@$VPS_DOC_URL -p 7654 "cd $GITLAB_IMAGE_NAME && docker-compose up -d && exit"
+  #- name: "Deploy to VPS"
+  #  dependencies: ["Build and deploy image"]
+  #  task:
+  #    jobs:
+  #      - name: Deploy to VPS
+  #        commands:
+  #          - ssh-keyscan -p 7654 -H $VPS_DOC_URL >> ~/.ssh/known_hosts
+  #          - chmod 0600 ~/.ssh/id_rsa_semaphoreci
+  #          - ssh-add ~/.ssh/id_rsa_semaphoreci
+  #          - ssh -t $VPS_DOC_USERNAME@$VPS_DOC_URL -p 7654 "cd $GITLAB_IMAGE_NAME && docker-compose stop && exit"
+  #          - ssh -t $VPS_DOC_USERNAME@$VPS_DOC_URL -p 7654 "docker container rm $GITLAB_IMAGE_NAME && docker image rm $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest && exit"
+  #          - ssh -t $VPS_DOC_USERNAME@$VPS_DOC_URL -p 7654 "docker pull $GITLAB_REGISTRY/private-registry/$GITLAB_IMAGE_NAME:latest && exit"
+  #          - ssh -t $VPS_DOC_USERNAME@$VPS_DOC_URL -p 7654 "sed -i \"/APP_VERSION=/c\APP_VERSION=$SEMAPHORE_GIT_TAG_NAME\" $GITLAB_IMAGE_NAME/.env && exit"
+  #          - ssh -t $VPS_DOC_USERNAME@$VPS_DOC_URL -p 7654 "cd $GITLAB_IMAGE_NAME && docker-compose up -d && exit"

@@ -37,7 +37,7 @@ public class OnlineBankingBackendApplication {
 
 		return new OpenAPI()
 				.addServersItem(new Server().url("http://localhost:8080").description("Local"))
-				.addServersItem(new Server().url("https://online-banking-backend.k2p.it").description("Production"))
+				.addServersItem(new Server().url("https://online-banking-backend-api.herokuapp.com").description("Production"))
 				.components(new Components().addSecuritySchemes("bearer-key",
 						new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")))
 				.info(new Info().title("Online Banking Backend").version(pingService.show())
