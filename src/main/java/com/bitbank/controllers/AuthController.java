@@ -1,6 +1,8 @@
 package com.bitbank.controllers;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -25,9 +27,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bitbank.dto.UsersDTO;
+import com.bitbank.dto.UsersPostDTO;
+import com.bitbank.entities.RolesEntity;
 import com.bitbank.entities.UsersEntity;
+import com.bitbank.exceptions.RoleOrAuthorityNotFoundException;
+import com.bitbank.repositories.ERole;
 import com.bitbank.responses.JwtResponse;
 import com.bitbank.responses.MessageResponse;
+import com.bitbank.services.RolesService;
 import com.bitbank.services.UserDetailsServiceImpl;
 import com.bitbank.utils.JwtUtils;
 
@@ -58,6 +65,9 @@ public class AuthController {
 	@Autowired
 	JwtUtils jwtUtils;
 
+	@Autowired
+	private RolesService rolesService;
+
 	@Value("${app.enableRegistration}")
 	private Boolean enableRegistration;
 
@@ -70,20 +80,30 @@ public class AuthController {
 	 * 
 	 * @param usersDTO
 	 * @return
+	 * @throws RoleOrAuthorityNotFoundException
 	 */
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
-	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<MessageResponse> post(@Valid @RequestBody UsersDTO usersDTO) {
+	public ResponseEntity<MessageResponse> post(@Valid @RequestBody UsersPostDTO usersDTO) throws RoleOrAuthorityNotFoundException {
 
 		String username = usersDTO.getUsername();
 		if (Boolean.TRUE.equals(getEnableRegistration())) {
+
+			// Get username and password (enconded)
 			String password = usersDTO.getPassword();
 			String encodedPassword = passwordEncoder.encode(password);
 
+			// Prepare for roles
+			Set<RolesEntity> rolesEntity = new HashSet<>();
+			RolesEntity customerRole;
+			customerRole = rolesService.show(ERole.ROLE_CUSTOMER);
+			rolesEntity.add(customerRole);
+
+			// Instance UsersDTO and populate it
 			UsersDTO encodedUsersDTO = new UsersDTO();
 			encodedUsersDTO.setUsername(username);
 			encodedUsersDTO.setPassword(encodedPassword);
+			encodedUsersDTO.setRolesEntity(rolesEntity);
 
 			UsersEntity usersEntity = convertToEntity(encodedUsersDTO);
 			usersService.post(usersEntity);
@@ -102,7 +122,7 @@ public class AuthController {
 	 * @return the jwt token
 	 */
 	@PostMapping("/login")
-	public ResponseEntity<JwtResponse> login(@Valid @RequestBody UsersDTO usersDTO) {
+	public ResponseEntity<JwtResponse> login(@Valid @RequestBody UsersPostDTO usersDTO) {
 
 		String username = usersDTO.getUsername();
 		String password = usersDTO.getPassword();

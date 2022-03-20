@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.bitbank.config.AuthEntryPointJwt;
 import com.bitbank.config.AuthTokenFilter;
 import com.bitbank.entities.UsersEntity;
+import com.bitbank.services.RolesService;
 import com.bitbank.services.UserDetailsServiceImpl;
 import com.bitbank.utils.JwtUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,6 +59,9 @@ class RegisterControllerTest {
 
 	@MockBean
 	SecurityContext securityContext;
+
+	@MockBean
+	private RolesService rolesService;
 
 	@Test
 	@WithMockUser(username = "username", authorities = { "ROLE_ADMIN" })

@@ -1,12 +1,14 @@
 package com.bitbank.controllers;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -33,7 +35,10 @@ import com.bitbank.config.AuthEntryPointJwt;
 import com.bitbank.config.AuthTokenFilter;
 import com.bitbank.entities.RolesEntity;
 import com.bitbank.entities.UsersEntity;
+import com.bitbank.exceptions.RoleOrAuthorityNotFoundException;
 import com.bitbank.repositories.ERole;
+import com.bitbank.repositories.RolesRepository;
+import com.bitbank.services.RolesService;
 import com.bitbank.services.UserDetailsImpl;
 import com.bitbank.services.UserDetailsServiceImpl;
 import com.bitbank.utils.JwtUtils;
@@ -71,6 +76,12 @@ class AuthControllerTest {
 	@MockBean
 	SecurityContext securityContext;
 
+	@MockBean
+	private RolesService rolesService;
+
+	@MockBean
+	private RolesRepository rolesRepository;
+
 	/**
 	 * Generate an authority before every test
 	 * 
@@ -87,25 +98,49 @@ class AuthControllerTest {
 		this.adminRole = adminRole;
 	}
 
+	@BeforeEach
+	private void buildCustomerRoleAuthority() {
+		// CUSTOMER - Initialize the set
+		Set<RolesEntity> customerRole = new HashSet<>();
+		// CUSTOMER - Generate the entity
+		RolesEntity customerRolesEntity = validRolesEntity(1L, ERole.valueOf("ROLE_CUSTOMER"));
+		// CUSTOMER - Add the entity to the set
+		customerRole.add(customerRolesEntity);
+		this.customerRole = customerRole;
+	}
+
 	/**
 	 * The autority to use
 	 * 
 	 * @throws Exception
 	 */
 	private Set adminRole;
+	private Set customerRole;
 
 	private Set getAdminRole() {
 		return this.adminRole;
+	}
+
+	private Set getCustomerRole() {
+		return this.customerRole;
 	}
 
 	@Test
 	@WithMockUser(username = "username", authorities = { "ROLE_ADMIN" })
 	void canRegisterNewUser() throws Exception {
 
-		var userToSave = validUserEntity("username", "password", this.getAdminRole());
-		var savedUser = validUserEntity("username", "a1.b2.c3", this.getAdminRole());
+		// Create a valid user
+		var userToSave = validUserEntity("username", "password", this.getCustomerRole());
+		var savedUser = validUserEntity("username", "a1.b2.c3", this.getCustomerRole());
 
+		// Create valid role entity
+		RolesEntity rolesEntity = validRolesEntity(1L, ERole.valueOf("ROLE_CUSTOMER"));
+		// Create an optional result
+		RolesEntity result = Optional.of(rolesEntity).get();
+
+		// Mock some methods
 		when(userDetailsServiceImpl.post(userToSave)).thenReturn(savedUser);
+		when(rolesService.show(ERole.valueOf("ROLE_CUSTOMER"))).thenReturn(result);
 
 		mvc.perform(post("/api/v1/auth/register/").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(userToSave))).andExpect(status().isCreated());
@@ -217,6 +252,22 @@ class AuthControllerTest {
 		return Stream.of(validUsersEntity.toBuilder().username(null).build(),
 				validUsersEntity.toBuilder().username("").build(), validUsersEntity.toBuilder().password(null).build(),
 				validUsersEntity.toBuilder().password("").build());
+	}
+
+	/**
+	 * Test RoleOrAuthorityNotFoundException
+	 * 
+	 */
+	@Test
+	void canCatchRoleOrAuthorityNotFoundException() throws Exception {
+
+		// Create a valid user
+		var userToSave = validUserEntity("username", "password", this.getAdminRole());
+
+		when(rolesService.show(any())).thenThrow(new RoleOrAuthorityNotFoundException("cannot find role ADMIN_ROLE"));
+
+		mvc.perform(post("/api/v1/auth/register/").contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsBytes(userToSave))).andExpect(status().isBadRequest());
 	}
 
 	/**

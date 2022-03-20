@@ -55,5 +55,18 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleAccessDenied(AccessDeniedException ex) {
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(ex.getLocalizedMessage()));
 	}
+	
+	/**
+	 * Manage RoleOrAuthorityNotFoundException.
+	 * 
+	 * Return the entity with Error response.
+	 * 
+	 * @param ex
+	 * @return
+	 */
+	@ExceptionHandler(RoleOrAuthorityNotFoundException.class)
+	protected ResponseEntity<Object> handleRoleOrAuthorityNotFound(RoleOrAuthorityNotFoundException ex) {
+		return ResponseEntity.badRequest().body(new ErrorResponse(ex.getMessage()));
+	}
 
 }
