@@ -28,6 +28,16 @@ There is a dummy database, pre-populated. At first spin, MySQL will re-populate 
 
 With a custom Sonar setup, launch them with `$ docker-compose profile --dev up` and you will not get Sonar images.
 
+## How populate database
+
+If you don't use current database dump, you need to populate `roles` table with:
+
+
+```sql
+INSERT INTO roles(name) VALUES('ROLE_ADMIN');
+INSERT INTO roles(name) VALUES('ROLE_CUSTOMER');
+```
+
 
 ## Test
 `$ make test`

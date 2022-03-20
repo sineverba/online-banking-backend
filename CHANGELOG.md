@@ -1,4 +1,7 @@
-# 0.15.0
+# Next version
++ Fix some Spring warnings
+
+## 0.15.0
 + Add `Roles` Repository
 + Add roles to UsersEntity
 + Add authorities to UserDetails

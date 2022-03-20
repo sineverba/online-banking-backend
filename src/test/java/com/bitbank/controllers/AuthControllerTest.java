@@ -114,14 +114,14 @@ class AuthControllerTest {
 	 * 
 	 * @throws Exception
 	 */
-	private Set adminRole;
-	private Set customerRole;
+	private Set<RolesEntity> adminRole;
+	private Set<RolesEntity> customerRole;
 
-	private Set getAdminRole() {
+	private Set<RolesEntity> getAdminRole() {
 		return this.adminRole;
 	}
 
-	private Set getCustomerRole() {
+	private Set<RolesEntity> getCustomerRole() {
 		return this.customerRole;
 	}
 
@@ -277,7 +277,7 @@ class AuthControllerTest {
 	 * @param password
 	 * @return
 	 */
-	private static UsersEntity validUserEntity(String username, String password, Set roles) {
+	private static UsersEntity validUserEntity(String username, String password, Set<RolesEntity> roles) {
 		return UsersEntity.builder().username(username).password(password).rolesEntity(roles).build();
 	}
 

@@ -14,7 +14,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.bitbank.controllers.PingController;
-import com.bitbank.entities.UsersEntity;
 import com.bitbank.repositories.UsersRepository;
 import com.bitbank.services.PingService;
 import com.bitbank.services.UserDetailsServiceImpl;
@@ -101,18 +100,6 @@ class AuthTokenFilterTest {
 		String token = "a1.b2.c3";
 		mvc.perform(get("/api/v1/ping").header("Authorization", "NotStartWithBearer " + token))
 				.andExpect(status().isOk());
-	}
-
-	/**
-	 * Generate a valid user entity for tests.
-	 * 
-	 * @param id
-	 * @param username
-	 * @param password
-	 * @return
-	 */
-	private static UsersEntity validUsersEntity(Long id, String username, String password) {
-		return UsersEntity.builder().id(id).username(username).password(password).build();
 	}
 
 }
