@@ -1,4 +1,4 @@
-# Next version
+# 0.15.0
 + Add `Roles` Repository
 + Add roles to UsersEntity
 + Add authorities to UserDetails
