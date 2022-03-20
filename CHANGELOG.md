@@ -1,5 +1,6 @@
 # Next version
 + Fix some Spring warnings
++ Refactor balance not enough exception
 
 ## 0.15.0
 + Add `Roles` Repository
