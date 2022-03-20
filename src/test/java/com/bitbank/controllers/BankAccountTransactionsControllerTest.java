@@ -132,7 +132,6 @@ class BankAccountTransactionsControllerTest {
 		// Create a valid entity to submit.
 		var transactionToSave = validBankAccountTransactionsEntity(new BigDecimal(100), "test");
 
-		// when(bankAccountTransactionsService.post(transactionToSave)).thenThrow(BalanceNotEnoughException.class);
 		when(bankAccountTransactionsService.post(transactionToSave))
 				.thenThrow(new BalanceNotEnoughException("balance is not enough to deduct 100"));
 

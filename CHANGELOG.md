@@ -11,6 +11,7 @@
 + Add Roles Service
 + Add Role not found Exception
 + Refactor show method of RolesService
++ Add Customer Role when user subscribe
 
 ## 0.14.0
 + Upgrade dependencies
