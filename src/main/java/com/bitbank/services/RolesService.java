@@ -21,13 +21,13 @@ public class RolesService {
 	 * 
 	 * @throws RoleOrAuthorityNotFoundException
 	 */
-	public Optional<RolesEntity> show(ERole role) throws RoleOrAuthorityNotFoundException {
+	public RolesEntity show(ERole role) throws RoleOrAuthorityNotFoundException {
 
 		Optional<RolesEntity> optionalRolesEntity = rolesRepository.findByRole(role);
 		if (optionalRolesEntity.isEmpty()) {
 			throw new RoleOrAuthorityNotFoundException("cannot find role " + role);
 		}
-		return optionalRolesEntity;
+		return optionalRolesEntity.get();
 	}
 
 }

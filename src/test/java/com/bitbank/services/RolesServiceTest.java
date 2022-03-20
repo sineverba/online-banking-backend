@@ -43,7 +43,7 @@ class RolesServiceTest {
 		// Mock the method
 		when(rolesRepository.findByRole(ERole.valueOf("ROLE_ADMIN"))).thenReturn(Optional.of(rolesEntity));
 
-		assertEquals(Optional.of(rolesEntity), rolesService.show(ERole.valueOf("ROLE_ADMIN")));
+		assertEquals(Optional.of(rolesEntity).get(), rolesService.show(ERole.valueOf("ROLE_ADMIN")));
 
 	}
 

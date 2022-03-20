@@ -10,6 +10,7 @@
 + Handle AccessDenied Exception
 + Add Roles Service
 + Add Role not found Exception
++ Refactor show method of RolesService
 
 ## 0.14.0
 + Upgrade dependencies
