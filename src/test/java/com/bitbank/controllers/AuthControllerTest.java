@@ -227,7 +227,7 @@ class AuthControllerTest {
 	 */
 	@ParameterizedTest
 	@MethodSource("getInvalidUsers")
-	void testCanCatchExceptionOnRegistration(UsersEntity invalidUsersEntity) throws Exception {
+	void testCanCatchExceptionOnSubscription(UsersEntity invalidUsersEntity) throws Exception {
 
 		mvc.perform(post("/api/v1/auth/register/").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(invalidUsersEntity))).andExpect(status().isBadRequest());

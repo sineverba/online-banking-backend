@@ -2,6 +2,7 @@
 + Fix some Spring warnings
 + Refactor balance not enough exception
 + Move to Heroku
++ Rename registration in subscription
 
 ## 0.15.0
 + Add `Roles` Repository

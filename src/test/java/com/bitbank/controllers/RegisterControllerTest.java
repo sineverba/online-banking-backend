@@ -30,7 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(AuthController.class)
-@TestPropertySource(locations = "classpath:application.properties", properties = "app.enableRegistration=false")
+@TestPropertySource(locations = "classpath:application.properties", properties = "app.enableSubscription=false")
 class RegisterControllerTest {
 
 	@Autowired
@@ -65,7 +65,7 @@ class RegisterControllerTest {
 
 	@Test
 	@WithMockUser(username = "username", authorities = { "ROLE_ADMIN" })
-	void cannotRegisterUserWhenRegistrationsAreDisabled() throws Exception {
+	void cannotRegisterUserWhenSubscriptionsAreDisabled() throws Exception {
 
 		var userToSave = validUserEntity("username", "password");
 		var savedUser = validUserEntity("username", "a1.b2.c3");
@@ -75,7 +75,7 @@ class RegisterControllerTest {
 		mvc.perform(post("/api/v1/auth/register/").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(userToSave))).andExpect(status().isBadRequest())
 				.andExpect(jsonPath("$.status", is("error")))
-				.andExpect(jsonPath("$.message", is("registrations disabled")));
+				.andExpect(jsonPath("$.message", is("subscriptions disabled")));
 	}
 
 	private static UsersEntity validUserEntity(String username, String password) {
