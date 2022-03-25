@@ -41,7 +41,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 	 * @return
 	 */
 	@ExceptionHandler(BalanceNotEnoughException.class)
-	protected ResponseEntity<Object> handleBalanceNotEnough(BalanceNotEnoughException ex) {
+	protected ResponseEntity<ErrorResponse> handleBalanceNotEnough(BalanceNotEnoughException ex) {
 		return ResponseEntity.badRequest().body(new ErrorResponse(ex.getMessage()));
 	}
 
@@ -52,7 +52,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 	 * 
 	 */
 	@ExceptionHandler(AccessDeniedException.class)
-	protected ResponseEntity<Object> handleAccessDenied(AccessDeniedException ex) {
+	protected ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException ex) {
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(ex.getLocalizedMessage()));
 	}
 	
@@ -65,7 +65,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 	 * @return
 	 */
 	@ExceptionHandler(RoleOrAuthorityNotFoundException.class)
-	protected ResponseEntity<Object> handleRoleOrAuthorityNotFound(RoleOrAuthorityNotFoundException ex) {
+	protected ResponseEntity<ErrorResponse> handleRoleOrAuthorityNotFound(RoleOrAuthorityNotFoundException ex) {
 		return ResponseEntity.badRequest().body(new ErrorResponse(ex.getMessage()));
 	}
 
