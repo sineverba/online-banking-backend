@@ -4,6 +4,7 @@
 + Move to Heroku
 + Rename registration in subscription
 + Refactor `me` controller
++ Change type of return of Response
 
 ## 0.15.0
 + Add `Roles` Repository
