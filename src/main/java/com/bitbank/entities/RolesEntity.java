@@ -9,7 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.bitbank.repositories.ERole;
+import com.bitbank.constants.ERole;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
