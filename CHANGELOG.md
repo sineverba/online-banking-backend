@@ -6,6 +6,7 @@
 + Refactor `me` controller
 + Change type of return of Response
 + Move ERole enums to `constants` package
++ Fix link in README and MySql dump
 
 ## 0.15.0
 + Add `Roles` Repository
