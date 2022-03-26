@@ -6,7 +6,7 @@ Online Banking Demo Backend
 | Service | Github link | Demo |
 | ------- | ----------- | ---- |
 | Backend | [https://github.com/sineverba/online-banking-backend](https://github.com/sineverba/online-banking-backend) | [Swagger](https://https://online-banking-backend-api.herokuapp.com) |
-| Frontend | [https://github.com/sineverba/online-banking-frontend](https://github.com/sineverba/online-banking-frontend) | [Netlify](https://bit-bank.netlify.app) | [Vercel](https://online-banking-frontend.vercel.app) | [Heroku](https://bit-bank.herokuapp.com) |
+| Frontend | [https://github.com/sineverba/online-banking-frontend](https://github.com/sineverba/online-banking-frontend) | [Netlify](https://bit-bank.netlify.app) - [Vercel](https://online-banking-frontend.vercel.app) - [Heroku](https://bit-bank.herokuapp.com) |
 
 __This project uses:__
 
