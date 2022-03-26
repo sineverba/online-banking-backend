@@ -5,8 +5,8 @@ Online Banking Demo Backend
 
 | Service | Github link | Demo |
 | ------- | ----------- | ---- |
-| Backend | [https://github.com/sineverba/online-banking-backend](https://github.com/sineverba/online-banking-backend) | [Swagger](https://online-banking-backend.k2p.it) |
-| Frontend | [https://github.com/sineverba/online-banking-frontend](https://github.com/sineverba/online-banking-frontend) | [Demo](https://bitbank.k2p.it) |
+| Backend | [https://github.com/sineverba/online-banking-backend](https://github.com/sineverba/online-banking-backend) | [Swagger](https://https://online-banking-backend-api.herokuapp.com) |
+| Frontend | [https://github.com/sineverba/online-banking-frontend](https://github.com/sineverba/online-banking-frontend) | [Netlify](https://bit-bank.netlify.app) - [Vercel](https://online-banking-frontend.vercel.app) - [Heroku](https://bit-bank.herokuapp.com) |
 
 __This project uses:__
 
@@ -27,6 +27,20 @@ __This project uses:__
 There is a dummy database, pre-populated. At first spin, MySQL will re-populate the database with some data.
 
 With a custom Sonar setup, launch them with `$ docker-compose profile --dev up` and you will not get Sonar images.
+
+## How generate a random string to use for Jwt secret
+
+`$ tr -dc A-Za-z0-9 </dev/urandom | head -c 100 ; echo ''`
+
+## How populate database
+
+If you don't use current database dump, you need to populate `roles` table with:
+
+
+```sql
+INSERT INTO roles(name) VALUES('ROLE_ADMIN');
+INSERT INTO roles(name) VALUES('ROLE_CUSTOMER');
+```
 
 
 ## Test

@@ -33,10 +33,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.bitbank.config.AuthEntryPointJwt;
 import com.bitbank.config.AuthTokenFilter;
+import com.bitbank.constants.ERole;
 import com.bitbank.entities.RolesEntity;
 import com.bitbank.entities.UsersEntity;
 import com.bitbank.exceptions.RoleOrAuthorityNotFoundException;
-import com.bitbank.repositories.ERole;
 import com.bitbank.repositories.RolesRepository;
 import com.bitbank.services.RolesService;
 import com.bitbank.services.UserDetailsImpl;
@@ -114,14 +114,14 @@ class AuthControllerTest {
 	 * 
 	 * @throws Exception
 	 */
-	private Set adminRole;
-	private Set customerRole;
+	private Set<RolesEntity> adminRole;
+	private Set<RolesEntity> customerRole;
 
-	private Set getAdminRole() {
+	private Set<RolesEntity> getAdminRole() {
 		return this.adminRole;
 	}
 
-	private Set getCustomerRole() {
+	private Set<RolesEntity> getCustomerRole() {
 		return this.customerRole;
 	}
 
@@ -227,7 +227,7 @@ class AuthControllerTest {
 	 */
 	@ParameterizedTest
 	@MethodSource("getInvalidUsers")
-	void testCanCatchExceptionOnRegistration(UsersEntity invalidUsersEntity) throws Exception {
+	void testCanCatchExceptionOnSubscription(UsersEntity invalidUsersEntity) throws Exception {
 
 		mvc.perform(post("/api/v1/auth/register/").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(invalidUsersEntity))).andExpect(status().isBadRequest());
@@ -277,7 +277,7 @@ class AuthControllerTest {
 	 * @param password
 	 * @return
 	 */
-	private static UsersEntity validUserEntity(String username, String password, Set roles) {
+	private static UsersEntity validUserEntity(String username, String password, Set<RolesEntity> roles) {
 		return UsersEntity.builder().username(username).password(password).rolesEntity(roles).build();
 	}
 

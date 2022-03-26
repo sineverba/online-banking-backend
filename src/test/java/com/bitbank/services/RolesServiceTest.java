@@ -13,9 +13,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.bitbank.constants.ERole;
 import com.bitbank.entities.RolesEntity;
 import com.bitbank.exceptions.RoleOrAuthorityNotFoundException;
-import com.bitbank.repositories.ERole;
 import com.bitbank.repositories.RolesRepository;
 
 @ExtendWith(MockitoExtension.class)

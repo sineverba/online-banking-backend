@@ -1,16 +1,9 @@
 version: "3.8"
 services:
   sonarqube:
-    profiles: ["all"]
     image: sonarqube:9.3.0-community
     container_name: online-banking-backend-sonarqube
     command: "-Dsonar.search.javaAdditionalOpts=-Dnode.store.allow_mmap=false"
-    depends_on:
-      - postgres
-    environment:
-      SONAR_JDBC_URL: jdbc:postgresql://postgres:5432/sonar
-      SONAR_JDBC_USERNAME: sonar
-      SONAR_JDBC_PASSWORD: sonar
     volumes:
       - ./docker-volumes/sonarqube/sonarqube_conf:/opt/sonarqube/conf
       - ./docker-volumes/sonarqube/sonarqube_data:/opt/sonarqube/data
@@ -21,21 +14,7 @@ services:
     networks:
       - online-banking-backend
       
-  postgres:
-    profiles: ["all"]
-    image: postgres:14.2-alpine3.15
-    container_name: online-banking-backend-postgres
-    environment:
-      POSTGRES_USER: sonar
-      POSTGRES_PASSWORD: sonar
-    volumes:
-      - ./docker-volumes/postgres/postgresql:/var/lib/postgresql
-      - ./docker-volumes/postgres/postgresql_data:/var/lib/postgresql/data
-    networks:
-      - online-banking-backend
-      
   db:
-    profiles: ["dev", "all"]
     image: mysql:8.0.28
     container_name: online-banking-backend-mysql
     environment:
@@ -51,7 +30,6 @@ services:
       - online-banking-backend
       
   adminer:
-    profiles: ["dev", "all"]
     image: adminer:4.8.1-standalone
     container_name: online-banking-backend-adminer
     ports:

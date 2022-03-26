@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,12 +23,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/api/v1/me")
 @Tag(name = "Me", description = "Returns the username that belongs to the token")
 public class MeController {
-	
+
 	@Autowired
 	JwtUtils jwtUtils;
-	
+
 	/**
-	 * Returns the username that belongs to the token
+	 * Returns the username of authenticated user
+	 * 
 	 * @param httpServletRequest
 	 * @return
 	 */
@@ -34,10 +37,9 @@ public class MeController {
 	@Operation(security = { @SecurityRequirement(name = "bearer-key") })
 	@PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
 	public ResponseEntity<MeResponse> index(HttpServletRequest httpServletRequest) {
-		// Get the token from the header
-		String token = httpServletRequest.getHeader("Authorization").replace("Bearer ", "");
-		// Fetch the username from the token
-		String username = jwtUtils.getUserNameFromJwtToken(token);
+		// Get the user from the security context
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username = userDetails.getUsername();
 		return ResponseEntity.status(HttpStatus.OK).body(new MeResponse(username));
 	}
 }

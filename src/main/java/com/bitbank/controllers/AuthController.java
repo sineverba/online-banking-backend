@@ -26,12 +26,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bitbank.constants.ERole;
 import com.bitbank.dto.UsersDTO;
 import com.bitbank.dto.UsersPostDTO;
 import com.bitbank.entities.RolesEntity;
 import com.bitbank.entities.UsersEntity;
 import com.bitbank.exceptions.RoleOrAuthorityNotFoundException;
-import com.bitbank.repositories.ERole;
 import com.bitbank.responses.JwtResponse;
 import com.bitbank.responses.MessageResponse;
 import com.bitbank.services.RolesService;
@@ -68,15 +68,15 @@ public class AuthController {
 	@Autowired
 	private RolesService rolesService;
 
-	@Value("${app.enableRegistration}")
-	private Boolean enableRegistration;
+	@Value("${app.enableSubscription}")
+	private Boolean enableSubscription;
 
-	private Boolean getEnableRegistration() {
-		return this.enableRegistration;
+	private Boolean getEnableSubscription() {
+		return this.enableSubscription;
 	}
 
 	/**
-	 * Performs registration, if registrations are enabled.
+	 * Performs subscription, if they are enabled.
 	 * 
 	 * @param usersDTO
 	 * @return
@@ -87,7 +87,7 @@ public class AuthController {
 	public ResponseEntity<MessageResponse> post(@Valid @RequestBody UsersPostDTO usersDTO) throws RoleOrAuthorityNotFoundException {
 
 		String username = usersDTO.getUsername();
-		if (Boolean.TRUE.equals(getEnableRegistration())) {
+		if (Boolean.TRUE.equals(getEnableSubscription())) {
 
 			// Get username and password (enconded)
 			String password = usersDTO.getPassword();
@@ -109,9 +109,9 @@ public class AuthController {
 			usersService.post(usersEntity);
 			return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("ok", "new user created"));
 		}
-		logger.warn("A user with {} username has attempted to register itself", username);
+		logger.warn("A user with {} username has attempted to subscribe itself", username);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				.body(new MessageResponse("error", "registrations disabled"));
+				.body(new MessageResponse("error", "subscriptions disabled"));
 
 	}
 

@@ -1,4 +1,14 @@
-# 0.15.0
+# 0.16.0
++ Fix some Spring warnings
++ Refactor balance not enough exception
++ Move to Heroku
++ Rename registration in subscription
++ Refactor `me` controller
++ Change type of return of Response
++ Move ERole enums to `constants` package
++ Fix link in README and MySql dump
+
+## 0.15.0
 + Add `Roles` Repository
 + Add roles to UsersEntity
 + Add authorities to UserDetails

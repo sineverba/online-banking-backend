@@ -74,12 +74,8 @@ public class BankAccountTransactionsController {
 			@Valid @RequestBody BankAccountTransactionsPostDTO bankAccountTransactionsDTO)
 			throws BalanceNotEnoughException {
 		BankAccountTransactionsEntity bankAccountTransactionsEntity = convertToEntity(bankAccountTransactionsDTO);
-		BankAccountTransactionsEntity savedBankAccountTransactionsEntity;
-		try {
-			savedBankAccountTransactionsEntity = bankAccountTransactionsService.post(bankAccountTransactionsEntity);
-		} catch (BalanceNotEnoughException e) {
-			throw new BalanceNotEnoughException(e.getMessage());
-		}
+		BankAccountTransactionsEntity savedBankAccountTransactionsEntity = bankAccountTransactionsService
+				.post(bankAccountTransactionsEntity);
 		return convertToDto(savedBankAccountTransactionsEntity);
 	}
 

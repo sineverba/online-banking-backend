@@ -29,20 +29,33 @@ INSERT INTO `bank_account_transactions` (`id`, `amount`, `purpose`, `transaction
 (10,	250.00,	'Monthly Interest',	'2022-02-23 19:25:39.993603'),
 (11,	4.44,	'Daily Loan HGGYRT5',	'2022-02-24 19:02:39.883321'),
 (12,	11.11,	'Insurance KKW',	'2022-02-24 19:22:51.889850'),
-(13,	44.44,	'Stake 5HHIG',	'2022-03-09 12:31:13.544369'),
-(14,	-10.00,	'Netlify Monthly Subscription',	'2022-03-09 12:31:35.589276'),
-(15,	-10.00,	'Croissant Bar',	'2022-03-10 07:34:14.254201'),
-(16,	7.77,	'Stake 5HHIG',	'2022-03-10 07:34:21.296960'),
-(17,	2400.00,	'March Salary',	'2022-03-11 06:20:28.055431'),
-(18,	-1400.00,	'High School HGGDFGTRG',	'2022-03-14 07:08:10.554796'),
-(19,	7.77,	'Daily interest AGGF',	'2022-03-14 07:33:15.475434'),
-(20,	-30.00,	'Pizza and Pazza',	'2022-03-14 07:33:31.166137'),
-(21,	5.55,	'Daily interest AGGF',	'2022-03-14 07:44:47.942832'),
-(22,	-20.00,	'Bar',	'2022-03-14 07:44:55.961543'),
-(23,	5.55,	'Daily interest AGGF',	'2022-03-15 06:48:52.007560'),
-(24,	8.88,	'Daily interest AGGF',	'2022-03-17 12:55:04.431211'),
-(25,	-40.77,	'Supermarket ACME INC',	'2022-03-17 12:55:27.982661'),
-(26,	-12.99,	'FilmMovie INC - Monthly Subscription',	'2022-03-18 06:55:02.848138');
+(13,	7.77,	'Global IJDJHF',	'2022-02-25 07:23:51.240445'),
+(14,	2.22,	'National UUIIOO',	'2022-02-25 14:16:37.200504'),
+(15,	-202.00,	'Medical Insurance',	'2022-02-25 14:16:54.457176'),
+(16,	8.88,	'Daily bank interest',	'2022-02-26 07:43:23.856498'),
+(17,	7.77,	'Stake 5HHIG',	'2022-02-27 06:38:28.489241'),
+(18,	7.77,	'Stake 5HHIG',	'2022-02-27 09:10:18.689972'),
+(19,	5.55,	'Stake 5HHIG',	'2022-02-27 09:10:37.382327'),
+(20,	7.77,	NULL,	'2022-02-27 09:11:08.641589'),
+(21,	7.77,	'Stake 5HHIG',	'2022-02-27 09:11:14.881241'),
+(22,	7.77,	'Stake 5HHIG',	'2022-02-27 09:24:34.068538'),
+(23,	7.77,	'Stake 5HHIG',	'2022-02-27 09:38:19.242984'),
+(28,	4.44,	'Stake 5HHIG',	'2022-03-03 18:24:12.090851'),
+(29,	-20.00,	'Pet Shop',	'2022-03-03 18:24:25.996135'),
+(30,	7.77,	'Stake 5HHIG',	'2022-03-05 08:24:55.557341'),
+(31,	-12.34,	'Supermarket',	'2022-03-05 08:25:18.134922'),
+(36,	-100.00,	'Amazon Gift Card',	'2022-03-06 13:32:59.185699'),
+(37,	11.11,	'Daily interest AGGF',	'2022-03-18 18:44:01.291086'),
+(38,	-22.00,	'Cake and biscuits',	'2022-03-18 18:44:23.839985'),
+(39,	100.00,	'Gift from grandPa and Grand ma!',	'2022-03-20 09:48:39.506947'),
+(40,	7.77,	'Compound interest A7A7A8',	'2022-03-20 09:59:11.950031'),
+(41,	-80.77,	'Xmas Party',	'2022-03-20 09:59:43.535285'),
+(42,	5.55,	'Daily Interest AAJGHG',	'2022-03-22 20:58:46.573314'),
+(43,	-10.00,	'Phone Mobile recharge',	'2022-03-22 20:59:02.905769'),
+(44,	2500.00,	'April Salary',	'2022-03-25 20:45:14.839527'),
+(45,	-4.44,	'Bar Happy',	'2022-03-25 20:45:17.555240'),
+(46,	7.77,	'Daily interest 5.55',	'2022-03-26 07:56:42.588727'),
+(47,	-50.00,	'Gasoline Station 144th Street',	'2022-03-26 07:57:33.629479');
 
 DROP TABLE IF EXISTS `roles`;
 CREATE TABLE `roles` (
@@ -52,8 +65,8 @@ CREATE TABLE `roles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `roles` (`id`, `role`) VALUES
-(1,	'ADMIN'),
-(2,	'CUSTOMER');
+(1,	'ROLE_ADMIN'),
+(2,	'ROLE_CUSTOMER');
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
@@ -79,4 +92,4 @@ CREATE TABLE `users_roles` (
 INSERT INTO `users_roles` (`users_id`, `roles_id`) VALUES
 (1,	2);
 
--- 2022-03-18 07:43:39
+-- 2022-03-26 09:48:06
