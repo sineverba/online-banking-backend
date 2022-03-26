@@ -5,6 +5,7 @@
 + Rename registration in subscription
 + Refactor `me` controller
 + Change type of return of Response
++ Move ERole enums to `constants` package
 
 ## 0.15.0
 + Add `Roles` Repository

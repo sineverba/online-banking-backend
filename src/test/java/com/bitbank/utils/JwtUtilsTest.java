@@ -22,9 +22,9 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.TestPropertySource;
 
+import com.bitbank.constants.ERole;
 import com.bitbank.entities.RolesEntity;
 import com.bitbank.entities.UsersEntity;
-import com.bitbank.repositories.ERole;
 import com.bitbank.services.UserDetailsImpl;
 
 @SpringBootTest

@@ -5,9 +5,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bitbank.constants.ERole;
 import com.bitbank.entities.RolesEntity;
 import com.bitbank.exceptions.RoleOrAuthorityNotFoundException;
-import com.bitbank.repositories.ERole;
 import com.bitbank.repositories.RolesRepository;
 
 @Service

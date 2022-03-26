@@ -16,6 +16,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.bitbank.constants.ERole;
 import com.bitbank.entities.RolesEntity;
 import com.bitbank.entities.UsersEntity;
 

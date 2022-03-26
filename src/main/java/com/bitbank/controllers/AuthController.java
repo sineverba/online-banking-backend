@@ -26,12 +26,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bitbank.constants.ERole;
 import com.bitbank.dto.UsersDTO;
 import com.bitbank.dto.UsersPostDTO;
 import com.bitbank.entities.RolesEntity;
 import com.bitbank.entities.UsersEntity;
 import com.bitbank.exceptions.RoleOrAuthorityNotFoundException;
-import com.bitbank.repositories.ERole;
 import com.bitbank.responses.JwtResponse;
 import com.bitbank.responses.MessageResponse;
 import com.bitbank.services.RolesService;
