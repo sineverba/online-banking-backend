@@ -3,9 +3,6 @@ include .env
 IMAGE_NAME=registry.gitlab.com/private-registry/online-banking-backend
 CONTAINER_NAME=online-banking-backend
 
-dc:
-	docker-compose --profile dev up -d
-
 check-update:
 	mvn versions:display-dependency-updates
 	
