@@ -1,4 +1,7 @@
-# 0.16.0
+# Next version
++ Upgraded dependencies
+
+## 0.16.0
 + Fix some Spring warnings
 + Refactor balance not enough exception
 + Move to Heroku
