@@ -1,5 +1,7 @@
 package com.bitbank.controllers;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +41,10 @@ public class MeController {
 	public ResponseEntity<MeResponse> index(HttpServletRequest httpServletRequest) {
 		// Get the user from the security context
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		// Get the username
 		String username = userDetails.getUsername();
-		return ResponseEntity.status(HttpStatus.OK).body(new MeResponse(username));
+		// Get the roles
+		List<String> roles = jwtUtils.getAuthorities(SecurityContextHolder.getContext().getAuthentication());
+		return ResponseEntity.status(HttpStatus.OK).body(new MeResponse(username, roles));
 	}
 }
