@@ -1,12 +1,15 @@
 package com.bitbank.controllers;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -95,6 +98,43 @@ class MeControllerTest {
 
 		mvc.perform(get("/api/v1/me/").contentType(MediaType.APPLICATION_JSON).header("Authorization", token))
 				.andExpect(status().isOk()).andExpect(jsonPath("$.username", is("testusername")));
+	}
+
+	@WithMockUser(username = "testusername", authorities = { "ROLE_CUSTOMER" })
+	@Test
+	void testCanReturnsRolesList() throws Exception {
+
+		// Add the Security Context
+		SecurityContextHolder.setContext(securityContext);
+
+		// Create an usersEntity to build by userDetailsImpl
+		// ADMIN - Initialize the set
+		Set<RolesEntity> adminRole = new HashSet<>();
+		// ADMIN - Generate the entity
+		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ROLE_ADMIN"));
+		// ADMIN - Add the entity to the set
+		adminRole.add(adminRolesEntity);
+		UsersEntity usersEntity = new UsersEntity(1L, "testusername", "password", adminRole);
+		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
+
+		// Mock some method...
+		when(securityContext.getAuthentication()).thenReturn(authentication);
+		when(authentication.getPrincipal()).thenReturn(user);
+
+		// Create a fake token
+		String token = "a1.b2.c3";
+
+		// Mock return
+		when(jwtUtils.getUserNameFromJwtToken(token)).thenReturn("testusername");
+
+		// Create roles for the return
+		List<String> roles = new ArrayList<>();
+		roles.add("ROLE_CUSTOMER");
+		when(jwtUtils.getAuthorities(any())).thenReturn(roles);
+
+		mvc.perform(get("/api/v1/me/").contentType(MediaType.APPLICATION_JSON).header("Authorization", token))
+				.andExpect(status().isOk()).andExpect(jsonPath("$.username", is("testusername")))
+				.andExpect(jsonPath("$.roles").isNotEmpty()).andExpect(jsonPath("$.roles").isArray());
 	}
 
 	/**

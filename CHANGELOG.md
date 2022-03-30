@@ -1,5 +1,6 @@
 # Next version
 + Upgraded dependencies
++ Add roles list to me route
 
 ## 0.16.0
 + Fix some Spring warnings
