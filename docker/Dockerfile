@@ -10,8 +10,8 @@ RUN mvn -f /home/app/pom.xml -Dmaven.test.skip=true clean package
 #
 # Package stage
 #
-FROM eclipse-temurin:17.0.2_8-jre-alpine
-RUN apk update && apk add --upgrade apk-tools && apk upgrade --available
+FROM eclipse-temurin:17.0.2_8-jre-focal AS packager
+RUN apt-get update -y && apt-get upgrade -y
 COPY docker/entrypoint.sh /etc/entrypoint.sh
 RUN chmod +x /etc/entrypoint.sh
 COPY --from=builder /home/app/target/*.jar /usr/local/lib/
