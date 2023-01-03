@@ -1,14 +1,14 @@
 version: "3.8"
 services:
   online-banking-backend:
-    image: registry.gitlab.com/private-registry/online-banking-backend:latest
+    image: registry.gitlab.com/cicdprojects/online-banking-backend:latest
     container_name: ${CONTAINER_NAME}
     restart: unless-stopped
     env_file:
       - ./.env
     networks:
       - proxy
-      - databases
+      - manage
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -20,6 +20,6 @@ services:
 networks:
   proxy:
     external: true
-  databases:
-    name: databases
+  manage:
+    name: manage
     driver: bridge
