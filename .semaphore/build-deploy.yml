@@ -24,24 +24,24 @@ global_job_config:
       value: online-banking-backend
 
 blocks:
-  - name: "Build and push image"
-    dependencies: []
-    task:
-      jobs:
-        - name: Build and push
-          commands:
-            - checkout
-            - docker login -u semaphore -p $GITLAB_TOKEN $GITLAB_REGISTRY
-            - mkdir -vp ~/.docker/cli-plugins/
-            - curl --silent -L "https://github.com/docker/buildx/releases/download/v$BUILDX_VERSION/buildx-v$BUILDX_VERSION.linux-amd64" > ~/.docker/cli-plugins/docker-buildx
-            - chmod a+x ~/.docker/cli-plugins/docker-buildx
-            - docker buildx version
-            - docker run --rm --privileged tonistiigi/binfmt:$BINFMT_VERSION --install all
-            - docker buildx ls
-            - docker buildx create --name multiarch --driver docker-container --use
-            - docker buildx inspect --bootstrap --builder multiarch
-            #- docker buildx build --platform linux/amd64,linux/arm64/v8 --tag $DOCKER_IMAGE:$SEMAPHORE_GIT_TAG_NAME --tag $DOCKER_IMAGE:latest --push --file ./docker/Dockerfile .
-            - docker buildx build --platform linux/amd64,linux/arm64/v8 --tag $DOCKER_IMAGE:0.16.0.1 --tag $DOCKER_IMAGE:latest --push --file ./docker/Dockerfile .
+  #- name: "Build and push image"
+  #  dependencies: []
+  #  task:
+  #    jobs:
+  #      - name: Build and push
+  #        commands:
+  #          - checkout
+  #          - docker login -u semaphore -p $GITLAB_TOKEN $GITLAB_REGISTRY
+  #          - mkdir -vp ~/.docker/cli-plugins/
+  #          - curl --silent -L "https://github.com/docker/buildx/releases/download/v$BUILDX_VERSION/buildx-v$BUILDX_VERSION.linux-amd64" > ~/.docker/cli-plugins/docker-buildx
+  #          - chmod a+x ~/.docker/cli-plugins/docker-buildx
+  #          - docker buildx version
+  #          - docker run --rm --privileged tonistiigi/binfmt:$BINFMT_VERSION --install all
+  #          - docker buildx ls
+  #          - docker buildx create --name multiarch --driver docker-container --use
+  #          - docker buildx inspect --bootstrap --builder multiarch
+  #          - docker buildx build --platform linux/amd64,linux/arm64/v8 --tag $DOCKER_IMAGE:$SEMAPHORE_GIT_TAG_NAME --tag $DOCKER_IMAGE:latest --push --file ./docker/Dockerfile .
+  
           
   - name: "Deploy APP"
     #dependencies: ["Build and push image"]
