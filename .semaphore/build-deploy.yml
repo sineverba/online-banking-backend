@@ -44,7 +44,8 @@ blocks:
             - docker buildx build --platform linux/amd64,linux/arm64/v8 --tag $DOCKER_IMAGE:0.16.0.1 --tag $DOCKER_IMAGE:latest --push --file ./docker/Dockerfile .
           
   - name: "Deploy APP"
-    dependencies: ["Build and push image"]
+    #dependencies: ["Build and push image"]
+    dependencies: []
     task:
       jobs:
         - name: Deploy APP
