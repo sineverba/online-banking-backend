@@ -9,25 +9,51 @@ agent:
 global_job_config:
   secrets:
     - name: ACCESS_TOKENS
+    - name: VPS
 
   env_vars:
-    - name: HEROKU_REGISTRY_IMAGE
-      value: registry.heroku.com/online-banking-backend-api/web
-    - name: HEROKU_APP
-      value: online-banking-backend-api
+    - name: DOCKER_IMAGE
+      value: registry.gitlab.com/cicdprojects/online-banking-backend
+    - name: GITLAB_REGISTRY
+      value: registry.gitlab.com
+    - name: BUILDX_VERSION
+      value: 0.9.1
+    - name: BINFMT_VERSION
+      value: qemu-v7.0.0-28
+    - name: FOLDER_APP
+      value: online-banking-backend
 
 blocks:
-  - name: "Build and deploy image"
+  - name: "Build and push image"
     dependencies: []
     task:
       jobs:
-        - name: Build and push to Heroku
+        - name: Build and push
           commands:
             - checkout
-            - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
-            - docker login -u _ -p $HEROKU_API_KEY registry.heroku.com
-            - docker build --tag $HEROKU_REGISTRY_IMAGE --file docker/Dockerfile "."
-            - docker push $HEROKU_REGISTRY_IMAGE
-            - heroku config:set APP_VERSION=$SEMAPHORE_GIT_TAG_NAME -a $HEROKU_APP
-            - heroku container:release web -a $HEROKU_APP
-            - heroku labs:enable -a $HEROKU_APP runtime-new-layer-extract
+            - docker login -u semaphore -p $GITLAB_TOKEN $GITLAB_REGISTRY
+            - mkdir -vp ~/.docker/cli-plugins/
+            - curl --silent -L "https://github.com/docker/buildx/releases/download/v$BUILDX_VERSION/buildx-v$BUILDX_VERSION.linux-amd64" > ~/.docker/cli-plugins/docker-buildx
+            - chmod a+x ~/.docker/cli-plugins/docker-buildx
+            - docker buildx version
+            - docker run --rm --privileged tonistiigi/binfmt:$BINFMT_VERSION --install all
+            - docker buildx ls
+            - docker buildx create --name multiarch --driver docker-container --use
+            - docker buildx inspect --bootstrap --builder multiarch
+            - docker buildx build --platform linux/amd64,linux/arm64/v8 --tag $DOCKER_IMAGE:$SEMAPHORE_GIT_TAG_NAME --tag $DOCKER_IMAGE:latest --push --file ./docker/Dockerfile .
+  
+          
+  - name: "Deploy APP"
+    dependencies: ["Build and push image"]
+    task:
+      jobs:
+        - name: Deploy APP
+          commands:
+            - ssh-keyscan -p $VPS01_OCI_PORT -H $VPS01_OCI_URL >> ~/.ssh/known_hosts
+            - chmod 0600 ~/.ssh/id_semaphore
+            - ssh-add ~/.ssh/id_semaphore
+            - ssh -t $VPS01_OCI_USERNAME@$VPS01_OCI_URL -p $VPS01_OCI_PORT "cd $FOLDER_APP && docker-compose stop && exit"
+            - ssh -t $VPS01_OCI_USERNAME@$VPS01_OCI_URL -p $VPS01_OCI_PORT "docker container rm $FOLDER_APP && docker image rm $DOCKER_IMAGE:latest && exit"
+            - ssh -t $VPS01_OCI_USERNAME@$VPS01_OCI_URL -p $VPS01_OCI_PORT "docker pull $DOCKER_IMAGE:latest && exit"
+            - ssh -t $VPS01_OCI_USERNAME@$VPS01_OCI_URL -p $VPS01_OCI_PORT "sed -i \"/APP_VERSION=/c\APP_VERSION=$SEMAPHORE_GIT_TAG_NAME\" $FOLDER_APP/.env && exit"
+            - ssh -t $VPS01_OCI_USERNAME@$VPS01_OCI_URL -p $VPS01_OCI_PORT "cd $FOLDER_APP && docker-compose up -d && exit"

@@ -2,6 +2,7 @@
 + Upgraded dependencies
 + Add roles list to me route
 + Create multiarch image
++ Upgrade dependencies
 
 ## 0.16.0
 + Fix some Spring warnings
