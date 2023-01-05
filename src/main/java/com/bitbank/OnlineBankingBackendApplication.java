@@ -22,12 +22,12 @@ public class OnlineBankingBackendApplication {
 	}
 
 	@Bean
-	public ModelMapper modelMapper() {
+	ModelMapper modelMapper() {
 		return new ModelMapper();
 	}
 
 	@Bean
-	public OpenAPI customOpenAPI() {
+	OpenAPI customOpenAPI() {
 
 		/**
 		 * Cannot autowire it 'cause we need it for every test. Alternative: mock it for

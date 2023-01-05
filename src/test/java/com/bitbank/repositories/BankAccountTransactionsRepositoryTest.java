@@ -9,15 +9,16 @@ import java.util.List;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.TestPropertySource;
 
 import com.bitbank.entities.BankAccountTransactionsEntity;
 
-@ExtendWith(SpringExtension.class)
 @DataJpaTest
+@TestPropertySource("classpath:application.properties")
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class BankAccountTransactionsRepositoryTest {
 
 	@Autowired

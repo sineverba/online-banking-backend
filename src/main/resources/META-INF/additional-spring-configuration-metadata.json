@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "app.allowedOrigins",
+    "type": "java.lang.String",
+    "description": "A description for 'app.allowedOrigins'"
+  },
+  {
+    "name": "app.enableSubscription",
+    "type": "java.lang.String",
+    "description": "A description for 'app.enableSubscription'"
+  },
+  {
+    "name": "app.allowedOrigins",
+    "type": "java.lang.String",
+    "description": "A description for 'app.allowedOrigins'"
+  }
+]}

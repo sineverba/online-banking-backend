@@ -9,12 +9,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.math.BigDecimal;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.bitbank.config.AuthEntryPointJwt;
@@ -23,7 +21,6 @@ import com.bitbank.services.BankAccountTransactionsService;
 import com.bitbank.services.UserDetailsServiceImpl;
 import com.bitbank.utils.JwtUtils;
 
-@ExtendWith(SpringExtension.class)
 @WebMvcTest(BalanceController.class)
 class BalanceControllerTest {
 
@@ -59,7 +56,7 @@ class BalanceControllerTest {
 		mvc.perform(get("/api/v1/balance")).andExpect(status().isOk())
 				.andExpect(jsonPath("$.balance", is(balance.intValue())));
 	}
-	
+
 	/**
 	 * Test access denied exception.
 	 * 

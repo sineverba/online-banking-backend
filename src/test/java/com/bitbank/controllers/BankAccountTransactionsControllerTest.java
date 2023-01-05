@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.bitbank.config.AuthEntryPointJwt;
@@ -36,7 +34,6 @@ import com.bitbank.services.UserDetailsServiceImpl;
 import com.bitbank.utils.JwtUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@ExtendWith(SpringExtension.class)
 @WebMvcTest(BankAccountTransactionsController.class)
 // Delete database before each test
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)

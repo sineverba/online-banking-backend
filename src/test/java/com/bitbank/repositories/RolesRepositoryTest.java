@@ -7,19 +7,20 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.TestPropertySource;
 
 import com.bitbank.constants.ERole;
 import com.bitbank.entities.RolesEntity;
 
-@ExtendWith(SpringExtension.class)
 @DataJpaTest
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
+@TestPropertySource("classpath:application.properties")
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class RolesRepositoryTest {
 
 	@Autowired
