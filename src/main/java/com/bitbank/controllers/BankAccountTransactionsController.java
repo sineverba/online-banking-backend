@@ -38,7 +38,6 @@ public class BankAccountTransactionsController {
 	@Autowired
 	private ModelMapper modelMapper;
 
-	@Autowired
 	public BankAccountTransactionsController(BankAccountTransactionsService bankAccountTransactionsService) {
 		this.bankAccountTransactionsService = bankAccountTransactionsService;
 	}
