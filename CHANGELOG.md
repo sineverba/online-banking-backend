@@ -4,6 +4,7 @@
 + Create multiarch image
 + Upgrade dependencies
 + Upgrade Spring Starter Parent + Fix H2 + Fix some warning on STS
++ Fix deprecated SecurityConfiguration
 
 ## 0.16.0
 + Fix some Spring warnings
