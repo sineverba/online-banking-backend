@@ -23,7 +23,7 @@ sonar:
 	mvn -Dsonar.host.url=$(SONAR_HOST_URL) -Dsonar.projectKey=online-banking-backend -Dsonar.organization=sineverba -Dsonar.login=$(SONAR_LOGIN) clean package sonar:sonar
 	
 build:
-	docker build --tag $(IMAGE_NAME):$(VERSION) $(IMAGE_NAME):latest --file ./docker/Dockerfile .
+	docker build --tag $(IMAGE_NAME):$(VERSION) --tag $(IMAGE_NAME):latest --file ./docker/Dockerfile .
 	
 preparemulti:
 	mkdir -vp ~/.docker/cli-plugins
