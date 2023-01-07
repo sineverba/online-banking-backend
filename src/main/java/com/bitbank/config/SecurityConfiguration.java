@@ -36,9 +36,6 @@ public class SecurityConfiguration {
 	@Autowired
 	UserDetailsServiceImpl userDetailsServiceImpl;
 
-	@Autowired
-	AuthEntryPointJwt authEntryPointJwt;
-
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -76,7 +73,7 @@ public class SecurityConfiguration {
 	}
 
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+	public SecurityFilterChain filterChain(HttpSecurity http, AuthEntryPointJwt authEntryPointJwt) throws Exception {
 		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(authEntryPointJwt).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
 				.mvcMatchers("/api/v1/ping").permitAll().mvcMatchers("/api/v1/auth/register").permitAll()

@@ -8,7 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,7 +27,8 @@ import com.bitbank.services.UserDetailsServiceImpl;
 import com.bitbank.utils.JwtUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@WebMvcTest(AuthController.class)
+@AutoConfigureMockMvc
+@SpringBootTest
 @TestPropertySource(locations = "classpath:application.properties", properties = "app.enableSubscription=false")
 class RegisterControllerTest {
 
