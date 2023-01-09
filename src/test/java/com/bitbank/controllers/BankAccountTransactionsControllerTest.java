@@ -75,7 +75,7 @@ class BankAccountTransactionsControllerTest {
 		@SuppressWarnings("unchecked")
 		Page<BankAccountTransactionsEntity> items = mock(Page.class);
 		when(bankAccountTransactionsService.index(0, 1, "id", "desc")).thenReturn(items);
-		mvc.perform(get("/api/v1/bank-account-transactions/")).andExpect(status().isOk());
+		mvc.perform(get("/api/v1/bank-account-transactions")).andExpect(status().isOk());
 	}
 
 	@WithMockUser(username = "username", authorities = { "ROLE_CUSTOMER" })
@@ -87,7 +87,7 @@ class BankAccountTransactionsControllerTest {
 
 		when(bankAccountTransactionsService.post(transactionToSave)).thenReturn(savedTransaction);
 
-		mvc.perform(post("/api/v1/bank-account-transactions/").contentType(MediaType.APPLICATION_JSON)
+		mvc.perform(post("/api/v1/bank-account-transactions").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(transactionToSave))).andExpect(status().isCreated())
 				.andExpect(jsonPath("$.id", is((int) id)))
 				.andExpect(jsonPath("$.amount", is(transactionToSave.getAmount())));
@@ -98,7 +98,7 @@ class BankAccountTransactionsControllerTest {
 	@MethodSource("getInvalidBankAccountTransactions")
 	void testCanCatchException(BankAccountTransactionsEntity invalidBankAccountTransactionsEntity) throws Exception {
 
-		mvc.perform(post("/api/v1/bank-account-transactions/").contentType(MediaType.APPLICATION_JSON)
+		mvc.perform(post("/api/v1/bank-account-transactions").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(invalidBankAccountTransactionsEntity)))
 				.andExpect(status().isBadRequest());
 
@@ -134,7 +134,7 @@ class BankAccountTransactionsControllerTest {
 		when(bankAccountTransactionsService.post(transactionToSave))
 				.thenThrow(new BalanceNotEnoughException("balance is not enough to deduct 100"));
 
-		mvc.perform(post("/api/v1/bank-account-transactions/").contentType(MediaType.APPLICATION_JSON)
+		mvc.perform(post("/api/v1/bank-account-transactions").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(transactionToSave))).andExpect(status().isBadRequest())
 				.andExpect(
 						jsonPath("$.error", is("balance is not enough to deduct " + (new BigDecimal(100).toString()))));

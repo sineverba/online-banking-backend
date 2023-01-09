@@ -95,7 +95,7 @@ class MeControllerTest {
 		// Mock return
 		when(jwtUtils.getUserNameFromJwtToken(token)).thenReturn("testusername");
 
-		mvc.perform(get("/api/v1/me/").contentType(MediaType.APPLICATION_JSON).header("Authorization", token))
+		mvc.perform(get("/api/v1/me").contentType(MediaType.APPLICATION_JSON).header("Authorization", token))
 				.andExpect(status().isOk()).andExpect(jsonPath("$.username", is("testusername")));
 	}
 
@@ -131,7 +131,7 @@ class MeControllerTest {
 		roles.add("ROLE_CUSTOMER");
 		when(jwtUtils.getAuthorities(any())).thenReturn(roles);
 
-		mvc.perform(get("/api/v1/me/").contentType(MediaType.APPLICATION_JSON).header("Authorization", token))
+		mvc.perform(get("/api/v1/me").contentType(MediaType.APPLICATION_JSON).header("Authorization", token))
 				.andExpect(status().isOk()).andExpect(jsonPath("$.username", is("testusername")))
 				.andExpect(jsonPath("$.roles").isNotEmpty()).andExpect(jsonPath("$.roles").isArray());
 	}

@@ -87,7 +87,7 @@ class AuthControllerTest {
 	 * @return
 	 */
 	@BeforeEach
-	private void buildAdminRoleAuthority() {
+	void buildAdminRoleAuthority() {
 		// ADMIN - Initialize the set
 		Set<RolesEntity> adminRole = new HashSet<>();
 		// ADMIN - Generate the entity
@@ -98,7 +98,7 @@ class AuthControllerTest {
 	}
 
 	@BeforeEach
-	private void buildCustomerRoleAuthority() {
+	void buildCustomerRoleAuthority() {
 		// CUSTOMER - Initialize the set
 		Set<RolesEntity> customerRole = new HashSet<>();
 		// CUSTOMER - Generate the entity
@@ -141,7 +141,7 @@ class AuthControllerTest {
 		when(userDetailsServiceImpl.post(userToSave)).thenReturn(savedUser);
 		when(rolesService.show(ERole.valueOf("ROLE_CUSTOMER"))).thenReturn(result);
 
-		mvc.perform(post("/api/v1/auth/register/").contentType(MediaType.APPLICATION_JSON)
+		mvc.perform(post("/api/v1/auth/register").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(userToSave))).andExpect(status().isCreated());
 	}
 
@@ -167,7 +167,7 @@ class AuthControllerTest {
 		// Create an usersEntity to pass to the login
 		UsersEntity userToLogin = validUserEntity("username", "password", this.getAdminRole());
 
-		mvc.perform(post("/api/v1/auth/login/").contentType(MediaType.APPLICATION_JSON)
+		mvc.perform(post("/api/v1/auth/login").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(userToLogin))).andExpect(status().isOk())
 				.andExpect(jsonPath("$.access_token", is(token)))
 				.andExpect(jsonPath("$.expiry_at", is(expiryDate.toString())))
@@ -184,7 +184,7 @@ class AuthControllerTest {
 	@MethodSource("getInvalidUsers")
 	void testCanCatchExceptionOnLogin(UsersEntity invalidUsersEntity) throws Exception {
 
-		mvc.perform(post("/api/v1/auth/login/").contentType(MediaType.APPLICATION_JSON)
+		mvc.perform(post("/api/v1/auth/login").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(invalidUsersEntity))).andExpect(status().isBadRequest());
 
 	}
@@ -213,7 +213,7 @@ class AuthControllerTest {
 		when(jwtUtils.getExpiryDateFromJwtToken(refreshedToken)).thenReturn(expiryAt);
 
 		// Make the call
-		mvc.perform(post("/api/v1/auth/refresh-token/").contentType(MediaType.APPLICATION_JSON).header("Authorization",
+		mvc.perform(post("/api/v1/auth/refresh-token").contentType(MediaType.APPLICATION_JSON).header("Authorization",
 				token)).andExpect(status().isOk()).andExpect(jsonPath("$.access_token", is(refreshedToken)))
 				.andExpect(jsonPath("$.expiry_at", is(expiryAt.toString())));
 	}
@@ -228,7 +228,7 @@ class AuthControllerTest {
 	@MethodSource("getInvalidUsers")
 	void testCanCatchExceptionOnSubscription(UsersEntity invalidUsersEntity) throws Exception {
 
-		mvc.perform(post("/api/v1/auth/register/").contentType(MediaType.APPLICATION_JSON)
+		mvc.perform(post("/api/v1/auth/register").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(invalidUsersEntity))).andExpect(status().isBadRequest());
 
 	}
@@ -265,7 +265,7 @@ class AuthControllerTest {
 
 		when(rolesService.show(any())).thenThrow(new RoleOrAuthorityNotFoundException("cannot find role ADMIN_ROLE"));
 
-		mvc.perform(post("/api/v1/auth/register/").contentType(MediaType.APPLICATION_JSON)
+		mvc.perform(post("/api/v1/auth/register").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(userToSave))).andExpect(status().isBadRequest());
 	}
 

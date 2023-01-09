@@ -71,7 +71,7 @@ class RegisterControllerTest {
 
 		when(userDetailsServiceImpl.post(userToSave)).thenReturn(savedUser);
 
-		mvc.perform(post("/api/v1/auth/register/").contentType(MediaType.APPLICATION_JSON)
+		mvc.perform(post("/api/v1/auth/register").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(userToSave))).andExpect(status().isBadRequest())
 				.andExpect(jsonPath("$.status", is("error")))
 				.andExpect(jsonPath("$.message", is("subscriptions disabled")));
