@@ -28,7 +28,7 @@ There is a dummy database, pre-populated. At first spin, MySQL will re-populate 
 
 ## How generate a random string to use for Jwt secret
 
-`$ tr -dc A-Za-z0-9 </dev/urandom | head -c 100 ; echo ''`
+`$ openssl rand -base64 90`
 
 ## How populate database
 

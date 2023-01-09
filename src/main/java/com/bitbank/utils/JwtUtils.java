@@ -3,6 +3,8 @@ package com.bitbank.utils;
 import java.util.Date;
 import java.util.List;
 
+import javax.crypto.SecretKey;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -14,7 +16,8 @@ import com.bitbank.services.UserDetailsImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtUtils {
@@ -26,6 +29,15 @@ public class JwtUtils {
 
 	@Autowired
 	private TimeSource timeSource;
+
+	/**
+	 * Generate the Key from the string.
+	 * 
+	 * @return
+	 */
+	private SecretKey getKey() {
+		return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
+	}
 
 	/**
 	 * Generate the JWT token from an Authentication. If you have a String token,
@@ -58,7 +70,7 @@ public class JwtUtils {
 	 * @return the username
 	 */
 	public String getUserNameFromJwtToken(String token) {
-		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+		return Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJws(token).getBody().getSubject();
 	}
 
 	/**
@@ -68,7 +80,8 @@ public class JwtUtils {
 	 * @return the expiry date
 	 */
 	public Long getExpiryDateFromJwtToken(String token) {
-		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getExpiration().getTime();
+		return Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJws(token).getBody().getExpiration()
+				.getTime();
 	}
 
 	/**
@@ -79,7 +92,7 @@ public class JwtUtils {
 	 */
 	public boolean validateJwtToken(String authToken) {
 		try {
-			Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+			Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJws(authToken);
 			return true;
 		} catch (MalformedJwtException | ExpiredJwtException e) {
 			return false;
@@ -94,8 +107,8 @@ public class JwtUtils {
 	 */
 	private String getJwt(String username) {
 		return Jwts.builder().setSubject(username).setIssuedAt(new Date(timeSource.getCurrentTimeMillis()))
-				.setExpiration(new Date(timeSource.getCurrentTimeMillis() + jwtExpirationMs))
-				.signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
+				.setExpiration(new Date(timeSource.getCurrentTimeMillis() + jwtExpirationMs)).signWith(getKey())
+				.compact();
 	}
 
 	/**
