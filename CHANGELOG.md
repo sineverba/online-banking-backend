@@ -1,4 +1,4 @@
-# Next version
+# 0.18.0
 + Upgraded dependencies
 + Add roles list to me route
 + Create multiarch image
