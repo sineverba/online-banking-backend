@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: cimg/openjdk:17.0.2
+      - image: cimg/openjdk:17.0.5
     steps:
       - checkout
       - run: ./mvnw -Dmaven.test.skip=true package
@@ -14,7 +14,7 @@ jobs:
 
   test:
     docker:
-      - image: cimg/openjdk:17.0.2
+      - image: cimg/openjdk:17.0.5
     steps:
       - checkout
       - attach_workspace:

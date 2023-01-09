@@ -5,8 +5,8 @@ Online Banking Demo Backend
 
 | Service | Github link | Demo |
 | ------- | ----------- | ---- |
-| Backend | [https://github.com/sineverba/online-banking-backend](https://github.com/sineverba/online-banking-backend) | [Swagger](https://https://online-banking-backend-api.herokuapp.com) |
-| Frontend | [https://github.com/sineverba/online-banking-frontend](https://github.com/sineverba/online-banking-frontend) | [Netlify](https://bit-bank.netlify.app) - [Vercel](https://online-banking-frontend.vercel.app) - [Heroku](https://bit-bank.herokuapp.com) |
+| Backend | [https://github.com/sineverba/online-banking-backend](https://github.com/sineverba/online-banking-backend) | [Swagger](https://bitbankapi.k2p.it/swagger-ui/index.html) |
+| Frontend | [https://github.com/sineverba/online-banking-frontend](https://github.com/sineverba/online-banking-frontend) | [Netlify](https://bit-bank.netlify.app) - [Vercel](https://online-banking-frontend.vercel.app) |
 
 __This project uses:__
 
@@ -26,11 +26,9 @@ __This project uses:__
 
 There is a dummy database, pre-populated. At first spin, MySQL will re-populate the database with some data.
 
-With a custom Sonar setup, launch them with `$ docker-compose profile --dev up` and you will not get Sonar images.
-
 ## How generate a random string to use for Jwt secret
 
-`$ tr -dc A-Za-z0-9 </dev/urandom | head -c 100 ; echo ''`
+`$ openssl rand -base64 90`
 
 ## How populate database
 
@@ -50,24 +48,3 @@ INSERT INTO roles(name) VALUES('ROLE_CUSTOMER');
 `$ make coverage`
 
 > Coverage will be set into `target/site/jacoco`
-
-## Local SonarQube
-
-+ Copy .env.bak into .env
-+ Start containers (`docker-compose up -d`)
-+ Connect to SonarQube (at `http://localhost:9000")
-+ First credentials are `admin // admin`
-+ To associate a new project
-  + Manually
-  + Project Display Name: Online Banking Backend
-  + Project Key: online-banking-backend
-  + Setup
-  + Locally
-  + Generate a token called `online-banking-backend`
-  + In `.env`, place as `SONAR_LOGIN` the token value
-  + Continue > Run analyses ... > Other > Linux
-  + Launch scanner with `make sonar`
-
-### Next Sonar scan
-
-+ `make sonar`

@@ -19,7 +19,6 @@ public class PingController {
 	@Autowired
 	private PingService pingService;
 
-	@Autowired
 	public PingController(PingService pingService) {
 		this.pingService = pingService;
 	}

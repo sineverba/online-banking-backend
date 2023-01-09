@@ -12,11 +12,11 @@ import java.math.BigDecimal;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +24,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.bitbank.config.AuthEntryPointJwt;
@@ -36,8 +35,8 @@ import com.bitbank.services.UserDetailsServiceImpl;
 import com.bitbank.utils.JwtUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@ExtendWith(SpringExtension.class)
-@WebMvcTest(BankAccountTransactionsController.class)
+@AutoConfigureMockMvc
+@SpringBootTest
 // Delete database before each test
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 class BankAccountTransactionsControllerTest {
@@ -76,7 +75,7 @@ class BankAccountTransactionsControllerTest {
 		@SuppressWarnings("unchecked")
 		Page<BankAccountTransactionsEntity> items = mock(Page.class);
 		when(bankAccountTransactionsService.index(0, 1, "id", "desc")).thenReturn(items);
-		mvc.perform(get("/api/v1/bank-account-transactions/")).andExpect(status().isOk());
+		mvc.perform(get("/api/v1/bank-account-transactions")).andExpect(status().isOk());
 	}
 
 	@WithMockUser(username = "username", authorities = { "ROLE_CUSTOMER" })
@@ -88,7 +87,7 @@ class BankAccountTransactionsControllerTest {
 
 		when(bankAccountTransactionsService.post(transactionToSave)).thenReturn(savedTransaction);
 
-		mvc.perform(post("/api/v1/bank-account-transactions/").contentType(MediaType.APPLICATION_JSON)
+		mvc.perform(post("/api/v1/bank-account-transactions").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(transactionToSave))).andExpect(status().isCreated())
 				.andExpect(jsonPath("$.id", is((int) id)))
 				.andExpect(jsonPath("$.amount", is(transactionToSave.getAmount())));
@@ -99,7 +98,7 @@ class BankAccountTransactionsControllerTest {
 	@MethodSource("getInvalidBankAccountTransactions")
 	void testCanCatchException(BankAccountTransactionsEntity invalidBankAccountTransactionsEntity) throws Exception {
 
-		mvc.perform(post("/api/v1/bank-account-transactions/").contentType(MediaType.APPLICATION_JSON)
+		mvc.perform(post("/api/v1/bank-account-transactions").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(invalidBankAccountTransactionsEntity)))
 				.andExpect(status().isBadRequest());
 
@@ -135,7 +134,7 @@ class BankAccountTransactionsControllerTest {
 		when(bankAccountTransactionsService.post(transactionToSave))
 				.thenThrow(new BalanceNotEnoughException("balance is not enough to deduct 100"));
 
-		mvc.perform(post("/api/v1/bank-account-transactions/").contentType(MediaType.APPLICATION_JSON)
+		mvc.perform(post("/api/v1/bank-account-transactions").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(transactionToSave))).andExpect(status().isBadRequest())
 				.andExpect(
 						jsonPath("$.error", is("balance is not enough to deduct " + (new BigDecimal(100).toString()))));

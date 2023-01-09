@@ -22,12 +22,12 @@ public class OnlineBankingBackendApplication {
 	}
 
 	@Bean
-	public ModelMapper modelMapper() {
+	ModelMapper modelMapper() {
 		return new ModelMapper();
 	}
 
 	@Bean
-	public OpenAPI customOpenAPI() {
+	OpenAPI customOpenAPI() {
 
 		/**
 		 * Cannot autowire it 'cause we need it for every test. Alternative: mock it for
@@ -37,7 +37,7 @@ public class OnlineBankingBackendApplication {
 
 		return new OpenAPI()
 				.addServersItem(new Server().url("http://localhost:8080").description("Local"))
-				.addServersItem(new Server().url("https://online-banking-backend-api.herokuapp.com").description("Production"))
+				.addServersItem(new Server().url("https://bitbankapi.k2p.it").description("Production"))
 				.components(new Components().addSecuritySchemes("bearer-key",
 						new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")))
 				.info(new Info().title("Online Banking Backend").version(pingService.show())

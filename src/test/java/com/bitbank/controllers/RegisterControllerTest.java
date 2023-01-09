@@ -7,9 +7,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,7 +17,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.bitbank.config.AuthEntryPointJwt;
@@ -28,8 +27,8 @@ import com.bitbank.services.UserDetailsServiceImpl;
 import com.bitbank.utils.JwtUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@ExtendWith(SpringExtension.class)
-@WebMvcTest(AuthController.class)
+@AutoConfigureMockMvc
+@SpringBootTest
 @TestPropertySource(locations = "classpath:application.properties", properties = "app.enableSubscription=false")
 class RegisterControllerTest {
 
@@ -72,7 +71,7 @@ class RegisterControllerTest {
 
 		when(userDetailsServiceImpl.post(userToSave)).thenReturn(savedUser);
 
-		mvc.perform(post("/api/v1/auth/register/").contentType(MediaType.APPLICATION_JSON)
+		mvc.perform(post("/api/v1/auth/register").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(userToSave))).andExpect(status().isBadRequest())
 				.andExpect(jsonPath("$.status", is("error")))
 				.andExpect(jsonPath("$.message", is("subscriptions disabled")));
