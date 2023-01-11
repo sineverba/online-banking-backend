@@ -1,4 +1,7 @@
-# 0.18.0
+# Next version
++ Fix some warning during boot
+
+## 0.18.0
 + Upgraded dependencies
 + Add roles list to me route
 + Create multiarch image
