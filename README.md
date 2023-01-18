@@ -6,7 +6,7 @@ Online Banking Demo Backend
 | Service | Github link | Demo |
 | ------- | ----------- | ---- |
 | Backend | [https://github.com/sineverba/online-banking-backend](https://github.com/sineverba/online-banking-backend) | [Swagger](https://bitbankapi.k2p.it/swagger-ui/index.html) |
-| Frontend | [https://github.com/sineverba/online-banking-frontend](https://github.com/sineverba/online-banking-frontend) | [Netlify](https://bit-bank.netlify.app) - [Vercel](https://online-banking-frontend.vercel.app) |
+| Frontend | [https://github.com/sineverba/online-banking-frontend](https://github.com/sineverba/online-banking-frontend) | [Netlify](https://bit-bank.netlify.app) - [Vercel](https://online-banking-frontend.vercel.app) | [Custom](https://bitbank.k2p.it/) |
 
 __This project uses:__
 
