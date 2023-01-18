@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -16,16 +17,23 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.context.TestPropertySource;
 
 import com.bitbank.entities.BankAccountTransactionsEntity;
 import com.bitbank.exceptions.BalanceNotEnoughException;
 import com.bitbank.repositories.BankAccountTransactionsRepository;
 
 @ExtendWith(MockitoExtension.class)
+@DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
+@TestPropertySource("classpath:application.properties")
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class BankAccountTransactionsServiceTest {
 	@Mock
 	private BankAccountTransactionsRepository bankAccountTransactionsRepository;
@@ -124,6 +132,20 @@ class BankAccountTransactionsServiceTest {
 		String actualMessage = balanceNotEnoughException.getMessage();
 
 		assertTrue(actualMessage.contains(expectedMessage));
+	}
+	
+	/**
+	 * Show - can single transaction
+	 */
+
+	@Test
+	void get_testCanShow() {
+		var transaction = BankAccountTransactionsServiceTest.validBankAccountTransactionsEntity(1L,
+				new BigDecimal(150), "First Transaction");
+		Optional<BankAccountTransactionsEntity> result = Optional.of(transaction);
+		when(bankAccountTransactionsRepository.findById(1L)).thenReturn(result);
+		assertEquals(1L, bankAccountTransactionsService.show(1L).get().getId());
+		assertEquals(new BigDecimal(150), bankAccountTransactionsService.show(1L).get().getAmount());
 	}
 
 	/**

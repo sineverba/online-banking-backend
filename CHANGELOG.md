@@ -1,4 +1,8 @@
-# 0.18.0
+# 0.19.0
++ Fix some warning during boot
++ Add get single transaction
+
+## 0.18.0
 + Upgraded dependencies
 + Add roles list to me route
 + Create multiarch image
