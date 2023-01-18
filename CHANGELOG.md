@@ -1,5 +1,6 @@
 # Next version
 + Fix some warning during boot
++ Add get single transaction
 
 ## 0.18.0
 + Upgraded dependencies

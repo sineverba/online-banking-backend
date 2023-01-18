@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -76,6 +77,19 @@ class BankAccountTransactionsControllerTest {
 		Page<BankAccountTransactionsEntity> items = mock(Page.class);
 		when(bankAccountTransactionsService.index(0, 1, "id", "desc")).thenReturn(items);
 		mvc.perform(get("/api/v1/bank-account-transactions")).andExpect(status().isOk());
+	}
+	
+	/**
+	 * show
+	 */
+	@WithMockUser(username = "username", authorities = { "ROLE_CUSTOMER" })
+	@Test
+	void testCanShow() throws Exception {
+		var id = 1L;
+		var transaction = validBankAccountTransactionsEntity(new BigDecimal(100), "First Transaction");
+		Optional<BankAccountTransactionsEntity> result = Optional.of(transaction);
+		when(bankAccountTransactionsService.show(id)).thenReturn(result);
+		mvc.perform(get("/api/v1/bank-account-transactions/"+id)).andExpect(status().isOk());
 	}
 
 	@WithMockUser(username = "username", authorities = { "ROLE_CUSTOMER" })
