@@ -1,6 +1,7 @@
 package com.bitbank.services;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,5 +80,15 @@ public class BankAccountTransactionsService {
 	 */
 	public BigDecimal balance() {
 		return bankAccountTransactionsRepository.balance();
+	}
+
+	/**
+	 * Return single transaction.
+	 * 
+	 * @param id
+	 * @return Optional<BankAccountTransactionsEntity>
+	 */
+	public Optional<BankAccountTransactionsEntity> show(long id) {
+		return bankAccountTransactionsRepository.findById(id);
 	}
 }

@@ -6,17 +6,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.TestPropertySource;
 
+import com.bitbank.constants.ERole;
 import com.bitbank.entities.BankAccountTransactionsEntity;
+import com.bitbank.entities.RolesEntity;
 
 @DataJpaTest
+@DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 @TestPropertySource("classpath:application.properties")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class BankAccountTransactionsRepositoryTest {
@@ -73,6 +79,23 @@ class BankAccountTransactionsRepositoryTest {
 
 		assertThat(balance, Matchers.comparesEqualTo(bankAccountTransactionsRepository.balance()));
 
+	}
+	
+	/**
+	 * Show - can get single transaction
+	 */
+	@Test
+	void testCanFindSingleTransaction() {
+		// 1. Create an item
+		BankAccountTransactionsEntity bankAccountTransactionsEntity = validBankAccountTransactionsEntity(1L, new BigDecimal(100), "first");
+		// 2. Save the item
+		bankAccountTransactionsRepository.save(bankAccountTransactionsEntity);
+		// 3 - Create an optional result
+		Optional<BankAccountTransactionsEntity> result = Optional.of(bankAccountTransactionsEntity);
+		// 4 - Get the result
+		result = bankAccountTransactionsRepository.findById(1L);
+		// 5 - Test
+		assertEquals(result.get().getAmount(), new BigDecimal(100));
 	}
 
 	private static BankAccountTransactionsEntity validBankAccountTransactionsEntity(Long id, BigDecimal amount,
