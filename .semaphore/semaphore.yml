@@ -26,11 +26,11 @@ blocks:
           - sem-version java 17
           - checkout
           - >-
-          	mvn 
-          	-Dsonar.host.url=https://sonarcloud.io 
-          	-Dsonar.projectKey=sineverba_online-banking-backend 
-          	-Dsonar.organization=sineverba 
-          	clean package sonar:sonar
+            mvn 
+            -Dsonar.host.url=https://sonarcloud.io 
+            -Dsonar.projectKey=sineverba_online-banking-backend 
+            -Dsonar.organization=sineverba 
+            clean package sonar:sonar
           
 promotions:
   - name: Deploy
