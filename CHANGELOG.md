@@ -1,4 +1,4 @@
-# Next version
+# 0.20.0
 + Upgrade dependencies, reorganize Docker and refactor Semaphore
 
 ## 0.19.0
