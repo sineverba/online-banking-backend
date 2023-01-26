@@ -1,4 +1,7 @@
-# 0.19.0
+# Next version
++ Upgrade dependencies, reorganize Docker and refactor Semaphore
+
+## 0.19.0
 + Fix some warning during boot
 + Add get single transaction
 

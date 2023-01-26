@@ -17,14 +17,14 @@ global_job_config:
     - name: GITLAB_REGISTRY
       value: registry.gitlab.com
     - name: BUILDX_VERSION
-      value: 0.9.1
+      value: 0.10.0
     - name: BINFMT_VERSION
       value: qemu-v7.0.0-28
     - name: FOLDER_APP
       value: online-banking-backend
 
 blocks:
-  - name: "Build and push image"
+  - name: "Build and deploy"
     dependencies: []
     task:
       jobs:
@@ -33,27 +33,56 @@ blocks:
             - checkout
             - docker login -u semaphore -p $GITLAB_TOKEN $GITLAB_REGISTRY
             - mkdir -vp ~/.docker/cli-plugins/
-            - curl --silent -L "https://github.com/docker/buildx/releases/download/v$BUILDX_VERSION/buildx-v$BUILDX_VERSION.linux-amd64" > ~/.docker/cli-plugins/docker-buildx
+            - >-
+              curl 
+              --silent 
+              -L "https://github.com/docker/buildx/releases/download/v$BUILDX_VERSION/buildx-v$BUILDX_VERSION.linux-amd64" 
+              > ~/.docker/cli-plugins/docker-buildx
             - chmod a+x ~/.docker/cli-plugins/docker-buildx
             - docker buildx version
             - docker run --rm --privileged tonistiigi/binfmt:$BINFMT_VERSION --install all
             - docker buildx ls
             - docker buildx create --name multiarch --driver docker-container --use
             - docker buildx inspect --bootstrap --builder multiarch
-            - docker buildx build --platform linux/amd64,linux/arm64/v8 --tag $DOCKER_IMAGE:$SEMAPHORE_GIT_TAG_NAME --tag $DOCKER_IMAGE:latest --push --file ./docker/Dockerfile .
+            - >-
+              docker buildx build 
+              --platform linux/arm64/v8,linux/amd64,linux/arm/v6,linux/arm/v7 
+              --tag $DOCKER_IMAGE:$SEMAPHORE_GIT_TAG_NAME 
+              --tag $DOCKER_IMAGE:latest 
+              --push 
+              --file ./dockerfiles/production/build/Dockerfile "."
   
           
   - name: "Deploy APP"
-    dependencies: ["Build and push image"]
+    dependencies: ["Build and deploy"]
     task:
       jobs:
-        - name: Deploy APP
+        - name: Deploy to VPS
           commands:
             - ssh-keyscan -p $VPS01_OCI_PORT -H $VPS01_OCI_URL >> ~/.ssh/known_hosts
             - chmod 0600 ~/.ssh/id_semaphore
             - ssh-add ~/.ssh/id_semaphore
-            - ssh -t $VPS01_OCI_USERNAME@$VPS01_OCI_URL -p $VPS01_OCI_PORT "cd $FOLDER_APP && docker-compose stop && exit"
-            - ssh -t $VPS01_OCI_USERNAME@$VPS01_OCI_URL -p $VPS01_OCI_PORT "docker container rm $FOLDER_APP && docker image rm $DOCKER_IMAGE:latest && exit"
-            - ssh -t $VPS01_OCI_USERNAME@$VPS01_OCI_URL -p $VPS01_OCI_PORT "docker pull $DOCKER_IMAGE:latest && exit"
-            - ssh -t $VPS01_OCI_USERNAME@$VPS01_OCI_URL -p $VPS01_OCI_PORT "sed -i \"/APP_VERSION=/c\APP_VERSION=$SEMAPHORE_GIT_TAG_NAME\" $FOLDER_APP/.env && exit"
-            - ssh -t $VPS01_OCI_USERNAME@$VPS01_OCI_URL -p $VPS01_OCI_PORT "cd $FOLDER_APP && docker-compose up -d && exit"
+            # 1 - Stop the container and remove it
+            - >-
+              ssh -t $VPS01_OCI_USERNAME@$VPS01_OCI_URL -p $VPS01_OCI_PORT
+              "cd $FOLDER_APP && docker-compose stop && docker container rm $FOLDER_APP && exit"
+            # 2 - Remove all tagged images
+            - >-
+              ssh -t $VPS01_OCI_USERNAME@$VPS01_OCI_URL -p $VPS01_OCI_PORT
+              "docker images | grep $FOLDER_APP | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} docker rmi $DOCKER_IMAGE:{} && exit"
+            # 3 - Pull the image
+            - >-
+              ssh -t $VPS01_OCI_USERNAME@$VPS01_OCI_URL -p $VPS01_OCI_PORT
+              "docker pull $DOCKER_IMAGE:$SEMAPHORE_GIT_TAG_NAME && exit"
+            # 4 - Replace the docker-compose with new tag image
+            - >-
+              ssh -t $VPS01_OCI_USERNAME@$VPS01_OCI_URL -p $VPS01_OCI_PORT
+              "sed -i \"/image\: registry.gitlab.com\/cicdprojects\/$FOLDER_APP:/c\    image\: registry.gitlab.com\/cicdprojects\/$FOLDER_APP\:$SEMAPHORE_GIT_TAG_NAME\" $FOLDER_APP/docker-compose.yml && exit"
+            # 5 - Replace the APP version in env file
+            - >-
+              ssh -t $VPS01_OCI_USERNAME@$VPS01_OCI_URL -p $VPS01_OCI_PORT
+              "sed -i \"/APP_VERSION=/c\APP_VERSION=$SEMAPHORE_GIT_TAG_NAME\" $FOLDER_APP/.env && exit"
+            # 6 - Restart the service
+            - >-
+              ssh -t $VPS01_OCI_USERNAME@$VPS01_OCI_URL -p $VPS01_OCI_PORT
+              "cd $FOLDER_APP && docker-compose up -d && exit"
