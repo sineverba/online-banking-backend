@@ -2,8 +2,8 @@ include .env
 
 IMAGE_NAME=registry.gitlab.com/cicdprojects/online-banking-backend
 CONTAINER_NAME=online-banking-backend
-VERSION=0.19.0-dev
-BUILDX_VERSION=0.9.1
+VERSION=0.20.0-dev
+BUILDX_VERSION=0.10.0
 BINFMT_VERSION=qemu-v7.0.0-28
 
 
@@ -20,10 +20,18 @@ coverage:
 	mvn test jacoco:report
 	
 sonar:
-	mvn -Dsonar.host.url=$(SONAR_HOST_URL) -Dsonar.projectKey=online-banking-backend -Dsonar.organization=sineverba -Dsonar.login=$(SONAR_LOGIN) clean package sonar:sonar
+	mvn \
+		-Dsonar.host.url=$(SONAR_HOST_URL) \
+		-Dsonar.projectKey=online-banking-backend \
+		-Dsonar.organization=sineverba \
+		-Dsonar.login=$(SONAR_LOGIN) \
+		clean package sonar:sonar
 	
 build:
-	docker build --tag $(IMAGE_NAME):$(VERSION) --tag $(IMAGE_NAME):latest --file ./docker/Dockerfile .
+	docker build \
+		--tag $(IMAGE_NAME):$(VERSION) \
+		--tag $(IMAGE_NAME):latest \
+		--file ./dockerfiles/production/build/Dockerfile "."
 	
 preparemulti:
 	mkdir -vp ~/.docker/cli-plugins
@@ -34,10 +42,15 @@ preparemulti:
 	docker buildx ls
 	docker buildx rm multiarch
 	docker buildx create --name multiarch --driver docker-container --use
+	docker buildx inspect --bootstrap --builder multiarch
 	
 multi:
-	docker buildx inspect --bootstrap --builder multiarch
-	docker buildx build --platform linux/arm64/v8,linux/amd64 --tag $(IMAGE_NAME):$(VERSION) --tag $(IMAGE_NAME):latest --push --file ./docker/Dockerfile .
+	docker buildx build \
+		--platform linux/arm64/v8,linux/amd64,linux/arm/v6,linux/arm/v7 \
+		--tag $(IMAGE_NAME):$(VERSION) \
+		--tag $(IMAGE_NAME):latest \
+		--push \
+		--file ./dockerfiles/production/build/Dockerfile "."
 	
 spin:
 	docker run --name $(CONTAINER_NAME) -e "PORT=9876" -p "9876:9876" $(IMAGE_NAME):$(VERSION)

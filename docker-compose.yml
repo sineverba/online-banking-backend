@@ -11,7 +11,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./dockerfiles/mysql:/docker-entrypoint-initdb.d
+      - ./dockerfiles/development/mysql:/docker-entrypoint-initdb.d
     networks:
       - online-banking-backend
       
