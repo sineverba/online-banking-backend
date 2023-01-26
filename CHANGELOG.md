@@ -1,4 +1,7 @@
-# 0.20.0
+# 0.20.1
++ Fix multiplatform
+
+## 0.20.0
 + Upgrade dependencies, reorganize Docker and refactor Semaphore
 
 ## 0.19.0
