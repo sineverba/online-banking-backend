@@ -1,4 +1,7 @@
-# 0.20.1
+# Next version
++ Refactor Semaphore
+
+## 0.20.1
 + Fix multiplatform
 
 ## 0.20.0

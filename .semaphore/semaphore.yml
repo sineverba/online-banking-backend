@@ -14,17 +14,17 @@ blocks:
     skip:
       when: "tag =~ '.*'"
     task:
+      prologue:
+        commands:
+          - sem-version java 17
+          - checkout
       jobs:
       - name: Test
         commands:
-          - sem-version java 17
           - export COVERALLS_REPO_TOKEN=$COVERALLS_ONLINE_BANKING_BACKEND
-          - checkout
           - mvn -DrepoToken=$COVERALLS_REPO_TOKEN test jacoco:report coveralls:report
       - name: Sonar
         commands:
-          - sem-version java 17
-          - checkout
           - >-
             mvn 
             -Dsonar.host.url=https://sonarcloud.io 
@@ -33,7 +33,7 @@ blocks:
             clean package sonar:sonar
           
 promotions:
-  - name: Deploy
-    pipeline_file: build-deploy.yml
+  - name: Build
+    pipeline_file: build.yml
     auto_promote:
       when: "result = 'passed' and tag =~ '.*'"
