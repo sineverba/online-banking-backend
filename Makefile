@@ -31,7 +31,7 @@ build:
 	docker build \
 		--tag $(IMAGE_NAME):$(VERSION) \
 		--tag $(IMAGE_NAME):latest \
-		--file ./dockerfiles/production/build/Dockerfile "."
+		--file ./dockerfiles/production/build/docker/Dockerfile "."
 	
 preparemulti:
 	mkdir -vp ~/.docker/cli-plugins
@@ -50,7 +50,7 @@ multi:
 		--tag $(IMAGE_NAME):$(VERSION) \
 		--tag $(IMAGE_NAME):latest \
 		--push \
-		--file ./dockerfiles/production/build/Dockerfile "."
+		--file ./dockerfiles/production/build/docker/Dockerfile "."
 	
 spin:
 	docker run --name $(CONTAINER_NAME) -e "PORT=9876" -p "9876:9876" $(IMAGE_NAME):$(VERSION)

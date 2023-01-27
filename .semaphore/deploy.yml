@@ -1,6 +1,6 @@
 version: v1.0
 
-name: Build and deploy
+name: Deploy
 agent:
   machine:
     type: e1-standard-2
@@ -10,7 +10,6 @@ global_job_config:
   secrets:
     - name: ACCESS_TOKENS
     - name: VPS
-
   env_vars:
     - name: DOCKER_IMAGE
       value: registry.gitlab.com/cicdprojects/online-banking-backend
@@ -24,37 +23,7 @@ global_job_config:
       value: online-banking-backend
 
 blocks:
-  - name: "Build and deploy"
-    dependencies: []
-    task:
-      jobs:
-        - name: Build and push
-          commands:
-            - checkout
-            - docker login -u semaphore -p $GITLAB_TOKEN $GITLAB_REGISTRY
-            - mkdir -vp ~/.docker/cli-plugins/
-            - >-
-              curl 
-              --silent 
-              -L "https://github.com/docker/buildx/releases/download/v$BUILDX_VERSION/buildx-v$BUILDX_VERSION.linux-amd64" 
-              > ~/.docker/cli-plugins/docker-buildx
-            - chmod a+x ~/.docker/cli-plugins/docker-buildx
-            - docker buildx version
-            - docker run --rm --privileged tonistiigi/binfmt:$BINFMT_VERSION --install all
-            - docker buildx ls
-            - docker buildx create --name multiarch --driver docker-container --use
-            - docker buildx inspect --bootstrap --builder multiarch
-            - >-
-              docker buildx build 
-              --platform linux/amd64,linux/arm64/v8
-              --tag $DOCKER_IMAGE:$SEMAPHORE_GIT_TAG_NAME 
-              --tag $DOCKER_IMAGE:latest 
-              --push 
-              --file ./dockerfiles/production/build/Dockerfile "."
-  
-          
-  - name: "Deploy APP"
-    dependencies: ["Build and deploy"]
+  - name: "Deploy"
     task:
       jobs:
         - name: Deploy to VPS

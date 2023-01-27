@@ -39,7 +39,7 @@ RUN mvn -f /home/app/pom.xml -Dmaven.test.skip=true clean package
 #
 FROM eclipse-temurin:17.0.5_8-jre-jammy AS packager
 RUN apt-get update -y && apt-get upgrade -y
-COPY dockerfiles/production/build/entrypoint.sh /etc/entrypoint.sh
+COPY dockerfiles/production/build/docker/entrypoint.sh /etc/entrypoint.sh
 RUN chmod +x /etc/entrypoint.sh
 COPY --from=builder /home/app/target/*.jar /usr/local/lib/
 CMD ["/etc/entrypoint.sh"]
