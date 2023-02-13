@@ -16,7 +16,7 @@ global_job_config:
     - name: GITLAB_REGISTRY
       value: registry.gitlab.com
     - name: BUILDX_VERSION
-      value: 0.10.0
+      value: 0.10.2
     - name: BINFMT_VERSION
       value: qemu-v7.0.0-28
     - name: FOLDER_APP
@@ -34,7 +34,7 @@ blocks:
             # 1 - Stop the container and remove it
             - >-
               ssh -t $VPS01_OCI_USERNAME@$VPS01_OCI_URL -p $VPS01_OCI_PORT
-              "cd $FOLDER_APP && docker-compose stop && docker container rm $FOLDER_APP && exit"
+              "cd $FOLDER_APP && docker compose stop && docker container rm $FOLDER_APP && exit"
             # 2 - Remove all tagged images
             - >-
               ssh -t $VPS01_OCI_USERNAME@$VPS01_OCI_URL -p $VPS01_OCI_PORT
@@ -43,7 +43,7 @@ blocks:
             - >-
               ssh -t $VPS01_OCI_USERNAME@$VPS01_OCI_URL -p $VPS01_OCI_PORT
               "docker pull $DOCKER_IMAGE:$SEMAPHORE_GIT_TAG_NAME && exit"
-            # 4 - Replace the docker-compose with new tag image
+            # 4 - Replace the docker compose with new tag image
             - >-
               ssh -t $VPS01_OCI_USERNAME@$VPS01_OCI_URL -p $VPS01_OCI_PORT
               "sed -i \"/image\: registry.gitlab.com\/cicdprojects\/$FOLDER_APP:/c\    image\: registry.gitlab.com\/cicdprojects\/$FOLDER_APP\:$SEMAPHORE_GIT_TAG_NAME\" $FOLDER_APP/docker-compose.yml && exit"
@@ -54,4 +54,4 @@ blocks:
             # 6 - Restart the service
             - >-
               ssh -t $VPS01_OCI_USERNAME@$VPS01_OCI_URL -p $VPS01_OCI_PORT
-              "cd $FOLDER_APP && docker-compose up -d && exit"
+              "cd $FOLDER_APP && docker compose up -d && exit"
