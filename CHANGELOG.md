@@ -1,5 +1,6 @@
 # Next version
 + Refactor Semaphore
++ Upgrade dependencies
 
 ## 0.20.1
 + Fix multiplatform

@@ -3,7 +3,7 @@ include .env
 IMAGE_NAME=registry.gitlab.com/cicdprojects/online-banking-backend
 CONTAINER_NAME=online-banking-backend
 VERSION=0.20.1-dev
-BUILDX_VERSION=0.10.0
+BUILDX_VERSION=0.10.2
 BINFMT_VERSION=qemu-v7.0.0-28
 
 
@@ -30,7 +30,6 @@ sonar:
 build:
 	docker build \
 		--tag $(IMAGE_NAME):$(VERSION) \
-		--tag $(IMAGE_NAME):latest \
 		--file ./dockerfiles/production/build/docker/Dockerfile "."
 	
 preparemulti:
@@ -48,8 +47,6 @@ multi:
 	docker buildx build \
 		--platform linux/amd64,linux/arm64/v8 \
 		--tag $(IMAGE_NAME):$(VERSION) \
-		--tag $(IMAGE_NAME):latest \
-		--push \
 		--file ./dockerfiles/production/build/docker/Dockerfile "."
 	
 spin:
@@ -60,7 +57,4 @@ stop:
 	docker container rm $(CONTAINER_NAME)
 	
 destroy:
-	docker image rm $(IMAGE_NAME):$(VERSION) $(IMAGE_NAME):latest
-	
-push:
-	docker push $(IMAGE_NAME):$(VERSION) $(IMAGE_NAME):latest
+	docker image rm $(IMAGE_NAME):$(VERSION)
