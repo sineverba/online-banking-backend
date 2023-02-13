@@ -1,6 +1,6 @@
 version: v1.0
 
-name: Build and deploy
+name: Deploy
 agent:
   machine:
     type: e1-standard-2
@@ -10,51 +10,20 @@ global_job_config:
   secrets:
     - name: ACCESS_TOKENS
     - name: VPS
-
   env_vars:
     - name: DOCKER_IMAGE
       value: registry.gitlab.com/cicdprojects/online-banking-backend
     - name: GITLAB_REGISTRY
       value: registry.gitlab.com
     - name: BUILDX_VERSION
-      value: 0.10.0
+      value: 0.10.2
     - name: BINFMT_VERSION
       value: qemu-v7.0.0-28
     - name: FOLDER_APP
       value: online-banking-backend
 
 blocks:
-  - name: "Build and deploy"
-    dependencies: []
-    task:
-      jobs:
-        - name: Build and push
-          commands:
-            - checkout
-            - docker login -u semaphore -p $GITLAB_TOKEN $GITLAB_REGISTRY
-            - mkdir -vp ~/.docker/cli-plugins/
-            - >-
-              curl 
-              --silent 
-              -L "https://github.com/docker/buildx/releases/download/v$BUILDX_VERSION/buildx-v$BUILDX_VERSION.linux-amd64" 
-              > ~/.docker/cli-plugins/docker-buildx
-            - chmod a+x ~/.docker/cli-plugins/docker-buildx
-            - docker buildx version
-            - docker run --rm --privileged tonistiigi/binfmt:$BINFMT_VERSION --install all
-            - docker buildx ls
-            - docker buildx create --name multiarch --driver docker-container --use
-            - docker buildx inspect --bootstrap --builder multiarch
-            - >-
-              docker buildx build 
-              --platform linux/amd64,linux/arm64/v8
-              --tag $DOCKER_IMAGE:$SEMAPHORE_GIT_TAG_NAME 
-              --tag $DOCKER_IMAGE:latest 
-              --push 
-              --file ./dockerfiles/production/build/Dockerfile "."
-  
-          
-  - name: "Deploy APP"
-    dependencies: ["Build and deploy"]
+  - name: "Deploy"
     task:
       jobs:
         - name: Deploy to VPS
@@ -65,7 +34,7 @@ blocks:
             # 1 - Stop the container and remove it
             - >-
               ssh -t $VPS01_OCI_USERNAME@$VPS01_OCI_URL -p $VPS01_OCI_PORT
-              "cd $FOLDER_APP && docker-compose stop && docker container rm $FOLDER_APP && exit"
+              "cd $FOLDER_APP && docker compose stop && docker container rm $FOLDER_APP && exit"
             # 2 - Remove all tagged images
             - >-
               ssh -t $VPS01_OCI_USERNAME@$VPS01_OCI_URL -p $VPS01_OCI_PORT
@@ -74,7 +43,7 @@ blocks:
             - >-
               ssh -t $VPS01_OCI_USERNAME@$VPS01_OCI_URL -p $VPS01_OCI_PORT
               "docker pull $DOCKER_IMAGE:$SEMAPHORE_GIT_TAG_NAME && exit"
-            # 4 - Replace the docker-compose with new tag image
+            # 4 - Replace the docker compose with new tag image
             - >-
               ssh -t $VPS01_OCI_USERNAME@$VPS01_OCI_URL -p $VPS01_OCI_PORT
               "sed -i \"/image\: registry.gitlab.com\/cicdprojects\/$FOLDER_APP:/c\    image\: registry.gitlab.com\/cicdprojects\/$FOLDER_APP\:$SEMAPHORE_GIT_TAG_NAME\" $FOLDER_APP/docker-compose.yml && exit"
@@ -85,4 +54,4 @@ blocks:
             # 6 - Restart the service
             - >-
               ssh -t $VPS01_OCI_USERNAME@$VPS01_OCI_URL -p $VPS01_OCI_PORT
-              "cd $FOLDER_APP && docker-compose up -d && exit"
+              "cd $FOLDER_APP && docker compose up -d && exit"

@@ -1,4 +1,8 @@
-# 0.20.1
+# 1.0.0
++ Refactor Semaphore
++ Upgrade dependencies
+
+## 0.20.1
 + Fix multiplatform
 
 ## 0.20.0

@@ -1,18 +1,15 @@
 #
 # Build stage
 #
-FROM eclipse-temurin:17.0.5_8-jdk-jammy AS builder
+FROM eclipse-temurin:17.0.6_10-jdk-jammy AS builder
 
 # Downloading and installing Maven
 # 1- Define a constant with the version of maven you want to install
-ARG MAVEN_VERSION=3.8.7
-
+ARG MAVEN_VERSION=3.9.0
 # 2- Define a constant with the working directory
 ARG USER_HOME_DIR="/root"
-
 # 3- Define the URL where maven can be downloaded from
 ARG BASE_URL=https://apache.osuosl.org/maven/maven-3/${MAVEN_VERSION}/binaries
-
 # 4- Create the directories, download maven, install it, remove downloaded file and set links
 RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
   && echo "Downloading maven" \
@@ -37,9 +34,10 @@ RUN mvn -f /home/app/pom.xml -Dmaven.test.skip=true clean package
 #
 # Package stage
 #
-FROM eclipse-temurin:17.0.5_8-jre-jammy AS packager
+FROM eclipse-temurin:17.0.6_10-jre-jammy AS packager
+# Update and upgrade
 RUN apt-get update -y && apt-get upgrade -y
-COPY dockerfiles/production/build/entrypoint.sh /etc/entrypoint.sh
+COPY dockerfiles/production/build/docker/entrypoint.sh /etc/entrypoint.sh
 RUN chmod +x /etc/entrypoint.sh
 COPY --from=builder /home/app/target/*.jar /usr/local/lib/
 CMD ["/etc/entrypoint.sh"]

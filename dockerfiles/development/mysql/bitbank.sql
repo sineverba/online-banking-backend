@@ -1,4 +1,4 @@
--- Adminer 4.8.1 MySQL 8.0.28 dump
+-- Adminer 4.8.1 MySQL 8.0.31 dump
 
 SET NAMES utf8;
 SET time_zone = '+00:00';
@@ -92,4 +92,4 @@ CREATE TABLE `users_roles` (
 INSERT INTO `users_roles` (`users_id`, `roles_id`) VALUES
 (1,	2);
 
--- 2022-03-26 09:48:06
+-- 2023-02-13 09:45:03
