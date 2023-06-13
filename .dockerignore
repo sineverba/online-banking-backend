@@ -1,2 +1,16 @@
 data/
 docker-volumes/
+.circleci/
+.idea/
+.rewrite-cache/
+.semaphore/
+.settings/
+.vscode/
+target/
+*.md
+docker-compose.yml
+LICENSE
+Makefile
+mvnw
+mvnw.cmd
+pom.xml.versionsBackup

@@ -73,14 +73,16 @@ public class SecurityConfiguration {
 	}
 
 	@Bean
-	SecurityFilterChain filterChain(HttpSecurity http, AuthEntryPointJwt authEntryPointJwt) throws Exception {
-		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(authEntryPointJwt).and()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeHttpRequests()
-				.requestMatchers("/api/v1/ping").permitAll().requestMatchers("/api/v1/auth/register").permitAll()
-				.requestMatchers("/api/v1/auth/login").permitAll().requestMatchers("/api-docs/**").permitAll()
-				.requestMatchers("/swagger-ui/**").permitAll().requestMatchers("/swagger-ui.html").permitAll()
-				.requestMatchers("/v3/api-docs/**").permitAll()
-				.requestMatchers("/documentation").permitAll().requestMatchers("/").permitAll().anyRequest().authenticated();
+	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http.csrf(csrf -> csrf.disable())
+				.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/ping").permitAll()
+						.requestMatchers("/api/v1/auth/register").permitAll().requestMatchers("/api/v1/auth/login")
+						.permitAll().requestMatchers("/api-docs/**").permitAll().requestMatchers("/swagger-ui/**")
+						.permitAll().requestMatchers("/swagger-ui.html").permitAll().requestMatchers("/v3/api-docs/**")
+						.permitAll().requestMatchers("/documentation").permitAll().requestMatchers("/").permitAll()
+						.anyRequest().authenticated())
+				.cors();
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();

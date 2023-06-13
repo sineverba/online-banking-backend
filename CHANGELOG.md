@@ -1,4 +1,7 @@
-# 1.0.0
+# Next version
++ Upgrade dependencies
+
+## 1.0.0
 + Refactor Semaphore
 + Upgrade dependencies
 
