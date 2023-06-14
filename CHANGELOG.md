@@ -1,5 +1,6 @@
 # Next version
 + Upgrade dependencies
++ Fix deprecated CORS
 
 ## 1.0.0
 + Refactor Semaphore
