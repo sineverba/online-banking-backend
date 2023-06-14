@@ -1,4 +1,4 @@
--- Adminer 4.8.1 MySQL 8.0.31 dump
+-- Adminer 4.8.1 MySQL 8.0.33 dump
 
 SET NAMES utf8;
 SET time_zone = '+00:00';
@@ -55,12 +55,14 @@ INSERT INTO `bank_account_transactions` (`id`, `amount`, `purpose`, `transaction
 (44,	2500.00,	'April Salary',	'2022-03-25 20:45:14.839527'),
 (45,	-4.44,	'Bar Happy',	'2022-03-25 20:45:17.555240'),
 (46,	7.77,	'Daily interest 5.55',	'2022-03-26 07:56:42.588727'),
-(47,	-50.00,	'Gasoline Station 144th Street',	'2022-03-26 07:57:33.629479');
+(47,	-50.00,	'Gasoline Station 144th Street',	'2022-03-26 07:57:33.629479'),
+(48,	2600.00,	'Salary June 2023',	'2023-06-14 10:53:24.134720'),
+(49,	-399.40,	'Children shop',	'2023-06-14 10:53:51.051447');
 
 DROP TABLE IF EXISTS `roles`;
 CREATE TABLE `roles` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `role` varchar(256) DEFAULT NULL,
+  `role` enum('ROLE_ADMIN','ROLE_CUSTOMER') DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -73,11 +75,12 @@ CREATE TABLE `users` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `password` varchar(256) DEFAULT NULL,
   `username` varchar(256) DEFAULT NULL,
+  `secret_mfa` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO `users` (`id`, `password`, `username`) VALUES
-(1,	'$2a$10$SLZnEcosM46bVHrEmMS9euPJNKB/e3K/ITA0tOV8actbZsA4yEAkW',	'112233');
+INSERT INTO `users` (`id`, `password`, `username`, `secret_mfa`) VALUES
+(1,	'$2a$10$SLZnEcosM46bVHrEmMS9euPJNKB/e3K/ITA0tOV8actbZsA4yEAkW',	'112233',	'ABCDEFGHIJ123456');
 
 DROP TABLE IF EXISTS `users_roles`;
 CREATE TABLE `users_roles` (
@@ -92,4 +95,4 @@ CREATE TABLE `users_roles` (
 INSERT INTO `users_roles` (`users_id`, `roles_id`) VALUES
 (1,	2);
 
--- 2023-02-13 09:45:03
+-- 2023-06-14 10:55:59
