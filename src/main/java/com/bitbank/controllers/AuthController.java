@@ -41,9 +41,9 @@ import com.bitbank.utils.RandomStringGenerator;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@RestController
+@RestController("AuthControllerV1")
 @RequestMapping("/api/v1/auth")
-@Tag(name = "Authorization", description = "List of authorizations url")
+@Tag(name = "Authorization - V1", description = "List of authorizations url")
 public class AuthController {
 
 	/**

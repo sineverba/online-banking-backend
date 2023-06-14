@@ -4,6 +4,7 @@
 + Add column `secret_mfa` to database
 + Add utility to generate a random string
 + Store secret when save a new user
++ Add V2 controller for login
 
 ## 1.0.0
 + Refactor Semaphore
