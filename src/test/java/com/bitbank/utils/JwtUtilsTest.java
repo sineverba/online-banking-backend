@@ -59,7 +59,7 @@ class JwtUtilsTest {
 		// ADMIN - Add the entity to the set
 		adminRole.add(adminRolesEntity);
 
-		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", adminRole);
+		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", "1111", adminRole);
 
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 
@@ -81,7 +81,7 @@ class JwtUtilsTest {
 		// ADMIN - Add the entity to the set
 		adminRole.add(adminRolesEntity);
 
-		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", adminRole);
+		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", "1111", adminRole);
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 
 		when(timeSource.getCurrentTimeMillis()).thenReturn(System.currentTimeMillis());
@@ -104,7 +104,7 @@ class JwtUtilsTest {
 		// ADMIN - Add the entity to the set
 		adminRole.add(adminRolesEntity);
 
-		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", adminRole);
+		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", "1111", adminRole);
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 
 		when(timeSource.getCurrentTimeMillis()).thenReturn(System.currentTimeMillis());
@@ -133,7 +133,7 @@ class JwtUtilsTest {
 		// ADMIN - Add the entity to the set
 		adminRole.add(adminRolesEntity);
 
-		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", adminRole);
+		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", "1111", adminRole);
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 
 		// 1262344822000 == 01 Jan 2010 11:20:22 UTC
@@ -161,7 +161,7 @@ class JwtUtilsTest {
 		// ADMIN - Add the entity to the set
 		adminRole.add(adminRolesEntity);
 
-		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", adminRole);
+		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", "1111", adminRole);
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 
 		when(timeSource.getCurrentTimeMillis()).thenReturn(System.currentTimeMillis());
@@ -196,7 +196,7 @@ class JwtUtilsTest {
 		// ADMIN - Add the entity to the set
 		adminRole.add(adminRolesEntity);
 
-		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", adminRole);
+		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", "1111", adminRole);
 		// Build the entity to return from getPrincipal
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 		when(authentication.getPrincipal()).thenReturn(user);
@@ -234,7 +234,7 @@ class JwtUtilsTest {
 		// ADMIN - Add the entity to the set
 		adminRole.add(adminRolesEntity);
 
-		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", adminRole);
+		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", "1111", adminRole);
 		// Build the entity to return from getPrincipal
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 		when(authentication.getPrincipal()).thenReturn(user);

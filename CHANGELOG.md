@@ -1,6 +1,7 @@
 # Next version
 + Upgrade dependencies
 + Fix deprecated CORS
++ Add column `secret_mfa` to database
 
 ## 1.0.0
 + Refactor Semaphore

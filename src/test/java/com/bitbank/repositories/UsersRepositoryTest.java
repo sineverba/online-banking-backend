@@ -52,8 +52,8 @@ class UsersRepositoryTest {
 		// CUSTOMER - Add the entity to the set
 		customerRole.add(customerRolesEntity);
 
-		list.add(usersEntity(1L, "username", "password"));
-		list.add(usersEntity(2L, "anotherUsername", "anotherPassword"));
+		list.add(usersEntity(1L, "username", "password", "1111"));
+		list.add(usersEntity(2L, "anotherUsername", "anotherPassword", "2222"));
 
 		for (UsersEntity entity : list) {
 			usersRepository.save(entity);
@@ -85,9 +85,9 @@ class UsersRepositoryTest {
 		// CUSTOMER - Add the entity to the set
 		customerRole.add(customerRolesEntity);
 
-		UsersEntity usersEntity01 = usersEntity(1L, "username", "password");
+		UsersEntity usersEntity01 = usersEntity(1L, "username", "password", "1111");
 		list.add(usersEntity01);
-		list.add(usersEntity(2L, "anotherUsername", "anotherPassword"));
+		list.add(usersEntity(2L, "anotherUsername", "anotherPassword", "2222"));
 
 		for (UsersEntity entity : list) {
 			usersRepository.save(entity);
@@ -106,8 +106,8 @@ class UsersRepositoryTest {
 	 * @param password
 	 * @return
 	 */
-	private static UsersEntity usersEntity(Long id, String username, String password) {
-		return UsersEntity.builder().id(id).username(username).password(password).build();
+	private static UsersEntity usersEntity(Long id, String username, String password, String secretMfa) {
+		return UsersEntity.builder().id(id).username(username).password(password).secretMfa(secretMfa).build();
 	}
 
 	/**
