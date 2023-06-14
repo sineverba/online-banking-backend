@@ -26,6 +26,10 @@ public class UsersDTO {
 	
 	@NotNull(message = "has to be present")
 	@NotEmpty(message = "has to be not empty")
+	private String secretMfa;
+	
+	@NotNull(message = "has to be present")
+	@NotEmpty(message = "has to be not empty")
 	private Set<RolesEntity> rolesEntity;
 	
 }
