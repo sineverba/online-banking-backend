@@ -2,6 +2,7 @@
 + Upgrade dependencies
 + Fix deprecated CORS
 + Add column `secret_mfa` to database
++ Add utility to generate a random string
 
 ## 1.0.0
 + Refactor Semaphore
