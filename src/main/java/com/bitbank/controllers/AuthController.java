@@ -37,6 +37,7 @@ import com.bitbank.responses.MessageResponse;
 import com.bitbank.services.RolesService;
 import com.bitbank.services.UserDetailsServiceImpl;
 import com.bitbank.utils.JwtUtils;
+import com.bitbank.utils.RandomStringGenerator;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -98,11 +99,16 @@ public class AuthController {
 			RolesEntity customerRole;
 			customerRole = rolesService.show(ERole.ROLE_CUSTOMER);
 			rolesEntity.add(customerRole);
+			
+			// Prepare for secret MFA
+			RandomStringGenerator randomStringGenerator = new RandomStringGenerator();
+			String generatedRandomString = randomStringGenerator.getRandomString();
 
 			// Instance UsersDTO and populate it
 			UsersDTO encodedUsersDTO = new UsersDTO();
 			encodedUsersDTO.setUsername(username);
 			encodedUsersDTO.setPassword(encodedPassword);
+			encodedUsersDTO.setSecretMfa(generatedRandomString);
 			encodedUsersDTO.setRolesEntity(rolesEntity);
 
 			UsersEntity usersEntity = convertToEntity(encodedUsersDTO);
