@@ -91,10 +91,7 @@ public class AuthController {
 		// Get the user
 		Optional<UsersEntity> user = usersService.show(Long.parseLong(id));
 		String secretMfa = user.get().getSecretMfa();
-
-		Totp totp = new Totp(secretMfa);
-		Boolean verified = totp.verify(code);
-
+		
 		throw new InvalidMfaException("The sent code is invalid.");
 
 	}
