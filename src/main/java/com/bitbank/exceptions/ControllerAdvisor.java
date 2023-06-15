@@ -49,4 +49,17 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 		return ResponseEntity.badRequest().body(new ErrorResponse(ex.getMessage()));
 	}
 
+	/**
+	 * Handle InvalidMfaException.
+	 * 
+	 * Return the entity with Error response.
+	 * 
+	 * @param ex
+	 * @return
+	 */
+	@ExceptionHandler(InvalidMfaException.class)
+	protected ResponseEntity<ErrorResponse> handleInvalidMfaException(InvalidMfaException ex) {
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse(ex.getMessage()));
+	}
+
 }
