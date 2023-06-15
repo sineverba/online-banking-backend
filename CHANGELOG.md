@@ -7,6 +7,7 @@
 + Add V2 controller for login
 + Add `findById` method for user
 + Refactor `findById` method for user
++ Add route for verify MFA
 
 ## 1.0.0
 + Refactor Semaphore
