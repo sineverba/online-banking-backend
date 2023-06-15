@@ -78,6 +78,39 @@ class UserDetailServiceImplTest {
 
 		assertEquals(savedUser, userDetailServiceImpl.post(userToSave));
 	}
+	
+	/**
+	 * Can find by id
+	 */
+	@Test
+	void testCanLoadById() {
+
+		UsersEntity usersEntity = validUsersEntity(1L, "username", "password");
+		Optional<UsersEntity> result = Optional.of(usersEntity);
+
+		when(usersRepository.findById(Long.valueOf(1))).thenReturn(result);
+
+		UserDetails userDetails = userDetailServiceImpl.loadUserById(1);
+
+		assertEquals("username", userDetails.getUsername());
+
+	}
+	
+	/**
+	 * Can throw exception looking for ID
+	 */
+	@Test
+	void testCanThrowExceptionFindById() {
+
+		UsernameNotFoundException usernameNotFoundException = assertThrows(UsernameNotFoundException.class, () -> {
+			userDetailServiceImpl.loadUserById(1);
+		});
+
+		String expectedMessage = "User not found";
+		String actualMessage = usernameNotFoundException.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
+	}
 
 	/**
 	 * Generate a valid user entity for tests.
