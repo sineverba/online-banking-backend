@@ -105,9 +105,7 @@ public class AuthController {
 
 		String secretMfa = user.get().getSecretMfa();
 
-		mfaService.setSecret(secretMfa);
-
-		if (!mfaService.verify(code)) {
+		if (!mfaService.verify(secretMfa, code)) {
 			throw new InvalidMfaException("The sent code is invalid.");
 		}
 

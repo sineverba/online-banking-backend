@@ -82,8 +82,6 @@ class AuthControllerTest {
 	 */
 	@Test
 	void testCanThrowInvalidMfaExceptionIfUserIsMissing() throws Exception {
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		String encodedPassword = passwordEncoder.encode("password");
 		// Create the MFA
 		MfaDTO mfaDto = new MfaDTO("1", "123456");
 		mvc.perform(post("/api/v2/auth/verify-mfa").contentType(MediaType.APPLICATION_JSON)
@@ -104,7 +102,7 @@ class AuthControllerTest {
 		// Create the MFA
 		MfaDTO mfaDto = new MfaDTO("1", "123456");
 		// Mock the method
-		when(mfaService.verify(any())).thenReturn(true);
+		when(mfaService.verify(any(), any())).thenReturn(true);
 		mvc.perform(post("/api/v2/auth/verify-mfa").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(mfaDto))).andExpect(status().isOk());
 	}
