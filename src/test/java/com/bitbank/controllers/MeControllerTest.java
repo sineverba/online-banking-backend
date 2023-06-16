@@ -113,7 +113,7 @@ class MeControllerTest {
 		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ROLE_ADMIN"));
 		// ADMIN - Add the entity to the set
 		adminRole.add(adminRolesEntity);
-		UsersEntity usersEntity = new UsersEntity(1L, "testusername", "password","1111", adminRole);
+		UsersEntity usersEntity = new UsersEntity(1L, "testusername", "password", "1111", adminRole);
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 
 		// Mock some method...
@@ -129,7 +129,7 @@ class MeControllerTest {
 		// Create roles for the return
 		List<String> roles = new ArrayList<>();
 		roles.add("ROLE_CUSTOMER");
-		when(jwtUtils.getAuthorities(any())).thenReturn(roles);
+		when(jwtUtils.getAuthorities(any(Authentication.class))).thenReturn(roles);
 
 		mvc.perform(get("/api/v1/me").contentType(MediaType.APPLICATION_JSON).header("Authorization", token))
 				.andExpect(status().isOk()).andExpect(jsonPath("$.username", is("testusername")))

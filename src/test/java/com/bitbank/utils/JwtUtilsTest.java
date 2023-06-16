@@ -244,6 +244,19 @@ class JwtUtilsTest {
 		assertThat(roles).contains("ROLE_ADMIN").doesNotContain("ROLE_CUSTOMER");
 	}
 
+	@Test
+	void getRolesFromSetRoles() {
+		// ADMIN - Initialize the set
+		Set<RolesEntity> adminRole = new HashSet<>();
+		// ADMIN - Generate the entity
+		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ROLE_ADMIN"));
+		// ADMIN - Add the entity to the set
+		adminRole.add(adminRolesEntity);
+
+		List<String> roles = jwtUtils.getAuthorities(adminRole);
+		assertThat(roles).contains("ROLE_ADMIN").doesNotContain("ROLE_CUSTOMER");
+	}
+
 	/**
 	 * Generate a RolesEntity
 	 */

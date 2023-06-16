@@ -1,8 +1,9 @@
 package com.bitbank.controllers.v2;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
-import org.jboss.aerogear.security.otp.Totp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bitbank.dto.MfaDTO;
 import com.bitbank.dto.UsersPostDTO;
+import com.bitbank.entities.RolesEntity;
 import com.bitbank.entities.UsersEntity;
 import com.bitbank.exceptions.InvalidMfaException;
+import com.bitbank.responses.JwtResponse;
 import com.bitbank.responses.MfaResponse;
+import com.bitbank.services.MfaService;
 import com.bitbank.services.UserDetailsImpl;
 import com.bitbank.services.UserDetailsServiceImpl;
 import com.bitbank.services.UsersService;
@@ -54,6 +58,9 @@ public class AuthController {
 	@Autowired
 	JwtUtils jwtUtils;
 
+	@Autowired
+	MfaService mfaService;
+
 	/**
 	 * Perform login. Returns a response to use in MFA, with ID
 	 * 
@@ -79,20 +86,42 @@ public class AuthController {
 	 * Perform login. Returns a ResponseEntity with token and expiry_at
 	 * 
 	 * @param usersDTO
+	 * @return
 	 * @return the jwt token
 	 * @throws InvalidMfaException
 	 */
 	@PostMapping("/verify-mfa")
-	public void verifyMfa(@Valid @RequestBody MfaDTO mfaDTO) throws InvalidMfaException {
+	public ResponseEntity<JwtResponse> verifyMfa(@Valid @RequestBody MfaDTO mfaDTO) throws InvalidMfaException {
 
 		String id = mfaDTO.getId();
 		String code = mfaDTO.getCode();
 
 		// Get the user
 		Optional<UsersEntity> user = usersService.show(Long.parseLong(id));
+
+		if (user.isEmpty()) {
+			throw new InvalidMfaException("cannot find an user");
+		}
+
 		String secretMfa = user.get().getSecretMfa();
-		
-		throw new InvalidMfaException("The sent code is invalid.");
+
+		mfaService.setSecret(secretMfa);
+
+		if (!mfaService.verify(code)) {
+			throw new InvalidMfaException("The sent code is invalid.");
+		}
+
+		String username = user.get().getUsername();
+		Set<RolesEntity> rolesEntity = user.get().getRolesEntity();
+
+		// This is the token
+		String jwt = jwtUtils.generateJwtTokenFromUsername(username);
+		// Get the expiry at value
+		String expiryAt = jwtUtils.getExpiryDateFromJwtToken(jwt).toString();
+		// Get the roles
+		List<String> roles = jwtUtils.getAuthorities(rolesEntity);
+
+		return ResponseEntity.ok(new JwtResponse(jwt, expiryAt, roles));
 
 	}
 }
