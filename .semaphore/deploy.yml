@@ -16,7 +16,7 @@ global_job_config:
     - name: GITLAB_REGISTRY
       value: registry.gitlab.com
     - name: BUILDX_VERSION
-      value: 0.10.2
+      value: 0.10.5
     - name: BINFMT_VERSION
       value: qemu-v7.0.0-28
     - name: FOLDER_APP

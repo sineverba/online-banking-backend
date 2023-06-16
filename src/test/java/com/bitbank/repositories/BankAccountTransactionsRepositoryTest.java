@@ -17,9 +17,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.TestPropertySource;
 
-import com.bitbank.constants.ERole;
 import com.bitbank.entities.BankAccountTransactionsEntity;
-import com.bitbank.entities.RolesEntity;
 
 @DataJpaTest
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -80,14 +78,15 @@ class BankAccountTransactionsRepositoryTest {
 		assertThat(balance, Matchers.comparesEqualTo(bankAccountTransactionsRepository.balance()));
 
 	}
-	
+
 	/**
 	 * Show - can get single transaction
 	 */
 	@Test
 	void testCanFindSingleTransaction() {
 		// 1. Create an item
-		BankAccountTransactionsEntity bankAccountTransactionsEntity = validBankAccountTransactionsEntity(1L, new BigDecimal(100), "first");
+		BankAccountTransactionsEntity bankAccountTransactionsEntity = validBankAccountTransactionsEntity(1L,
+				new BigDecimal(100), "first");
 		// 2. Save the item
 		bankAccountTransactionsRepository.save(bankAccountTransactionsEntity);
 		// 3 - Create an optional result

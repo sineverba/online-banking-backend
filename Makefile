@@ -1,11 +1,8 @@
-include .env
-
 IMAGE_NAME=registry.gitlab.com/cicdprojects/online-banking-backend
 CONTAINER_NAME=online-banking-backend
-VERSION=1.0.0-dev
-BUILDX_VERSION=0.10.2
+VERSION=1.1.0-dev
+BUILDX_VERSION=0.10.5
 BINFMT_VERSION=qemu-v7.0.0-28
-
 
 check-update:
 	mvn versions:display-dependency-updates
@@ -21,10 +18,10 @@ coverage:
 	
 sonar:
 	mvn \
-		-Dsonar.host.url=$(SONAR_HOST_URL) \
+		-Dsonar.host.url=${SONAR_HOST_URL} \
 		-Dsonar.projectKey=online-banking-backend \
 		-Dsonar.organization=sineverba \
-		-Dsonar.login=$(SONAR_LOGIN) \
+		-Dsonar.login=${SONAR_LOGIN} \
 		clean package sonar:sonar
 	
 build:
@@ -50,7 +47,10 @@ multi:
 		--file ./dockerfiles/production/build/docker/Dockerfile "."
 	
 spin:
-	docker run --name $(CONTAINER_NAME) -e "PORT=9876" -p "9876:9876" $(IMAGE_NAME):$(VERSION)
+	docker run --name $(CONTAINER_NAME) \
+		-e "PORT=9876" \
+		-p "9876:9876" \
+		$(IMAGE_NAME):$(VERSION)
 	
 stop:
 	docker container stop $(CONTAINER_NAME)
@@ -58,3 +58,5 @@ stop:
 	
 destroy:
 	docker image rm $(IMAGE_NAME):$(VERSION)
+	docker image rm eclipse-temurin:17.0.7_7-jdk-jammy
+	docker image rm eclipse-temurin:17.0.7_7-jre-jammy

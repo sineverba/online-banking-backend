@@ -2,6 +2,7 @@ package com.bitbank.utils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.crypto.SecretKey;
 
@@ -11,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import com.bitbank.entities.RolesEntity;
 import com.bitbank.services.UserDetailsImpl;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -60,6 +62,16 @@ public class JwtUtils {
 	 */
 	public String generateJwtToken(String token) {
 		return this.getJwt(this.getUserNameFromJwtToken(token));
+	}
+
+	/**
+	 * Generate the JWT token from username
+	 * 
+	 * @param authentication
+	 * @return The JWT
+	 */
+	public String generateJwtTokenFromUsername(String username) {
+		return this.getJwt(username);
 	}
 
 	/**
@@ -120,5 +132,15 @@ public class JwtUtils {
 	public List<String> getAuthorities(Authentication authentication) {
 		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 		return userPrincipal.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+	}
+
+	/**
+	 * Get list of roles from roles entity
+	 * 
+	 * @param authentication
+	 * @return The JWT
+	 */
+	public List<String> getAuthorities(Set<RolesEntity> rolesEntity) {
+		return rolesEntity.stream().map(role -> role.getRole().name().toString()).toList();
 	}
 }

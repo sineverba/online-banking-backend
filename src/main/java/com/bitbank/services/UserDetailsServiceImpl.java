@@ -31,4 +31,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		return usersRepository.save(usersEntity);
 	}
 
+	/**
+	 * Return an user by ID
+	 * @param id
+	 * @return UserDetails user
+	 */
+	@Transactional
+	public UserDetails loadUserById(int id) {
+		UsersEntity userEntity = usersRepository.findById(Long.valueOf(id))
+				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+		return UserDetailsImpl.build(userEntity);
+	}
+
 }

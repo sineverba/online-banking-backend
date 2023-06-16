@@ -1,6 +1,7 @@
 package com.bitbank.repositories;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -52,8 +53,8 @@ class UsersRepositoryTest {
 		// CUSTOMER - Add the entity to the set
 		customerRole.add(customerRolesEntity);
 
-		list.add(usersEntity(1L, "username", "password"));
-		list.add(usersEntity(2L, "anotherUsername", "anotherPassword"));
+		list.add(usersEntity(1L, "username", "password", "1111"));
+		list.add(usersEntity(2L, "anotherUsername", "anotherPassword", "2222"));
 
 		for (UsersEntity entity : list) {
 			usersRepository.save(entity);
@@ -85,9 +86,9 @@ class UsersRepositoryTest {
 		// CUSTOMER - Add the entity to the set
 		customerRole.add(customerRolesEntity);
 
-		UsersEntity usersEntity01 = usersEntity(1L, "username", "password");
+		UsersEntity usersEntity01 = usersEntity(1L, "username", "password", "1111");
 		list.add(usersEntity01);
-		list.add(usersEntity(2L, "anotherUsername", "anotherPassword"));
+		list.add(usersEntity(2L, "anotherUsername", "anotherPassword", "2222"));
 
 		for (UsersEntity entity : list) {
 			usersRepository.save(entity);
@@ -96,6 +97,42 @@ class UsersRepositoryTest {
 		Optional<UsersEntity> result = Optional.of(usersEntity01);
 
 		assertEquals(result, usersRepository.findByUsername("username"));
+	}
+	
+	/**
+	 * Find by id
+	 */
+	@Test
+	void testCanFindById() {
+
+		List<UsersEntity> list = new ArrayList<UsersEntity>();
+
+		// ADMIN - Initialize the set
+		Set<RolesEntity> adminRole = new HashSet<>();
+		// ADMIN - Generate the entity
+		RolesEntity adminRolesEntity = rolesEntity(1L, ERole.valueOf("ROLE_ADMIN"));
+		// ADMIN - Add the entity to the set
+		adminRole.add(adminRolesEntity);
+
+		// CUSTOMER - Initialize the set
+		Set<RolesEntity> customerRole = new HashSet<>();
+		// CUSTOMER - Generate the entity
+		RolesEntity customerRolesEntity = rolesEntity(2L, ERole.valueOf("ROLE_CUSTOMER"));
+		// CUSTOMER - Add the entity to the set
+		customerRole.add(customerRolesEntity);
+
+		UsersEntity usersEntity01 = usersEntity(1L, "username", "password", "1111");
+		list.add(usersEntity01);
+		list.add(usersEntity(2L, "anotherUsername", "anotherPassword", "2222"));
+
+		for (UsersEntity entity : list) {
+			usersRepository.save(entity);
+		}
+
+		Optional<UsersEntity> result = Optional.of(usersEntity01);
+
+		assertEquals(result, usersRepository.findById(1L));
+		assertNotEquals(result, usersRepository.findById(2L));
 	}
 
 	/**
@@ -106,8 +143,8 @@ class UsersRepositoryTest {
 	 * @param password
 	 * @return
 	 */
-	private static UsersEntity usersEntity(Long id, String username, String password) {
-		return UsersEntity.builder().id(id).username(username).password(password).build();
+	private static UsersEntity usersEntity(Long id, String username, String password, String secretMfa) {
+		return UsersEntity.builder().id(id).username(username).password(password).secretMfa(secretMfa).build();
 	}
 
 	/**

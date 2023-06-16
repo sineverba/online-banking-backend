@@ -1,5 +1,7 @@
 package com.bitbank.config;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,10 +20,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.bitbank.services.UserDetailsServiceImpl;
 
@@ -73,39 +73,33 @@ public class SecurityConfiguration {
 	}
 
 	@Bean
-	SecurityFilterChain filterChain(HttpSecurity http, AuthEntryPointJwt authEntryPointJwt) throws Exception {
-		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(authEntryPointJwt).and()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeHttpRequests()
-				.requestMatchers("/api/v1/ping").permitAll().requestMatchers("/api/v1/auth/register").permitAll()
-				.requestMatchers("/api/v1/auth/login").permitAll().requestMatchers("/api-docs/**").permitAll()
-				.requestMatchers("/swagger-ui/**").permitAll().requestMatchers("/swagger-ui.html").permitAll()
-				.requestMatchers("/v3/api-docs/**").permitAll()
-				.requestMatchers("/documentation").permitAll().requestMatchers("/").permitAll().anyRequest().authenticated();
+	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http.csrf(csrf -> csrf.disable())
+				.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/ping").permitAll()
+						.requestMatchers("/api/v1/auth/register").permitAll().requestMatchers("/api/*/auth/login")
+						.permitAll().requestMatchers("/api/*/auth/verify-mfa").permitAll()
+						.requestMatchers("/api-docs/**").permitAll().requestMatchers("/swagger-ui/**").permitAll()
+						.requestMatchers("/swagger-ui.html").permitAll().requestMatchers("/v3/api-docs/**").permitAll()
+						.requestMatchers("/documentation").permitAll().requestMatchers("/").permitAll().anyRequest()
+						.authenticated())
+				.cors(withDefaults());
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}
 
 	@Bean
-	WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedMethods("*");
-			}
-		};
-	}
-
-	@Bean
-	CorsFilter corsFilter() {
+	CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(getAllowedOrigins());
+		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS"));
+		configuration.setAllowCredentials(true);
+		configuration.setAllowedHeaders(Arrays.asList("Authorization", "Accept", "Cache-Control", "Content-Type",
+				"Origin", "x-csrf-token", "x-requested-with"));
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		CorsConfiguration config = new CorsConfiguration();
-		config.setAllowCredentials(true);
-		config.setAllowedOriginPatterns(getAllowedOrigins());
-		config.addAllowedHeader("*");
-		config.addAllowedMethod("*");
-		source.registerCorsConfiguration("/**", config);
-		return new CorsFilter(source);
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
 	}
 
 }

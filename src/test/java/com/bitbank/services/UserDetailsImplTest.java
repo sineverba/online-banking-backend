@@ -31,7 +31,7 @@ class UserDetailsImplTest {
 		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ROLE_ADMIN"));
 		// ADMIN - Add the entity to the set
 		adminRole.add(adminRolesEntity);
-		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", adminRole);
+		UsersEntity usersEntity = new UsersEntity(1L, "username", "password", "1111", adminRole);
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 		this.user = user;
 	}

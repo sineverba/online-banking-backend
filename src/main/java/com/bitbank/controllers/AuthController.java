@@ -4,9 +4,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
-
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,12 +34,15 @@ import com.bitbank.responses.MessageResponse;
 import com.bitbank.services.RolesService;
 import com.bitbank.services.UserDetailsServiceImpl;
 import com.bitbank.utils.JwtUtils;
+import com.bitbank.utils.RandomStringGenerator;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
-@RestController
+@RestController("AuthControllerV1")
 @RequestMapping("/api/v1/auth")
-@Tag(name = "Authorization", description = "List of authorizations url")
+@Tag(name = "Authorization - V1", description = "List of authorizations url")
 public class AuthController {
 
 	/**
@@ -84,7 +84,8 @@ public class AuthController {
 	 */
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<MessageResponse> post(@Valid @RequestBody UsersPostDTO usersDTO) throws RoleOrAuthorityNotFoundException {
+	public ResponseEntity<MessageResponse> post(@Valid @RequestBody UsersPostDTO usersDTO)
+			throws RoleOrAuthorityNotFoundException {
 
 		String username = usersDTO.getUsername();
 		if (Boolean.TRUE.equals(getEnableSubscription())) {
@@ -99,10 +100,15 @@ public class AuthController {
 			customerRole = rolesService.show(ERole.ROLE_CUSTOMER);
 			rolesEntity.add(customerRole);
 
+			// Prepare for secret MFA
+			RandomStringGenerator randomStringGenerator = new RandomStringGenerator();
+			String generatedRandomString = randomStringGenerator.getRandomString();
+
 			// Instance UsersDTO and populate it
 			UsersDTO encodedUsersDTO = new UsersDTO();
 			encodedUsersDTO.setUsername(username);
 			encodedUsersDTO.setPassword(encodedPassword);
+			encodedUsersDTO.setSecretMfa(generatedRandomString);
 			encodedUsersDTO.setRolesEntity(rolesEntity);
 
 			UsersEntity usersEntity = convertToEntity(encodedUsersDTO);
@@ -136,8 +142,7 @@ public class AuthController {
 		String jwt = jwtUtils.generateJwtToken(authentication);
 		// Get the expiry at value
 		String expiryAt = jwtUtils.getExpiryDateFromJwtToken(jwt).toString();
-
-		// Get the autorithies
+		// Get the autorities
 		List<String> roles = jwtUtils.getAuthorities(authentication);
 
 		return ResponseEntity.ok(new JwtResponse(jwt, expiryAt, roles));

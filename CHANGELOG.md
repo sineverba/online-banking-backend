@@ -1,4 +1,17 @@
-# 1.0.0
+# 1.1.0
++ Upgrade dependencies
++ Fix deprecated CORS
++ Add column `secret_mfa` to database
++ Add utility to generate a random string
++ Store secret when save a new user
++ Add V2 controller for login
++ Add `findById` method for user
++ Refactor `findById` method for user
++ Add route for verify MFA
++ Add MFAService
++ Complete MFA
+
+## 1.0.0
 + Refactor Semaphore
 + Upgrade dependencies
 
