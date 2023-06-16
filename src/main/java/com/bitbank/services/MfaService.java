@@ -1,26 +1,38 @@
 package com.bitbank.services;
 
-import org.jboss.aerogear.security.otp.Totp;
 import org.springframework.stereotype.Service;
+
+import dev.samstevens.totp.code.CodeGenerator;
+import dev.samstevens.totp.code.CodeVerifier;
+import dev.samstevens.totp.code.DefaultCodeGenerator;
+import dev.samstevens.totp.code.DefaultCodeVerifier;
+import dev.samstevens.totp.secret.DefaultSecretGenerator;
+import dev.samstevens.totp.secret.SecretGenerator;
+import dev.samstevens.totp.time.SystemTimeProvider;
+import dev.samstevens.totp.time.TimeProvider;
 
 @Service
 public class MfaService {
 
-	private static final long serialVersionUID = -202306151424001L;
-
-	// The shared secret of the user
-	private String secret;
-
-	public void setSecret(String secret) {
-		this.secret = secret;
+	/**
+	 * Generate a random secret to store into user data. E.g.:
+	 * "BP26TDZUZ5SVPZJRIHCAUVREO5EWMHHV"
+	 * 
+	 * @return String a random secret
+	 */
+	public String generateSecret() {
+		SecretGenerator secretGenerator = new DefaultSecretGenerator();
+		return secretGenerator.generate();
 	}
 
-	private String getSecret() {
-		return this.secret;
-	}
+	public boolean verify(String sharedSecret, String mfaCode) {
+		TimeProvider timeProvider = new SystemTimeProvider();
+		CodeGenerator codeGenerator = new DefaultCodeGenerator();
 
-	public boolean verify(String mfaCode) {
-		Totp totp = new Totp(this.getSecret());
-		return totp.verify(mfaCode);
+		CodeVerifier verifier = new DefaultCodeVerifier(codeGenerator, timeProvider);
+
+		// secret = the shared secret for the user
+		// code = the code submitted by the user
+		return verifier.isValidCode(sharedSecret, mfaCode);
 	}
 }

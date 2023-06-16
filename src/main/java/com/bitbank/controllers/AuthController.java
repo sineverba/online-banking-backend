@@ -31,10 +31,10 @@ import com.bitbank.entities.UsersEntity;
 import com.bitbank.exceptions.RoleOrAuthorityNotFoundException;
 import com.bitbank.responses.JwtResponse;
 import com.bitbank.responses.MessageResponse;
+import com.bitbank.services.MfaService;
 import com.bitbank.services.RolesService;
 import com.bitbank.services.UserDetailsServiceImpl;
 import com.bitbank.utils.JwtUtils;
-import com.bitbank.utils.RandomStringGenerator;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -67,6 +67,9 @@ public class AuthController {
 
 	@Autowired
 	private RolesService rolesService;
+
+	@Autowired
+	MfaService mfaService;
 
 	@Value("${app.enableSubscription}")
 	private Boolean enableSubscription;
@@ -101,8 +104,7 @@ public class AuthController {
 			rolesEntity.add(customerRole);
 
 			// Prepare for secret MFA
-			RandomStringGenerator randomStringGenerator = new RandomStringGenerator();
-			String generatedRandomString = randomStringGenerator.getRandomString();
+			String generatedRandomString = mfaService.generateSecret();
 
 			// Instance UsersDTO and populate it
 			UsersDTO encodedUsersDTO = new UsersDTO();

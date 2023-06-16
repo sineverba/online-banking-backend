@@ -1,4 +1,7 @@
-# 1.1.0
+# Next version
++ Change OTP library
+
+## 1.1.0
 + Upgrade dependencies
 + Fix deprecated CORS
 + Add column `secret_mfa` to database
