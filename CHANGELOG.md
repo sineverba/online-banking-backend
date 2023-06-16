@@ -9,6 +9,7 @@
 + Refactor `findById` method for user
 + Add route for verify MFA
 + Add MFAService
++ Complete MFA
 
 ## 1.0.0
 + Refactor Semaphore

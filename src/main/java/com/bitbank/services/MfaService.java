@@ -1,21 +1,17 @@
 package com.bitbank.services;
 
-import java.io.Serializable;
-
 import org.jboss.aerogear.security.otp.Totp;
+import org.springframework.stereotype.Service;
 
-public class MfaService implements Serializable {
+@Service
+public class MfaService {
 
 	private static final long serialVersionUID = -202306151424001L;
-
-	public MfaService(String secret) {
-		this.setSecret(secret);
-	}
 
 	// The shared secret of the user
 	private String secret;
 
-	private void setSecret(String secret) {
+	public void setSecret(String secret) {
 		this.secret = secret;
 	}
 
