@@ -39,6 +39,9 @@ public class UsersEntity {
 
 	@Column(name = "secret_mfa", columnDefinition = "VARCHAR(256)")
 	private String secretMfa;
+	
+	@Column(name = "temp_secret", columnDefinition = "VARCHAR(256)")
+	private String tempSecret;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "users_id"), inverseJoinColumns = @JoinColumn(name = "roles_id"))
