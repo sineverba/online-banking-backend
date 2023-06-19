@@ -1,6 +1,8 @@
 package com.bitbank.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -16,7 +18,10 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.TestPropertySource;
 
 import com.bitbank.entities.UsersEntity;
+import com.bitbank.exceptions.BalanceNotEnoughException;
 import com.bitbank.repositories.UsersRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @ExtendWith(MockitoExtension.class)
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -40,6 +45,39 @@ class UsersServiceTest {
 		when(usersRepository.findById(1L)).thenReturn(result);
 		assertEquals(1L, usersService.show(1L).get().getId());
 		assertEquals("username", usersService.show(1L).get().getUsername());
+	}
+
+	/**
+	 * Show - can return ID from username
+	 */
+
+	@Test
+	void get_testCanReturnIdFromUsername() {
+		UsersEntity user = UsersServiceTest.validUsersEntity(1L, "username", "password", "a1b2c3d4");
+		Optional<UsersEntity> optionalUser = Optional.of(user);
+		when(usersRepository.findByUsername("username")).thenReturn(optionalUser);
+		assertEquals(1L, usersService.getIdFromUsername("username"));
+	}
+
+	/**
+	 * Post section. Test can throw BalanceNotEnoughException
+	 * 
+	 * @throws BalanceNotEnoughException
+	 */
+
+	@Test
+	void testCanThrowEntityNotFoundException() {
+
+		// Throw the exception
+		EntityNotFoundException entityNotFoundException = assertThrows(EntityNotFoundException.class, () -> {
+			usersService.getIdFromUsername("username");
+		});
+
+		// Compare string
+		String expectedMessage = "no user found with username username";
+		String actualMessage = entityNotFoundException.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
 	/**

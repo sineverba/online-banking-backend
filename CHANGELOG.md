@@ -1,5 +1,6 @@
 # Next version
 + Change OTP library
++ Add EntityNotFoundException
 
 ## 1.1.0
 + Upgrade dependencies
