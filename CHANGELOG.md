@@ -2,6 +2,7 @@
 + Change OTP library
 + Add EntityNotFoundException
 + Add method to store a temp secret
++ Generate a secret store
 
 ## 1.1.0
 + Upgrade dependencies
