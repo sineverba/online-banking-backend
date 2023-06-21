@@ -93,9 +93,9 @@ public class AuthController {
 	}
 
 	/**
-	 * Perform login. Returns a ResponseEntity with token and expiry_at
+	 * Perform MFA verify. Returns a ResponseEntity with token and expiry_at
 	 * 
-	 * @param usersDTO
+	 * @param mfaDTO
 	 * @return
 	 * @return the jwt token
 	 * @throws InvalidMfaException
@@ -103,11 +103,12 @@ public class AuthController {
 	@PostMapping("/verify-mfa")
 	public ResponseEntity<JwtResponse> verifyMfa(@Valid @RequestBody MfaDTO mfaDTO) throws InvalidMfaException {
 
-		String id = mfaDTO.getId();
+		// Called castle_id in the json
+		String tempSecret = mfaDTO.getTempSecret();
 		String code = mfaDTO.getCode();
 
 		// Get the user
-		Optional<UsersEntity> user = usersService.show(Long.parseLong(id));
+		Optional<UsersEntity> user = usersService.findByTempCode(tempSecret);
 
 		if (user.isEmpty()) {
 			throw new InvalidMfaException("cannot find an user");
@@ -118,6 +119,10 @@ public class AuthController {
 		if (!mfaService.verify(secretMfa, code)) {
 			throw new InvalidMfaException("The sent code is invalid.");
 		}
+
+		Long id = user.get().getId();
+		// Reset the tempSecret
+		usersService.setTempSecret(id, null);
 
 		String username = user.get().getUsername();
 		Set<RolesEntity> rolesEntity = user.get().getRolesEntity();
