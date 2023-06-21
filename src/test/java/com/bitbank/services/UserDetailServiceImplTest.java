@@ -19,14 +19,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.bitbank.entities.UsersEntity;
 import com.bitbank.repositories.UsersRepository;
-import com.bitbank.utils.RandomStringGenerator;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 class UserDetailServiceImplTest {
 
 	@MockBean
-	private RandomStringGenerator randomStringGenerator;
+	private MfaService mfaService;
 
 	@Mock
 	private UsersRepository usersRepository;
@@ -69,7 +68,7 @@ class UserDetailServiceImplTest {
 	void post_testCanSaveItem() {
 
 		String randomString = "a1b2c3";
-		when(randomStringGenerator.getRandomString()).thenReturn(randomString);
+		when(mfaService.generateSecret()).thenReturn(randomString);
 
 		var userToSave = validUsersEntity("username", "password");
 		var savedUser = validUsersEntity(1L, "username", "password", randomString);
@@ -78,7 +77,7 @@ class UserDetailServiceImplTest {
 
 		assertEquals(savedUser, userDetailServiceImpl.post(userToSave));
 	}
-	
+
 	/**
 	 * Can find by id
 	 */
@@ -95,7 +94,7 @@ class UserDetailServiceImplTest {
 		assertEquals("username", userDetails.getUsername());
 
 	}
-	
+
 	/**
 	 * Can throw exception looking for ID
 	 */

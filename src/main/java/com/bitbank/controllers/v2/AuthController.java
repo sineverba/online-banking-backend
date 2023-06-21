@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -73,19 +74,28 @@ public class AuthController {
 		String username = usersDTO.getUsername();
 		String password = usersDTO.getPassword();
 
-		Authentication authentication = authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+		try {
+			Authentication authentication = authenticationManager
+					.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
-		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-		Long id = userPrincipal.getId();
+			UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+			Long id = userPrincipal.getId();
+			// Generate the temp secret token
+			String tempSecret = mfaService.generateSecret();
+			// Save in the database
+			usersService.setTempSecret(id, tempSecret);
+			// Return the token
+			return ResponseEntity.ok(new MfaResponse(tempSecret));
+		} catch (BadCredentialsException e) {
+			throw new BadCredentialsException("wrong username or password");
+		}
 
-		return ResponseEntity.ok(new MfaResponse(Long.toString(id)));
 	}
 
 	/**
-	 * Perform login. Returns a ResponseEntity with token and expiry_at
+	 * Perform MFA verify. Returns a ResponseEntity with token and expiry_at
 	 * 
-	 * @param usersDTO
+	 * @param mfaDTO
 	 * @return
 	 * @return the jwt token
 	 * @throws InvalidMfaException
@@ -93,11 +103,12 @@ public class AuthController {
 	@PostMapping("/verify-mfa")
 	public ResponseEntity<JwtResponse> verifyMfa(@Valid @RequestBody MfaDTO mfaDTO) throws InvalidMfaException {
 
-		String id = mfaDTO.getId();
+		// Called castle_id in the json
+		String tempSecret = mfaDTO.getTempSecret();
 		String code = mfaDTO.getCode();
 
 		// Get the user
-		Optional<UsersEntity> user = usersService.show(Long.parseLong(id));
+		Optional<UsersEntity> user = usersService.findByTempCode(tempSecret);
 
 		if (user.isEmpty()) {
 			throw new InvalidMfaException("cannot find an user");
@@ -105,11 +116,13 @@ public class AuthController {
 
 		String secretMfa = user.get().getSecretMfa();
 
-		mfaService.setSecret(secretMfa);
-
-		if (!mfaService.verify(code)) {
+		if (!mfaService.verify(secretMfa, code)) {
 			throw new InvalidMfaException("The sent code is invalid.");
 		}
+
+		Long id = user.get().getId();
+		// Reset the tempSecret
+		usersService.setTempSecret(id, null);
 
 		String username = user.get().getUsername();
 		Set<RolesEntity> rolesEntity = user.get().getRolesEntity();

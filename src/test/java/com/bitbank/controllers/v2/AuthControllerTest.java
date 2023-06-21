@@ -54,9 +54,30 @@ class AuthControllerTest {
 
 		var userToLogin = UsersEntity.builder().username("username").password("password").build();
 
+		when(mfaService.generateSecret()).thenReturn("secret");
+
 		mvc.perform(post("/api/v2/auth/login").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(userToLogin))).andExpect(status().isOk())
-				.andExpect(jsonPath("$.id", is("1")));
+				.andExpect(jsonPath("$.castle_id", is("secret")));
+	}
+
+	/**
+	 * Test Bad Credentials Exception
+	 * 
+	 */
+	@Test
+	void testCanThrowBadCredentialsException() throws Exception {
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String encodedPassword = passwordEncoder.encode("password");
+		// Insert an user
+		var user = UsersEntity.builder().username("username").password(encodedPassword).secretMfa("ABCDE").build();
+		usersRepository.save(user);
+		var userToLogin = UsersEntity.builder().username("username").password("wrongPassword").build();
+
+		when(mfaService.generateSecret()).thenReturn("secret");
+
+		mvc.perform(post("/api/v2/auth/login").contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsBytes(userToLogin))).andExpect(status().isUnauthorized());
 	}
 
 	/**
@@ -68,10 +89,10 @@ class AuthControllerTest {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String encodedPassword = passwordEncoder.encode("password");
 		// Insert an user
-		var user = UsersEntity.builder().username("username").password(encodedPassword).secretMfa("ABCDE").build();
+		var user = UsersEntity.builder().username("username").password(encodedPassword).secretMfa("ABCDE").tempSecret("secret").build();
 		usersRepository.save(user);
 		// Create the MFA
-		MfaDTO mfaDto = new MfaDTO("1", "123456");
+		MfaDTO mfaDto = new MfaDTO("secret", "123456");
 		mvc.perform(post("/api/v2/auth/verify-mfa").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(mfaDto))).andExpect(status().isUnauthorized());
 	}
@@ -82,8 +103,6 @@ class AuthControllerTest {
 	 */
 	@Test
 	void testCanThrowInvalidMfaExceptionIfUserIsMissing() throws Exception {
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		String encodedPassword = passwordEncoder.encode("password");
 		// Create the MFA
 		MfaDTO mfaDto = new MfaDTO("1", "123456");
 		mvc.perform(post("/api/v2/auth/verify-mfa").contentType(MediaType.APPLICATION_JSON)
@@ -99,12 +118,12 @@ class AuthControllerTest {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String encodedPassword = passwordEncoder.encode("password");
 		// Insert an user
-		var user = UsersEntity.builder().username("username").password(encodedPassword).secretMfa("ABCDE").build();
+		var user = UsersEntity.builder().username("username").password(encodedPassword).secretMfa("ABCDE").tempSecret("secret").build();
 		usersRepository.save(user);
 		// Create the MFA
-		MfaDTO mfaDto = new MfaDTO("1", "123456");
+		MfaDTO mfaDto = new MfaDTO("secret", "123456");
 		// Mock the method
-		when(mfaService.verify(any())).thenReturn(true);
+		when(mfaService.verify(any(), any())).thenReturn(true);
 		mvc.perform(post("/api/v2/auth/verify-mfa").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(mfaDto))).andExpect(status().isOk());
 	}

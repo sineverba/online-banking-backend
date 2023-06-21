@@ -12,8 +12,7 @@ class MfaServiceTest {
 	@Test
 	void testCanReturnFalseIfMfaCodeIsInvalid() {
 		MfaService mfaService = new MfaService();
-		mfaService.setSecret("AAAAAAAAAA");
-		assertFalse(mfaService.verify("1234"));
+		assertFalse(mfaService.verify("1234", "4321"));
 	}
 
 }
