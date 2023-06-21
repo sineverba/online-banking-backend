@@ -54,9 +54,30 @@ class AuthControllerTest {
 
 		var userToLogin = UsersEntity.builder().username("username").password("password").build();
 
+		when(mfaService.generateSecret()).thenReturn("secret");
+
 		mvc.perform(post("/api/v2/auth/login").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(userToLogin))).andExpect(status().isOk())
-				.andExpect(jsonPath("$.id", is("1")));
+				.andExpect(jsonPath("$.castle_id", is("secret")));
+	}
+
+	/**
+	 * Test Bad Credentials Exception
+	 * 
+	 */
+	@Test
+	void testCanThrowBadCredentialsException() throws Exception {
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String encodedPassword = passwordEncoder.encode("password");
+		// Insert an user
+		var user = UsersEntity.builder().username("username").password(encodedPassword).secretMfa("ABCDE").build();
+		usersRepository.save(user);
+		var userToLogin = UsersEntity.builder().username("username").password("wrongPassword").build();
+
+		when(mfaService.generateSecret()).thenReturn("secret");
+
+		mvc.perform(post("/api/v2/auth/login").contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsBytes(userToLogin))).andExpect(status().isUnauthorized());
 	}
 
 	/**

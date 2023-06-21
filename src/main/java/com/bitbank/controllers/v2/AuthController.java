@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -73,13 +74,22 @@ public class AuthController {
 		String username = usersDTO.getUsername();
 		String password = usersDTO.getPassword();
 
-		Authentication authentication = authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+		try {
+			Authentication authentication = authenticationManager
+					.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
-		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-		Long id = userPrincipal.getId();
+			UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+			Long id = userPrincipal.getId();
+			// Generate the temp secret token
+			String tempSecret = mfaService.generateSecret();
+			// Save in the database
+			usersService.setTempSecret(id, tempSecret);
+			// Return the token
+			return ResponseEntity.ok(new MfaResponse(tempSecret));
+		} catch (BadCredentialsException e) {
+			throw new BadCredentialsException("wrong username or password");
+		}
 
-		return ResponseEntity.ok(new MfaResponse(Long.toString(id)));
 	}
 
 	/**

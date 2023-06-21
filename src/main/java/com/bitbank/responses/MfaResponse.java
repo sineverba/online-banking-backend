@@ -4,18 +4,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class MfaResponse {
 
-	@JsonProperty("id")
-	private String id;
+	@JsonProperty("castle_id")
+	private String tempSecret;
 
-	public MfaResponse(String id) {
-		this.setId(id);
+	public MfaResponse(String tempSecret) {
+		this.setTempSecret(tempSecret);
 	}
 
-	private void setId(String id) {
-		this.id = id;
+	private void setTempSecret(String tempSecret) {
+		this.tempSecret = tempSecret;
 	}
 
-	public String getId() {
-		return this.id;
+	public String getTempSecret() {
+		return this.tempSecret;
 	}
 }
