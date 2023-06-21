@@ -1,6 +1,6 @@
 IMAGE_NAME=registry.gitlab.com/cicdprojects/online-banking-backend
 CONTAINER_NAME=online-banking-backend
-VERSION=1.1.0-dev
+VERSION=1.2.0-dev
 BUILDX_VERSION=0.10.5
 BINFMT_VERSION=qemu-v7.0.0-28
 
@@ -27,7 +27,8 @@ sonar:
 build:
 	docker build \
 		--tag $(IMAGE_NAME):$(VERSION) \
-		--file ./dockerfiles/production/build/docker/Dockerfile "."
+		--file ./dockerfiles/production/build/docker/Dockerfile \
+		"."
 	
 preparemulti:
 	mkdir -vp ~/.docker/cli-plugins
@@ -47,9 +48,12 @@ multi:
 		--file ./dockerfiles/production/build/docker/Dockerfile "."
 	
 spin:
-	docker run --name $(CONTAINER_NAME) \
-		-e "PORT=9876" \
-		-p "9876:9876" \
+	docker run --rm --name $(CONTAINER_NAME) \
+		--env-file ./dockerfiles/production/deploy/.env \
+		-e "PORT=8080" \
+		-e "JAWSDB_MARIA_URL=mysql://user:password@localhost:3306/bitbank?autoReconnect=true&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true" \
+		-e "JWT_SECRET=8OlQiX4kLEjCY9GTXNXy5kmEu5eoPURthJzZa6g1cS4eqd5kl0Ma0Z9zUqKG3Lft3AFQN6NgZ9E3V7dE+6lTxW1Gs2eQvwkATQzKe99vkbhQ34ENtTYeVHA" \
+		--network host \
 		$(IMAGE_NAME):$(VERSION)
 	
 stop:
