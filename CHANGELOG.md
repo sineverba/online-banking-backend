@@ -1,4 +1,4 @@
-# Next version
+# 1.2.0
 + Change OTP library
 + Add EntityNotFoundException
 + Add method to store a temp secret
