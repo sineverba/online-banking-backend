@@ -10,4 +10,6 @@ public interface UsersRepository extends CrudRepository<UsersEntity, Long> {
 
 	Optional<UsersEntity> findByUsername(String username);
 
+	Optional<UsersEntity> findByTempSecret(String tempSecret);
+
 }

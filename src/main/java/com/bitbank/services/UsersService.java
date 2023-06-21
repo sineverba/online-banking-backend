@@ -27,6 +27,16 @@ public class UsersService {
 	}
 
 	/**
+	 * Return single user.
+	 * 
+	 * @param String tempSecret
+	 * @return Optional<UsersEntity>
+	 */
+	public Optional<UsersEntity> findByTempCode(String tempSecret) {
+		return usersRepository.findByTempSecret(tempSecret);
+	}
+
+	/**
 	 * Return the ID of the user from username
 	 * 
 	 * @param string
@@ -52,7 +62,8 @@ public class UsersService {
 		}
 		usersEntity.get().setTempSecret(tempSecret);
 		UsersEntity updateUsersEntity = usersRepository.save(usersEntity.get());
-		return updateUsersEntity.getTempSecret().equals(usersEntity.get().getTempSecret());
+		return updateUsersEntity.getTempSecret() == null
+				|| updateUsersEntity.getTempSecret().equals(usersEntity.get().getTempSecret());
 	}
 
 }

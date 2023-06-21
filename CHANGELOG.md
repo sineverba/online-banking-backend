@@ -3,6 +3,7 @@
 + Add EntityNotFoundException
 + Add method to store a temp secret
 + Generate a secret store
++ Login via temp secret
 
 ## 1.1.0
 + Upgrade dependencies

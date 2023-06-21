@@ -89,10 +89,10 @@ class AuthControllerTest {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String encodedPassword = passwordEncoder.encode("password");
 		// Insert an user
-		var user = UsersEntity.builder().username("username").password(encodedPassword).secretMfa("ABCDE").build();
+		var user = UsersEntity.builder().username("username").password(encodedPassword).secretMfa("ABCDE").tempSecret("secret").build();
 		usersRepository.save(user);
 		// Create the MFA
-		MfaDTO mfaDto = new MfaDTO("1", "123456");
+		MfaDTO mfaDto = new MfaDTO("secret", "123456");
 		mvc.perform(post("/api/v2/auth/verify-mfa").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(mfaDto))).andExpect(status().isUnauthorized());
 	}
@@ -118,10 +118,10 @@ class AuthControllerTest {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String encodedPassword = passwordEncoder.encode("password");
 		// Insert an user
-		var user = UsersEntity.builder().username("username").password(encodedPassword).secretMfa("ABCDE").build();
+		var user = UsersEntity.builder().username("username").password(encodedPassword).secretMfa("ABCDE").tempSecret("secret").build();
 		usersRepository.save(user);
 		// Create the MFA
-		MfaDTO mfaDto = new MfaDTO("1", "123456");
+		MfaDTO mfaDto = new MfaDTO("secret", "123456");
 		// Mock the method
 		when(mfaService.verify(any(), any())).thenReturn(true);
 		mvc.perform(post("/api/v2/auth/verify-mfa").contentType(MediaType.APPLICATION_JSON)
