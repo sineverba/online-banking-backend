@@ -1,3 +1,5 @@
+#include .env
+
 IMAGE_NAME=registry.gitlab.com/cicdprojects/online-banking-backend
 CONTAINER_NAME=online-banking-backend
 VERSION=1.2.2-dev
