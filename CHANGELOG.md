@@ -1,4 +1,7 @@
-# 1.2.1
+# 1.2.2
++ Fix missing Maven repository
+
+## 1.2.1
 + Remove all MFA dependencies
 
 ## 1.2.0

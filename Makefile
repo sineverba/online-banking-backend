@@ -1,6 +1,8 @@
+#include .env
+
 IMAGE_NAME=registry.gitlab.com/cicdprojects/online-banking-backend
 CONTAINER_NAME=online-banking-backend
-VERSION=1.2.1-dev
+VERSION=1.2.2-dev
 BUILDX_VERSION=0.10.2
 BINFMT_VERSION=qemu-v7.0.0-28
 
