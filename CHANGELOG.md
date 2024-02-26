@@ -1,4 +1,7 @@
-# 1.0.0
+# 1.2.1
++ Remove all MFA dependencies
+
+## 1.0.0
 + Refactor Semaphore
 + Upgrade dependencies
 
