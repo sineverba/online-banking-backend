@@ -5,7 +5,7 @@ FROM eclipse-temurin:17.0.7_7-jdk-jammy AS builder
 
 # Downloading and installing Maven
 # 1- Define a constant with the version of maven you want to install
-ARG MAVEN_VERSION=3.9.2
+ARG MAVEN_VERSION=3.9.5
 # 2- Define a constant with the working directory
 ARG USER_HOME_DIR="/root"
 # 3- Define the URL where maven can be downloaded from
