@@ -1,4 +1,7 @@
-# 1.2.0
+# 1.2.1
++ Remove all MFA dependencies
+
+## 1.2.0
 + Change OTP library
 + Add EntityNotFoundException
 + Add method to store a temp secret
