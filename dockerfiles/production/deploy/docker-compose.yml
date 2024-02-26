@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   online-banking-backend:
-    image: registry.gitlab.com/cicdprojects/online-banking-backend:1.2.0
+    image: registry.gitlab.com/cicdprojects/online-banking-backend:1.2.1
     container_name: ${CONTAINER_NAME}
     restart: unless-stopped
     env_file:
