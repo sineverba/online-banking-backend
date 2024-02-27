@@ -31,7 +31,6 @@ import com.bitbank.entities.UsersEntity;
 import com.bitbank.exceptions.RoleOrAuthorityNotFoundException;
 import com.bitbank.responses.JwtResponse;
 import com.bitbank.responses.MessageResponse;
-import com.bitbank.services.MfaService;
 import com.bitbank.services.RolesService;
 import com.bitbank.services.UserDetailsServiceImpl;
 import com.bitbank.utils.JwtUtils;
@@ -40,7 +39,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
-@RestController("AuthControllerV1")
+@RestController
 @RequestMapping("/api/v1/auth")
 @Tag(name = "Authorization - V1", description = "List of authorizations url")
 public class AuthController {
@@ -67,9 +66,6 @@ public class AuthController {
 
 	@Autowired
 	private RolesService rolesService;
-
-	@Autowired
-	MfaService mfaService;
 
 	@Value("${app.enableSubscription}")
 	private Boolean enableSubscription;
@@ -103,14 +99,10 @@ public class AuthController {
 			customerRole = rolesService.show(ERole.ROLE_CUSTOMER);
 			rolesEntity.add(customerRole);
 
-			// Prepare for secret MFA
-			String generatedRandomString = mfaService.generateSecret();
-
 			// Instance UsersDTO and populate it
 			UsersDTO encodedUsersDTO = new UsersDTO();
 			encodedUsersDTO.setUsername(username);
 			encodedUsersDTO.setPassword(encodedPassword);
-			encodedUsersDTO.setSecretMfa(generatedRandomString);
 			encodedUsersDTO.setRolesEntity(rolesEntity);
 
 			UsersEntity usersEntity = convertToEntity(encodedUsersDTO);

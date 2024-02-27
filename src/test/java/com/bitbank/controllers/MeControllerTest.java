@@ -82,7 +82,7 @@ class MeControllerTest {
 		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ROLE_ADMIN"));
 		// ADMIN - Add the entity to the set
 		adminRole.add(adminRolesEntity);
-		UsersEntity usersEntity = new UsersEntity(1L, "testusername", "password", "1111", "ABCDE", adminRole);
+		UsersEntity usersEntity = new UsersEntity(1L, "testusername", "password", adminRole);
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 
 		// Mock some method...
@@ -113,7 +113,7 @@ class MeControllerTest {
 		RolesEntity adminRolesEntity = validRolesEntity(1L, ERole.valueOf("ROLE_ADMIN"));
 		// ADMIN - Add the entity to the set
 		adminRole.add(adminRolesEntity);
-		UsersEntity usersEntity = new UsersEntity(1L, "testusername", "password", "1111", "ABCDE", adminRole);
+		UsersEntity usersEntity = new UsersEntity(1L, "testusername", "password", adminRole);
 		UserDetailsImpl user = UserDetailsImpl.build(usersEntity);
 
 		// Mock some method...

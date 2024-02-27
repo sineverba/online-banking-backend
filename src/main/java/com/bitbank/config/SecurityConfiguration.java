@@ -78,7 +78,7 @@ public class SecurityConfiguration {
 				.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/ping").permitAll()
 						.requestMatchers("/api/v1/auth/register").permitAll().requestMatchers("/api/*/auth/login")
-						.permitAll().requestMatchers("/api/*/auth/verify-mfa").permitAll()
+						.permitAll()
 						.requestMatchers("/api-docs/**").permitAll().requestMatchers("/swagger-ui/**").permitAll()
 						.requestMatchers("/swagger-ui.html").permitAll().requestMatchers("/v3/api-docs/**").permitAll()
 						.requestMatchers("/documentation").permitAll().requestMatchers("/").permitAll().anyRequest()

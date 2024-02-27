@@ -22,15 +22,6 @@ __This project uses:__
 | Sonarqube | [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=sineverba_online-banking-backend&metric=alert_status)](https://sonarcloud.io/dashboard?id=sineverba_online-banking-backend) |
 | Coveralls | [![Coverage Status](https://coveralls.io/repos/github/sineverba/online-banking-backend/badge.svg?branch=master)](https://coveralls.io/github/sineverba/online-banking-backend?branch=master) |
 
-## Development with VSCode
-
-Extensions required (open `CTRL + P` and type the extension as following)
-
-| Extension | Developer | Link |
-| --------- | --------- | ---- |
-| Spring Boot Extension Pack | VMware | ext install vmware.vscode-boot-dev-pack |
-| Extension Pack for Java | Microsoft | ext install vscjava.vscode-java-pack |
-
 ## Local development with Docker
 
 There is a dummy database, pre-populated. At first spin, MySQL will re-populate the database with some data.
@@ -57,3 +48,6 @@ INSERT INTO roles(name) VALUES('ROLE_CUSTOMER');
 `$ make coverage`
 
 > Coverage will be set into `target/site/jacoco`
+
+## CI - CD custom image
+There is a custom image. Need to compile it with `$ make cicd` to use with Semaphore CI.

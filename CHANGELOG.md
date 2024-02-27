@@ -1,4 +1,10 @@
-# 1.2.2
+# 1.3.0
++ Update dependencies
++ Update dependencies
++ Fix Sonarqube
++ Remove all MFA
+
+## 1.2.2
 + Fix missing Maven repository
 
 ## 1.2.1

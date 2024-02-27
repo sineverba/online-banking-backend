@@ -75,12 +75,11 @@ CREATE TABLE `users` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `password` varchar(256) DEFAULT NULL,
   `username` varchar(256) DEFAULT NULL,
-  `secret_mfa` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO `users` (`id`, `password`, `username`, `secret_mfa`) VALUES
-(1,	'$2a$10$SLZnEcosM46bVHrEmMS9euPJNKB/e3K/ITA0tOV8actbZsA4yEAkW',	'112233',	'ABCDEFGHIJ123456');
+INSERT INTO `users` (`id`, `password`, `username`) VALUES
+(1,	'$2a$10$SLZnEcosM46bVHrEmMS9euPJNKB/e3K/ITA0tOV8actbZsA4yEAkW',	'112233');
 
 DROP TABLE IF EXISTS `users_roles`;
 CREATE TABLE `users_roles` (

@@ -65,16 +65,6 @@ public class JwtUtils {
 	}
 
 	/**
-	 * Generate the JWT token from username
-	 * 
-	 * @param authentication
-	 * @return The JWT
-	 */
-	public String generateJwtTokenFromUsername(String username) {
-		return this.getJwt(username);
-	}
-
-	/**
 	 * 
 	 * Get the username from a token.
 	 * 
@@ -82,7 +72,7 @@ public class JwtUtils {
 	 * @return the username
 	 */
 	public String getUserNameFromJwtToken(String token) {
-		return Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJws(token).getBody().getSubject();
+		return Jwts.parser().verifyWith(getKey()).build().parseSignedClaims(token).getPayload().getSubject();
 	}
 
 	/**
@@ -92,7 +82,7 @@ public class JwtUtils {
 	 * @return the expiry date
 	 */
 	public Long getExpiryDateFromJwtToken(String token) {
-		return Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJws(token).getBody().getExpiration()
+		return Jwts.parser().verifyWith(getKey()).build().parseSignedClaims(token).getPayload().getExpiration()
 				.getTime();
 	}
 
@@ -104,7 +94,7 @@ public class JwtUtils {
 	 */
 	public boolean validateJwtToken(String authToken) {
 		try {
-			Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJws(authToken);
+			Jwts.parser().verifyWith(getKey()).build().parseSignedClaims(authToken);
 			return true;
 		} catch (MalformedJwtException | ExpiredJwtException e) {
 			return false;
@@ -118,8 +108,8 @@ public class JwtUtils {
 	 * @return
 	 */
 	private String getJwt(String username) {
-		return Jwts.builder().setSubject(username).setIssuedAt(new Date(timeSource.getCurrentTimeMillis()))
-				.setExpiration(new Date(timeSource.getCurrentTimeMillis() + jwtExpirationMs)).signWith(getKey())
+		return Jwts.builder().subject(username).issuedAt(new Date(timeSource.getCurrentTimeMillis()))
+				.expiration(new Date(timeSource.getCurrentTimeMillis() + jwtExpirationMs)).signWith(getKey())
 				.compact();
 	}
 
