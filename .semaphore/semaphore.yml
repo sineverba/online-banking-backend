@@ -9,7 +9,7 @@ agent:
       image: "sineverba/online-banking-backend-cicd:1.2.2-dev"
 
   image_pull_secrets:
-    - name: $DOCKER_TOKEN
+    - name: ACCESS_TOKENS
     
     
 global_job_config:
