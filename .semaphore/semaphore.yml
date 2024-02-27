@@ -8,6 +8,9 @@ agent:
     - name: main
       image: "sineverba/online-banking-backend-cicd:1.2.2-dev"
 
+  image_pull_secrets:
+    - name: DOCKERHUB
+
 global_job_config:
   secrets:
     - name: ACCESS_TOKENS
