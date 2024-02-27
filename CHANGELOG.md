@@ -1,5 +1,6 @@
 # Next version
 + Update dependencies
++ Update dependencies
 
 ## 1.2.2
 + Fix missing Maven repository
