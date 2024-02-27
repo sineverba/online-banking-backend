@@ -7,14 +7,14 @@ agent:
   containers:
     - name: main
       image: "sineverba/online-banking-backend-cicd:1.2.2-dev"
+
+  image_pull_secrets:
+    - name: DOCKER_TOKEN
     
     
 global_job_config:
   secrets:
     - name: ACCESS_TOKENS
-  prologue:
-    commands:
-      - echo $DOCKER_TOKEN | docker login --username "$DOCKER_USERNAME" --password-stdin
 
 blocks:
   - name: "Test"
