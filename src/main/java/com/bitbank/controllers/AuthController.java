@@ -40,7 +40,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
-@RestController("AuthControllerV1")
+@RestController("authControllerV1")
 @RequestMapping("/api/v1/auth")
 @Tag(name = "Authorization - V1", description = "List of authorizations url")
 public class AuthController {
