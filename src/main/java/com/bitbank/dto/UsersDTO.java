@@ -6,11 +6,10 @@ package com.bitbank.dto;
 
 import java.util.Set;
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-
 import com.bitbank.entities.RolesEntity;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
@@ -23,10 +22,6 @@ public class UsersDTO {
 	@NotNull(message = "has to be present")
 	@NotEmpty(message = "has to be not empty")
 	private String password;
-	
-	@NotNull(message = "has to be present")
-	@NotEmpty(message = "has to be not empty")
-	private String secretMfa;
 	
 	@NotNull(message = "has to be present")
 	@NotEmpty(message = "has to be not empty")

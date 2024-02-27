@@ -13,7 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -23,9 +22,6 @@ import com.bitbank.repositories.UsersRepository;
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 class UserDetailServiceImplTest {
-
-	@MockBean
-	private MfaService mfaService;
 
 	@Mock
 	private UsersRepository usersRepository;
@@ -67,11 +63,8 @@ class UserDetailServiceImplTest {
 	@Test
 	void post_testCanSaveItem() {
 
-		String randomString = "a1b2c3";
-		when(mfaService.generateSecret()).thenReturn(randomString);
-
 		var userToSave = validUsersEntity("username", "password");
-		var savedUser = validUsersEntity(1L, "username", "password", randomString);
+		var savedUser = validUsersEntity(1L, "username", "password");
 
 		when(usersRepository.save(userToSave)).thenReturn(savedUser);
 
@@ -125,10 +118,6 @@ class UserDetailServiceImplTest {
 
 	private static UsersEntity validUsersEntity(String username, String password) {
 		return UsersEntity.builder().username(username).password(password).build();
-	}
-
-	private static UsersEntity validUsersEntity(Long id, String username, String password, String secretMfa) {
-		return UsersEntity.builder().id(id).username(username).password(password).secretMfa(secretMfa).build();
 	}
 
 }

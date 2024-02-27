@@ -65,16 +65,6 @@ public class JwtUtils {
 	}
 
 	/**
-	 * Generate the JWT token from username
-	 * 
-	 * @param authentication
-	 * @return The JWT
-	 */
-	public String generateJwtTokenFromUsername(String username) {
-		return this.getJwt(username);
-	}
-
-	/**
 	 * 
 	 * Get the username from a token.
 	 * 
