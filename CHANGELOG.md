@@ -1,6 +1,7 @@
 # Next version
 + Update dependencies
 + Update dependencies
++ Fix Sonarqube
 
 ## 1.2.2
 + Fix missing Maven repository

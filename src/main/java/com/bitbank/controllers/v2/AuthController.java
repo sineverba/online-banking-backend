@@ -34,7 +34,7 @@ import com.bitbank.utils.JwtUtils;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
-@RestController("AuthControllerV2")
+@RestController("authControllerV2")
 @RequestMapping("/api/v2/auth")
 @Tag(name = "Authorization - V2", description = "List of authorizations url")
 public class AuthController {

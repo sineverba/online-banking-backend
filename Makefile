@@ -23,7 +23,6 @@ sonar:
 		-Dsonar.host.url=${SONAR_HOST_URL} \
 		-Dsonar.projectKey=online-banking-backend \
 		-Dsonar.organization=sineverba \
-		-Dsonar.login=${SONAR_LOGIN} \
 		clean package sonar:sonar
 
 cicd:
