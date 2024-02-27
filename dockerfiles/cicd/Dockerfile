@@ -3,8 +3,13 @@
 #
 FROM eclipse-temurin:21.0.2_13-jdk-jammy AS builder
 # Update and upgrade
-RUN apt-get -yq update && \
-  apt-get -yqq install ssh
+RUN apt-get update -y && \
+  apt-get upgrade -y && \
+  apt-get install -y \ 
+  ssh \
+  bash \
+  git \
+  curl
 # Downloading and installing Maven
 # 1- Define a constant with the version of maven you want to install
 ARG MAVEN_VERSION=3.9.6
@@ -27,4 +32,3 @@ RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
 # 5- Define environmental variables required by Maven, like Maven_Home directory and where the maven repo is located
 ENV MAVEN_HOME /usr/share/maven
 ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
-RUN mvn -v | grep ${MAVEN_VERSION}
