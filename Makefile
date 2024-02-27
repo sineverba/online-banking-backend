@@ -3,7 +3,7 @@
 IMAGE_NAME=registry.gitlab.com/cicdprojects/online-banking-backend
 CONTAINER_NAME=online-banking-backend
 VERSION=1.2.2-dev
-BUILDX_VERSION=0.10.2
+BUILDX_VERSION=0.12.1
 BINFMT_VERSION=qemu-v7.0.0-28
 
 check-update:
@@ -25,6 +25,13 @@ sonar:
 		-Dsonar.organization=sineverba \
 		-Dsonar.login=${SONAR_LOGIN} \
 		clean package sonar:sonar
+
+cicd:
+	docker build \
+		--tag sineverba/$(CONTAINER_NAME)-cicd:$(VERSION) \
+		--file ./dockerfiles/cicd/Dockerfile \
+		"."
+	docker image push sineverba/$(CONTAINER_NAME)-cicd:$(VERSION)
 	
 build:
 	docker build \

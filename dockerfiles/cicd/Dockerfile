@@ -2,7 +2,14 @@
 # Build stage
 #
 FROM eclipse-temurin:21.0.2_13-jdk-jammy AS builder
-
+# Update and upgrade
+RUN apt-get update -y && \
+  apt-get upgrade -y && \
+  apt-get install -y \ 
+  ssh \
+  bash \
+  git \
+  curl
 # Downloading and installing Maven
 # 1- Define a constant with the version of maven you want to install
 ARG MAVEN_VERSION=3.9.6
@@ -25,19 +32,3 @@ RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
 # 5- Define environmental variables required by Maven, like Maven_Home directory and where the maven repo is located
 ENV MAVEN_HOME /usr/share/maven
 ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
-RUN mvn -v | grep ${MAVEN_VERSION}
-COPY src /home/app/src
-COPY pom.xml /home/app
-RUN mvn -f /home/app/pom.xml test
-RUN mvn -f /home/app/pom.xml -Dmaven.test.skip=true clean package
-
-#
-# Package stage
-#
-FROM eclipse-temurin:21.0.2_13-jre-jammy AS packager
-# Update and upgrade
-RUN apt-get update -y && apt-get upgrade -y
-COPY dockerfiles/production/build/docker/entrypoint.sh /etc/entrypoint.sh
-RUN chmod +x /etc/entrypoint.sh
-COPY --from=builder /home/app/target/*.jar /usr/local/lib/
-CMD ["/etc/entrypoint.sh"]
