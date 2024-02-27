@@ -1,4 +1,4 @@
-# Next version
+# 1.3.0
 + Update dependencies
 + Update dependencies
 + Fix Sonarqube
