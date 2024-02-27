@@ -6,7 +6,7 @@ agent:
     
   containers:
     - name: main
-      image: "eclipse-temurin:21.0.2_13-jdk-jammy"
+      image: "eclipse-temurin:21.0.2_13-jdk"
     
     
 global_job_config:
