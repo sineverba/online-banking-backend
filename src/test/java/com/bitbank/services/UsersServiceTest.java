@@ -1,7 +1,6 @@
 package com.bitbank.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
@@ -41,7 +40,7 @@ class UsersServiceTest {
 
 	@Test
 	void get_testCanShow() {
-		var user = UsersServiceTest.validUsersEntity(1L, "username", "password", "a1b2c3d4", "alfa");
+		var user = UsersServiceTest.validUsersEntity(1L, "username", "password");
 		Optional<UsersEntity> result = Optional.of(user);
 		when(usersRepository.findById(1L)).thenReturn(result);
 		assertEquals(1L, usersService.show(1L).get().getId());
@@ -54,7 +53,7 @@ class UsersServiceTest {
 
 	@Test
 	void get_testCanReturnIdFromUsername() {
-		UsersEntity user = UsersServiceTest.validUsersEntity(1L, "username", "password", "a1b2c3d4", "alfa");
+		UsersEntity user = UsersServiceTest.validUsersEntity(1L, "username", "password");
 		Optional<UsersEntity> optionalUser = Optional.of(user);
 		when(usersRepository.findByUsername("username")).thenReturn(optionalUser);
 		assertEquals(1L, usersService.getIdFromUsername("username"));
@@ -82,57 +81,6 @@ class UsersServiceTest {
 	}
 
 	/**
-	 * Can save a secret into the user
-	 */
-
-	@Test
-	void get_testCanStoreSecret() {
-		UsersEntity user = UsersServiceTest.validUsersEntity(1L, "username", "password", "a1b2c3d4", "tempalfa");
-		Optional<UsersEntity> optionalUser = Optional.of(user);
-		when(usersRepository.findById(1L)).thenReturn(optionalUser);
-		when(usersRepository.save(optionalUser.get())).thenReturn(optionalUser.get());
-		optionalUser.get().setTempSecret("tempSecret");
-		assertTrue(usersService.setTempSecret(1L, "secret"));
-	}
-
-	/**
-	 * Can return false if saved store is different
-	 */
-
-	@Test
-	void get_testCanHandleCannotStoreSecret() {
-		UsersEntity user = UsersServiceTest.validUsersEntity(1L, "username", "password", "a1b2c3d4", "alfa");
-		Optional<UsersEntity> optionalUser = Optional.of(user);
-		// A different user
-		UsersEntity differentUser = UsersServiceTest.validUsersEntity(1L, "anotherone", "password", "a1b2c3d4", "beta");
-		Optional<UsersEntity> optionalDifferentUser = Optional.of(differentUser);
-		when(usersRepository.findById(1L)).thenReturn(optionalUser);
-		when(usersRepository.save(optionalUser.get())).thenReturn(optionalDifferentUser.get());
-		optionalUser.get().setTempSecret("tempSecret");
-		assertFalse(usersService.setTempSecret(1L, "secret"));
-	}
-
-	/**
-	 * Post section. Test can throw BalanceNotEnoughException
-	 * 
-	 * @throws BalanceNotEnoughException
-	 */
-
-	@Test
-	void testCanThrowEntityNotFoundExceptionOnPost() {
-
-		// Throw the exception
-		EntityNotFoundException entityNotFoundException = assertThrows(EntityNotFoundException.class, () -> {
-			usersService.setTempSecret(1L, "secret");
-		});
-		// Compare string
-		String expectedMessage = "no user found with id 1";
-		String actualMessage = entityNotFoundException.getMessage();
-
-		assertTrue(actualMessage.contains(expectedMessage));
-	}
-
-	/**
 	 * Useful methods
 	 * 
 	 * @param id
@@ -141,9 +89,7 @@ class UsersServiceTest {
 	 * @return
 	 */
 
-	private static UsersEntity validUsersEntity(Long id, String username, String password, String secretMfa,
-			String tempSecret) {
-		return UsersEntity.builder().id(id).username(username).password(password).secretMfa(secretMfa)
-				.tempSecret(tempSecret).build();
+	private static UsersEntity validUsersEntity(Long id, String username, String password) {
+		return UsersEntity.builder().id(id).username(username).password(password).build();
 	}
 }
