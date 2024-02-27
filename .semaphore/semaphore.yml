@@ -6,7 +6,7 @@ agent:
     
   containers:
     - name: main
-      image: "eclipse-temurin:21.0.2_13-jdk"
+      image: "sineverba/online-banking-backend-cicd:1.2.2-dev"
     
     
 global_job_config:

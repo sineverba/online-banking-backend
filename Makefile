@@ -25,6 +25,13 @@ sonar:
 		-Dsonar.organization=sineverba \
 		-Dsonar.login=${SONAR_LOGIN} \
 		clean package sonar:sonar
+
+cicd:
+	docker build \
+		--tag sineverba/$(CONTAINER_NAME)-cicd:$(VERSION) \
+		--file ./dockerfiles/cicd/Dockerfile \
+		"."
+	docker image push sineverba/$(CONTAINER_NAME)-cicd:$(VERSION)
 	
 build:
 	docker build \
