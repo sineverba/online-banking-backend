@@ -1,4 +1,8 @@
-# 1.3.0
+# Next version
++ Update dependencies
++ Remove versions in POM
+
+## 1.3.0
 + Update dependencies
 + Update dependencies
 + Fix Sonarqube

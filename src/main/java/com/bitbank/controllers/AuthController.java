@@ -41,7 +41,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-@Tag(name = "Authorization - V1", description = "List of authorizations url")
+@Tag(name = "Authorization", description = "List of authorizations url")
 public class AuthController {
 
 	/**
